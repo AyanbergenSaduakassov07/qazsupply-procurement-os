@@ -50,3 +50,6 @@ data/
 
 # Playwright MCP session artifacts
 .playwright-mcp/
+
+# Playwright signed-in sessions (local test users)
+e2e/.auth/

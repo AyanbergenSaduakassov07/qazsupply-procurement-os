@@ -159,13 +159,13 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | odoo/odoo | LGPL (see repo) | WEAK | R | `3e1d217304` | M5 |  |
 | typesense/typesense | GPL (2 or 3, see repo) | STRONG | R | `86a3337b65` | M5 |  |
 | camelot-dev/camelot | MIT | PERMISSIVE | D | `b300e9e31a` | M6 |  |
-| datalab-to/marker | Apache-2.0 | PERMISSIVE | R | `e7c67f1d23` | M6 |  |
+| datalab-to/marker | Apache-2.0 | PERMISSIVE | D* | `e7c67f1d23` | M6 | code is Apache-2.0; model weights use a modified OpenRAIL-M (free for research, personal and startups under 5M USD funding/revenue; paid beyond): read the weights terms, then benchmark in M6 |
 | datasets/un-locode | NOT FOUND in repo | UNKNOWN | R | `b1309b37ed` | M6 | was V; no clear licence: reference only until the author clarifies |
 | docling-project/docling | MIT | PERMISSIVE | D | `9590eb4955` | M6 |  |
 | getomni-ai/zerox | MIT | PERMISSIVE | V | `91bbb20c50` | M6 |  |
 | invoice-x/invoice2data | MIT | PERMISSIVE | V | `09378126e3` | M6 |  |
 | jkeen/tracking_number | MIT | PERMISSIVE | R | `4e30609478` | M6 |  |
-| karrioapi/karrio | LGPL (see repo) | WEAK | S | `deea10f856` | M6 | LGPL: run as separate service |
+| karrioapi/karrio | LGPL (see repo) | WEAK | S | `deea10f856` | M6 | LGPL-3.0 core run as a separate service; the ee/ directory has a separate commercial licence: never use ee/ |
 | kreuzberg-dev/kreuzberg | MIT | PERMISSIVE | D | `4a5d57f225` | M6 |  |
 | M0r13n/pyais | MIT | PERMISSIVE | D | `8d0d0acc49` | M6 |  |
 | maplibre/maplibre-gl-js | MIT | PERMISSIVE | D | `2a4c3728b6` | M6 |  |
@@ -175,7 +175,7 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | nodemailer/mailparser | MIT | PERMISSIVE | D | `e1882ddee1` | M6 |  |
 | ocrmypdf/OCRmyPDF | MPL-2.0 | PERMISSIVE | S | `58048daf96` | M6 | MPL-2.0 file-level copyleft: call as CLI/sidecar, do not modify |
 | openboxes/openboxes | EPL | STRONG | R | `b477674a4a` | M6 |  |
-| opendatalab/MinerU | Apache-2.0 | PERMISSIVE | R | `ed50cc15bc` | M6 |  |
+| opendatalab/MinerU | Apache-2.0 | PERMISSIVE | D* | `ed50cc15bc` | M6 | Apache-2.0 plus additional terms (commercial thresholds at 100M MAU or 20M USD monthly revenue, online-service attribution obligation): read LICENSE.md, then benchmark in M6 |
 | PaddlePaddle/PaddleOCR | Apache-2.0 | PERMISSIVE | D | `dab3fe3537` | M6 |  |
 | py-pdf/pypdf | BSD | PERMISSIVE | D | `4a50fe80d9` | M6 |  |
 | schwehr/libais | Apache-2.0 | PERMISSIVE | D | `87dadfaa1b` | M6 |  |

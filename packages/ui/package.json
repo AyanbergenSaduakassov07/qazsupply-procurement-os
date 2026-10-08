@@ -1,0 +1,46 @@
+{
+  "name": "@qazsupply/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./lib/utils": "./src/lib/utils.ts",
+    "./components/ask-bar": "./src/components/ask-bar.tsx",
+    "./components/badge": "./src/components/badge.tsx",
+    "./components/button": "./src/components/button.tsx",
+    "./components/card": "./src/components/card.tsx",
+    "./components/charts": "./src/components/charts.tsx",
+    "./components/command-palette": "./src/components/command-palette.tsx",
+    "./components/data-table": "./src/components/data-table.tsx",
+    "./components/evidence-drawer": "./src/components/evidence-drawer.tsx",
+    "./components/finding-card": "./src/components/finding-card.tsx",
+    "./components/kpi": "./src/components/kpi.tsx",
+    "./components/probability-bar": "./src/components/probability-bar.tsx",
+    "./components/states": "./src/components/states.tsx",
+    "./components/timeline": "./src/components/timeline.tsx",
+    "./components/toast": "./src/components/toast.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@qazsupply/motion": "workspace:*",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "cmdk": "1.1.1",
+    "recharts": "3.10.1",
+    "sonner": "2.0.8",
+    "tailwind-merge": "3.7.0",
+    "vaul": "1.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "typescript": "7.0.2"
+  }
+}

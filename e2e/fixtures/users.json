@@ -1,0 +1,16 @@
+{
+  "_note": "LOCAL test users from infra/supabase/seed.sql. Not real credentials.",
+  "password": "qs-local-c98473c4de2a",
+  "users": {
+    "clientAdminA": "a.admin@qazsupply.test",
+    "clientUserA": "a.user@qazsupply.test",
+    "clientAdminB": "b.admin@qazsupply.test",
+    "reviewer": "reviewer@qazsupply.test",
+    "qsAdmin": "qs.admin@qazsupply.test",
+    "supplier": "supplier@qazsupply.test"
+  },
+  "orgs": {
+    "A": "10000000-0000-4000-a000-00000000000a",
+    "B": "10000000-0000-4000-a000-00000000000b"
+  }
+}

@@ -1,9 +1,208 @@
-/* Primitive layer only (M0). Semantic + component layers and dark mode land in M1. */
+/*
+ * QazSupply design tokens - three layers.
+ *
+ *   Layer 1 primitive   raw values, no meaning (--qs-color-*, --qs-space-*, ...)
+ *   Layer 2 semantic    meaning, themed light + dark (--qs-bg, --qs-text, ...)
+ *   Layer 3 component   one token per component decision (--qs-nav-*, --qs-btn-*, ...)
+ *
+ * Rules: colors come from CLAUDE.md. Contrast-safe derivations are the M0
+ * deviations reconciled in docs/design/design-system.md. Never read a primitives
+ * or semantic-layer token from a component; add a layer-3 token instead.
+ * Contrast is enforced by test/contrast.test.mjs (WCAG 2.2 AA, 4.5:1 text / 3:1 non-text).
+ */
+
+/* ------------------------------------------------------------------ Layer 1: primitive */
 :root {
-  --qs-frost: #eef1f3;
-  --qs-ink: #101418;
-  --qs-tengri: #0a8fb4;
-  --qs-gold: #c9a227;
-  --qs-risk: #c23b32;
-  --qs-ok: #2e7d5b;
+  /* Brand palette (CLAUDE.md) */
+  --qs-color-frost: #eef1f3;
+  --qs-color-ink: #101418;
+  --qs-color-tengri: #0a8fb4;
+  --qs-color-gold: #c9a227;
+  --qs-color-risk: #c23b32;
+  --qs-color-ok: #2e7d5b;
+
+  /* Contrast-safe derivations (deviation ledger in design-system.md) */
+  --qs-color-tengri-700: #076f8c; /* text/links/focus on light: 5.06:1 on frost */
+  --qs-color-tengri-800: #065e77; /* primary button fill, white text: 7.3:1 */
+  --qs-color-gold-800: #7a6114; /* gold as text on light: 5.22:1 */
+  --qs-color-ok-700: #276b4e; /* ok as text on light */
+  --qs-color-ink-muted: #5b6770;
+
+  /* Light surfaces */
+  --qs-color-white: #ffffff;
+  --qs-color-frost-raised: #f7f9fa;
+  --qs-color-border: #d4dbe0;
+  --qs-color-border-strong: #6b7680; /* UI boundary on white: 4.65:1 (WCAG 1.4.11) */
+
+  /* Dark primitives */
+  --qs-color-ink-900: #0b0f12;
+  --qs-color-ink-800: #12181d;
+  --qs-color-ink-700: #1a2229;
+  --qs-color-ink-600: #2a343c;
+  --qs-color-frost-muted: #9baab4;
+  --qs-color-tengri-300: #7ad3e8;
+  --qs-color-gold-300: #e4c766;
+  --qs-color-risk-300: #f08a82;
+  --qs-color-ok-300: #6fcb9f;
+
+  /* Spacing scale (4px base) */
+  --qs-space-1: 0.25rem;
+  --qs-space-2: 0.5rem;
+  --qs-space-3: 0.75rem;
+  --qs-space-4: 1rem;
+  --qs-space-5: 1.5rem;
+  --qs-space-6: 2rem;
+  --qs-space-7: 3rem;
+  --qs-space-8: 4rem;
+
+  /* Radius */
+  --qs-radius-sm: 4px;
+  --qs-radius-md: 8px;
+  --qs-radius-lg: 12px;
+  --qs-radius-pill: 999px;
+
+  /* Elevation */
+  --qs-elevation-1: 0 1px 2px rgba(16, 20, 24, 0.08);
+  --qs-elevation-2: 0 4px 12px rgba(16, 20, 24, 0.12);
+  --qs-elevation-3: 0 12px 32px rgba(16, 20, 24, 0.18);
+
+  /* Motion (see docs/design/design-system.md; anime.js v4) */
+  --qs-duration-micro: 200ms;
+  --qs-duration-complex: 360ms;
+  --qs-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Type scale (1.25 modular; body 16px) */
+  --qs-font-family:
+    "IBM Plex Sans", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --qs-font-size-xs: 0.75rem;
+  --qs-font-size-sm: 0.875rem;
+  --qs-font-size-md: 1rem;
+  --qs-font-size-lg: 1.25rem;
+  --qs-font-size-xl: 1.5rem;
+  --qs-font-size-2xl: 2rem;
+  --qs-line-height-tight: 1.2;
+  --qs-line-height-normal: 1.5;
+  --qs-font-weight-regular: 400;
+  --qs-font-weight-medium: 500;
+  --qs-font-weight-bold: 600;
+
+  /* Every figure uses tabular figures so columns and count-ups do not jitter. */
+  --qs-numeric-features: "tnum" 1, "lnum" 1;
+}
+
+/* ------------------------------------------------------------------ Layer 2: semantic */
+:root,
+[data-theme="light"] {
+  --qs-bg: var(--qs-color-frost);
+  --qs-surface: var(--qs-color-white);
+  --qs-surface-raised: var(--qs-color-frost-raised);
+  --qs-text: var(--qs-color-ink);
+  --qs-text-muted: var(--qs-color-ink-muted);
+  --qs-border: var(--qs-color-border);
+  --qs-border-strong: var(--qs-color-border-strong);
+
+  --qs-link: var(--qs-color-tengri-700);
+  --qs-focus: var(--qs-color-tengri-700);
+
+  --qs-accent: var(--qs-color-tengri);
+  --qs-accent-strong: var(--qs-color-tengri-800);
+  --qs-on-accent: var(--qs-color-white);
+
+  --qs-risk: var(--qs-color-risk);
+  --qs-ok: var(--qs-color-ok-700);
+  --qs-gold-text: var(--qs-color-gold-800);
+
+  --qs-scrim: rgba(16, 20, 24, 0.4);
+  --qs-nav-active-bg: rgba(10, 143, 180, 0.14);
+
+  /* Liquid Glass (navigation/control layer only) */
+  --qs-glass-bg: rgba(255, 255, 255, 0.62);
+  --qs-glass-border: rgba(255, 255, 255, 0.5);
+  --qs-glass-blur: blur(12px);
+}
+
+[data-theme="dark"],
+.dark {
+  --qs-bg: var(--qs-color-ink-900);
+  --qs-surface: var(--qs-color-ink-800);
+  --qs-surface-raised: var(--qs-color-ink-700);
+  --qs-text: var(--qs-color-frost);
+  --qs-text-muted: var(--qs-color-frost-muted);
+  --qs-border: var(--qs-color-ink-600);
+  --qs-border-strong: #71808b; /* UI boundary on dark surface: 4.39:1 */
+
+  --qs-link: var(--qs-color-tengri-300);
+  --qs-focus: var(--qs-color-tengri-300);
+
+  --qs-accent: var(--qs-color-tengri-300);
+  --qs-accent-strong: var(--qs-color-tengri-300);
+  --qs-on-accent: var(--qs-color-ink-900);
+
+  --qs-risk: var(--qs-color-risk-300);
+  --qs-ok: var(--qs-color-ok-300);
+  --qs-gold-text: var(--qs-color-gold-300);
+
+  --qs-scrim: rgba(0, 0, 0, 0.6);
+  --qs-nav-active-bg: rgba(122, 211, 232, 0.18);
+
+  --qs-glass-bg: rgba(18, 24, 29, 0.62);
+  --qs-glass-border: rgba(255, 255, 255, 0.12);
+  --qs-glass-blur: blur(12px);
+
+  --qs-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --qs-elevation-2: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --qs-elevation-3: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* Reduce-transparency fallback: opaque control surfaces, no blur (CLAUDE.md). */
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  [data-theme="light"],
+  [data-theme="dark"],
+  .dark {
+    --qs-glass-bg: var(--qs-surface);
+    --qs-glass-border: var(--qs-border);
+    --qs-glass-blur: none;
+  }
+}
+
+[data-reduce-transparency="true"] {
+  --qs-glass-bg: var(--qs-surface);
+  --qs-glass-border: var(--qs-border);
+  --qs-glass-blur: none;
+}
+
+/* ------------------------------------------------------------------ Layer 3: component */
+:root {
+  --qs-touch-target: 44px;
+
+  --qs-nav-bg: var(--qs-glass-bg);
+  --qs-nav-border: var(--qs-glass-border);
+  --qs-nav-blur: var(--qs-glass-blur);
+  --qs-nav-height: 56px;
+  --qs-nav-fg: var(--qs-text);
+  --qs-nav-fg-muted: var(--qs-text-muted);
+
+  --qs-card-bg: var(--qs-surface);
+  --qs-card-border: var(--qs-border);
+  --qs-card-radius: var(--qs-radius-lg);
+  --qs-card-shadow: var(--qs-elevation-1);
+
+  --qs-btn-primary-bg: var(--qs-accent-strong);
+  --qs-btn-primary-text: var(--qs-on-accent);
+  --qs-btn-radius: var(--qs-radius-md);
+  --qs-btn-min-height: var(--qs-touch-target);
+
+  --qs-input-bg: var(--qs-surface);
+  --qs-input-border: var(--qs-border-strong);
+  --qs-input-text: var(--qs-text);
+
+  --qs-drawer-bg: var(--qs-surface);
+  --qs-drawer-border: var(--qs-border);
+  --qs-drawer-shadow: var(--qs-elevation-3);
+  --qs-scrim-bg: var(--qs-scrim);
+
+  --qs-table-row-border: var(--qs-border);
+  --qs-table-header-bg: var(--qs-surface-raised);
 }

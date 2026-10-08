@@ -5,11 +5,15 @@ description = "QazSupply modular monolith: services/* and connectors/* are deep 
 requires-python = ">=3.13"
 dependencies = [
   "fastapi==0.142.4",
+  "psycopg[binary]==3.3.6",
+  "psycopg-pool==3.3.3",
+  "pyjwt[crypto]==2.15.0",
   "uvicorn==0.54.0",
 ]
 
 [dependency-groups]
 dev = [
+  "fonttools==4.66.0",
   "httpx==0.28.1",
   "mypy==2.4.0",
   "pip-audit==2.10.1",
@@ -26,7 +30,10 @@ package = false
 testpaths = ["services", "connectors", "scripts"]
 norecursedirs = ["vendor", "node_modules", ".venv"]
 pythonpath = ["."]
-markers = ["contract: connector contract and source-register checks"]
+markers = [
+  "contract: connector contract and source-register checks",
+  "integration: needs the local Supabase stack (make rls starts it)",
+]
 addopts = "-q"
 
 [tool.ruff]
@@ -42,3 +49,7 @@ ignore = ["S101"]
 strict = true
 files = ["services", "connectors", "scripts"]
 exclude = ["scripts/vendor\\.py$"]
+
+[[tool.mypy.overrides]]
+module = ["fontTools.*"]
+ignore_missing_imports = true

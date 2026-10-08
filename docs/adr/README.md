@@ -7,3 +7,4 @@ Template: `0000-template.md`. Append-only: supersede, never rewrite.
 - [0003](0003-event-sourced-logistics.md) Event-sourced logistics and conflict resolution (proposed)
 - [0004](0004-llm-gateway.md) LLM gateway and "LLM never computes numbers" (proposed)
 - [0005](0005-connector-contract.md) Connector contract (proposed; implemented)
+- [0006](0006-reference-tables.md) Global reference tables without org_id (accepted)

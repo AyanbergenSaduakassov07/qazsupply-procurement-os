@@ -1,7 +1,5 @@
 # services/report
 
-Report model, PDF export, review workflow.
+Report model, review workflow, PDF export (M3).
 
-**Public interface:** _to be defined in M0 / the phase that builds this module._
-
-**Rules:** see root `CLAUDE.md` and `CONTEXT.md`.
+**Public interface (M1):** `services.report.api.list_reports(conn, org_id)`. Client roles see only `released`/`superseded` reports (RLS); reviewers and QazSupply admins see every state.

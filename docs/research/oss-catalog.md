@@ -119,7 +119,7 @@ Two directions: (1) skills and MCP servers we use to build (Playwright MCP, Cont
 | [jsvine/pdfplumber](https://github.com/jsvine/pdfplumber) | MIT | 2026-06-14 | `4c64b92d5c` | D | M2 | PDF tables and text |
 | [microsoft/markitdown](https://github.com/microsoft/markitdown) | MIT | 2026-10-03 | `4cc9fa1765` | D | M2 | Office/PDF to Markdown for LLM ingestion |
 | [camelot-dev/camelot](https://github.com/camelot-dev/camelot) | MIT | 2026-10-06 | `b300e9e31a` | D | M6 | PDF table extraction |
-| [datalab-to/marker](https://github.com/datalab-to/marker) | Apache-2.0 | 2026-10-02 | `e7c67f1d23` | R | M6 | High-quality PDF to Markdown (restrictive licence: study only) |
+| [datalab-to/marker](https://github.com/datalab-to/marker) | Apache-2.0 | 2026-10-02 | `e7c67f1d23` | D* | M6 | High-quality PDF to Markdown; benchmark against Docling. **Gate:** code is Apache-2.0; model weights use a modified OpenRAIL-M (free for research, personal and startups under 5M USD funding/revenue; paid beyond): read the weights terms, then benchmark in M6. |
 | [docling-project/docling](https://github.com/docling-project/docling) | MIT | 2026-10-08 | `9590eb4955` | D | M6 | PDF/DOCX/image parsing to structured documents |
 | [getomni-ai/zerox](https://github.com/getomni-ai/zerox) | MIT | 2025-05-19 | `91bbb20c50` | V | M6 | Vision-LLM OCR pattern for hard scans |
 | [invoice-x/invoice2data](https://github.com/invoice-x/invoice2data) | MIT | 2026-10-06 | `09378126e3` | V | M6 | Template-based invoice field extraction |
@@ -127,7 +127,7 @@ Two directions: (1) skills and MCP servers we use to build (Playwright MCP, Cont
 | [mindee/doctr](https://github.com/mindee/doctr) | Apache-2.0 | 2026-10-07 | `fac9585c13` | D | M6 | OCR and layout in PyTorch |
 | [nodemailer/mailparser](https://github.com/nodemailer/mailparser) | MIT | 2026-10-05 | `e1882ddee1` | D | M6 | Parse inbound emails and attachments |
 | [ocrmypdf/OCRmyPDF](https://github.com/ocrmypdf/OCRmyPDF) | MPL-2.0 | 2026-10-07 | `58048daf96` | S | M6 | Make scanned PDFs searchable **Gate:** MPL-2.0 file-level copyleft: call as CLI/sidecar, do not modify. |
-| [opendatalab/MinerU](https://github.com/opendatalab/MinerU) | Apache-2.0 | 2026-09-29 | `ed50cc15bc` | R | M6 | Document extraction (copyleft: study only) |
+| [opendatalab/MinerU](https://github.com/opendatalab/MinerU) | Apache-2.0 | 2026-09-29 | `ed50cc15bc` | D* | M6 | Document extraction; benchmark against Docling. **Gate:** Apache-2.0 plus additional terms (commercial thresholds at 100M MAU or 20M USD monthly revenue, online-service attribution obligation): read LICENSE.md, then benchmark in M6. |
 | [PaddlePaddle/PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) | Apache-2.0 | 2026-09-16 | `dab3fe3537` | D | M6 | Multilingual OCR including Cyrillic |
 | [py-pdf/pypdf](https://github.com/py-pdf/pypdf) | BSD | 2026-10-08 | `4a50fe80d9` | D | M6 | PDF manipulation |
 | [tesseract-ocr/tesseract](https://github.com/tesseract-ocr/tesseract) | Apache-2.0 | 2026-10-07 | `09fe3f08b2` | S | M6 | Baseline OCR engine (kaz, rus traineddata) |
@@ -182,7 +182,7 @@ Two directions: (1) skills and MCP servers we use to build (Playwright MCP, Cont
 |---|---|---|---|---|---|---|
 | [datasets/un-locode](https://github.com/datasets/un-locode) | NOT FOUND in repo | 2026-07-27 | `b1309b37ed` | R | M6 | UN/LOCODE port and terminal codes **Gate:** was V; no clear licence: reference only until the author clarifies. |
 | [jkeen/tracking_number](https://github.com/jkeen/tracking_number) | MIT | 2026-08-15 | `4e30609478` | R | M6 | Carrier tracking-number patterns (port the rules) |
-| [karrioapi/karrio](https://github.com/karrioapi/karrio) | LGPL (see repo) | 2026-06-23 | `deea10f856` | S | M6 | Multi-carrier shipping/tracking API **Gate:** LGPL: run as separate service. |
+| [karrioapi/karrio](https://github.com/karrioapi/karrio) | LGPL (see repo) | 2026-06-23 | `deea10f856` | S | M6 | Multi-carrier shipping/tracking API. **Gate:** LGPL-3.0 core run as a separate service; the ee/ directory has a separate commercial licence: never use ee/. |
 | [M0r13n/pyais](https://github.com/M0r13n/pyais) | MIT | 2026-10-04 | `8d0d0acc49` | D | M6 | Decode AIS vessel messages |
 | [marchah/sea-ports](https://github.com/marchah/sea-ports) | NOT FOUND | 2022-06-28 | `3606d4d948` | R | M6 | Seaport dataset **Gate:** was V; no clear licence: reference only until the author clarifies. **Stale (last commit before 2025).** |
 | [mborsetti/airportsdata](https://github.com/mborsetti/airportsdata) | MIT | 2026-09-05 | `47ae282a84` | D | M6 | Airport dataset |

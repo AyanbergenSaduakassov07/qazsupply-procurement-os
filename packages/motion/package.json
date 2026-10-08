@@ -1,0 +1,30 @@
+{
+  "name": "@qazsupply/motion",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./presets": {
+      "types": "./src/presets.d.ts",
+      "default": "./src/presets.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "animejs": "4.5.0"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "react": "19.3.0",
+    "typescript": "7.0.2"
+  }
+}

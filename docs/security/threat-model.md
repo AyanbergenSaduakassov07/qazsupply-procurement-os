@@ -47,3 +47,24 @@ flowchart LR
 
 ## Top 5 to watch
 T9 cross-tenant leak, T10 data to model provider, T13 injection via supplier content, T7 supply chain, T6 malicious uploads.
+
+## M1 update (2026-10-08)
+
+Mitigations now implemented and tested:
+| Threat | What M1 built | Test |
+|---|---|---|
+| T9 cross-tenant read/write | RLS on all 19 public tables, role-aware policies, composite `(x_id, org_id)` FKs, explicit grants, anon has nothing | `infra/supabase/tests/m1_rls.test.sql` (data-driven over every org table), API tests `services/gateway/test_api_integration.py`, UI tests `e2e/tests/auth.spec.ts` |
+| T4/T8 tampering / repudiation | `audit_log` append-only (trigger, even for owner), sha256 hash chain per org, `private.verify_audit_chain`, actor forced to `auth.uid()` | pgTAP tamper test pinpoints the edited row |
+| T1 spoofing | JWT verified against JWKS (ES256), `aud` + `exp` required; tokens only in httpOnly cookies; refresh in `proxy.ts` | forged-signature test -> 401 |
+| T11 PII in logs | allowlisted JSON log fields only, no URLs/query strings | `test_log_lines_keep_only_allowlisted_fields` |
+| T13/L1 injection via untrusted text | LLM gateway escapes data so it cannot close its `<data>` block; no tools in M1 | `test_untrusted_text_cannot_close_the_data_block` |
+| T16 LLM cost abuse | per-tenant monthly budget + kill switch, every attempt in `llm_calls` | gateway tests |
+
+New surface introduced in M1 and its residual risk:
+| # | Threat | Mitigation | Residual |
+|---|---|---|---|
+| T21 | Session theft via XSS | httpOnly cookies; React escapes output; no `dangerouslySetInnerHTML` | Medium until a CSP is set (M3, before first client) |
+| T22 | CSRF on server actions (sign-in, sign-out, org switch) | Next validates `Origin` on server actions; `sameSite=lax`; org switch re-checked server-side | Low |
+| T23 | Forged `qs_org` cookie | Honoured only if the user is a member; API re-checks membership (404) | Low (tested) |
+| T24 | Security-definer helpers (`private.*`) misused | Fixed `search_path=''`, schema not exposed by PostgREST, execute granted to `authenticated` only | Low |
+| T25 | Service-role paths (ledger, future pipelines) bypass RLS | Only `PostgresLedger` uses a service connection in M1; every future one needs its own isolation test | Medium |

@@ -2249,13 +2249,13 @@
       "sha": "e7c67f1d239ea6a805cbf4ed6c6b2056d435e22d",
       "license": "Apache-2.0",
       "licenseClass": "PERMISSIVE",
-      "mode": "R",
+      "mode": "D*",
       "phase": "M6",
       "category": "DOC",
       "verified": "2026-10-08",
       "paths": [],
-      "gate": "",
-      "note": "High-quality PDF to Markdown (restrictive licence: study only)"
+      "gate": "code is Apache-2.0; model weights use a modified OpenRAIL-M (free for research, personal and startups under 5M USD funding/revenue; paid beyond): read the weights terms, then benchmark in M6",
+      "note": "High-quality PDF to Markdown; benchmark against Docling"
     },
     {
       "repo": "datasets/un-locode",
@@ -2350,7 +2350,7 @@
       "category": "LOG",
       "verified": "2026-10-08",
       "paths": [],
-      "gate": "LGPL: run as separate service",
+      "gate": "LGPL-3.0 core run as a separate service; the ee/ directory has a separate commercial licence: never use ee/",
       "note": "Multi-carrier shipping/tracking API"
     },
     {
@@ -2505,13 +2505,13 @@
       "sha": "ed50cc15bc2c9bfb00520dadfe61979866e62236",
       "license": "Apache-2.0",
       "licenseClass": "PERMISSIVE",
-      "mode": "R",
+      "mode": "D*",
       "phase": "M6",
       "category": "DOC",
       "verified": "2026-10-08",
       "paths": [],
-      "gate": "",
-      "note": "Document extraction (copyleft: study only)"
+      "gate": "Apache-2.0 plus additional terms (commercial thresholds at 100M MAU or 20M USD monthly revenue, online-service attribution obligation): read LICENSE.md, then benchmark in M6",
+      "note": "Document extraction; benchmark against Docling"
     },
     {
       "repo": "PaddlePaddle/PaddleOCR",

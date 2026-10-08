@@ -44,10 +44,10 @@ select throws_ok(
   'user A cannot add themself to Org B'
 );
 
-select throws_ok(
+-- Since M1 client_admins may rename their own org, so UPDATE is granted; RLS must filter Org B out.
+select lives_ok(
   $$update public.organizations set name = 'Hijacked' where id = '10000000-0000-0000-0000-00000000000b'$$,
-  '42501', null,
-  'user A cannot update Org B'
+  'user A update on Org B runs but RLS matches 0 rows (checked below)'
 );
 select throws_ok(
   $$delete from public.organizations where id = '10000000-0000-0000-0000-00000000000b'$$,
@@ -67,7 +67,8 @@ select is(
   'Org B is unchanged'
 );
 select is(
-  (select count(*)::int from public.memberships),
+  (select count(*)::int from public.memberships
+   where org_id in ('10000000-0000-0000-0000-00000000000a', '10000000-0000-0000-0000-00000000000b')),
   2,
   'no membership rows were added'
 );

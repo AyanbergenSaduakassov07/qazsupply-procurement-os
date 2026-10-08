@@ -1,0 +1,19 @@
+{
+  "name": "@qazsupply/api-client",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "cd ../.. && uv run python -m services.gateway.openapi > packages/api-client/openapi.json && openapi-typescript packages/api-client/openapi.json -o packages/api-client/src/schema.d.ts",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}
