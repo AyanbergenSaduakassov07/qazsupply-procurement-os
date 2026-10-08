@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype: Evidence drawer</title>
+<!--
+  THROWAWAY PROTOTYPE (M0). Tests the interaction model only: every number opens
+  its evidence in a side drawer. Fake data. Not production code; do not import.
+  Questions it answers: drawer vs modal? what goes first? keyboard + screen reader flow?
+-->
+<style>
+  :root {
+    --frost: #eef1f3; --ink: #101418; --muted: #4a5560; --line: #cfd6db;
+    --tengri-700: #076f8c; --tengri-800: #065e77; --gold: #c9a227; --gold-800: #7a6114;
+    --risk: #c23b32; --surface: #ffffff;
+    --dur: 220ms;
+  }
+  @media (prefers-reduced-motion: reduce) { :root { --dur: 0ms; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: var(--frost); color: var(--ink); }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px; }
+  .note { color: var(--muted); font-size: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 16px 0; }
+  .figure {
+    font: inherit; font-variant-numeric: tabular-nums; font-weight: 650; color: var(--tengri-800);
+    background: none; border: 0; border-bottom: 2px dotted var(--tengri-700); padding: 0 2px; cursor: pointer;
+  }
+  .figure:focus-visible, button:focus-visible { outline: 3px solid var(--tengri-700); outline-offset: 2px; }
+  .headline { font-size: 32px; }
+  .badge { display: inline-block; font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .badge.gold { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+  .scrim { position: fixed; inset: 0; background: rgb(16 20 24 / 0.45); opacity: 0; pointer-events: none; transition: opacity var(--dur) ease-out; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  aside {
+    position: fixed; top: 0; right: 0; height: 100dvh; width: min(480px, 100vw); background: var(--surface);
+    border-left: 1px solid var(--line); padding: 20px; overflow-y: auto;
+    transform: translateX(100%); transition: transform var(--dur) ease-out; visibility: hidden;
+  }
+  aside.open { transform: none; visibility: visible; }
+  aside header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+  .close { min-width: 44px; min-height: 44px; font-size: 22px; background: none; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 16px 0; }
+  dt { color: var(--muted); } dd { margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  td.num, th.num { text-align: right; }
+  .method { background: var(--frost); padding: 12px; border-radius: 8px; font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="note">Прототип (M0). Данные вымышлены. Нажмите на любое подчёркнутое число или используйте Tab + Enter.</p>
+  <h1>Отчёт по закупкам: I–II кв. 2026</h1>
+  <div class="card">
+    <p>Потенциальная экономия</p>
+    <p class="headline"><button class="figure" data-ev="ev-1" aria-haspopup="dialog">4 820 000 ₸</button></p>
+    <p class="note">Проверено: А. Сейткали, 07.10.2026 · <span class="badge gold">оценка</span></p>
+  </div>
+  <div class="card">
+    <h2>Замечание 1. Разброс цен: перчатки нитриловые, L, уп. 100</h2>
+    <p>Средняя цена у поставщика «Альфа» выше медианы по другим поставщикам на
+      <button class="figure" data-ev="ev-2" aria-haspopup="dialog">18,4%</button>
+      за период март–июнь.</p>
+  </div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="ev-title" tabindex="-1">
+  <header>
+    <div>
+      <p class="note" id="ev-id"></p>
+      <h2 id="ev-title" style="margin:0"></h2>
+    </div>
+    <button class="close" id="close" aria-label="Закрыть">×</button>
+  </header>
+  <dl id="ev-meta"></dl>
+  <h3>Как посчитано</h3>
+  <p class="method" id="ev-method"></p>
+  <h3>Исходные строки</h3>
+  <table>
+    <caption class="note" style="text-align:left" id="ev-caption"></caption>
+    <thead><tr><th>Файл, строка</th><th>Поставщик</th><th class="num">Цена, ₸</th></tr></thead>
+    <tbody id="ev-rows"></tbody>
+  </table>
+</aside>
+
+<script>
+  const EVIDENCE = {
+    "ev-1": {
+      title: "4 820 000 ₸ потенциальной экономии",
+      meta: [["Метод", "Сумма по 7 замечаниям"], ["Уверенность", "средняя (0,72)"], ["Проверил", "А. Сейткали, 07.10.2026"], ["Версия расчёта", "analyze 0.1.0 · run 2026-10-07-03"]],
+      method: "Сумма оценок экономии по одобренным замечаниям. Отклонённые замечания не входят.",
+      caption: "Показаны первые 3 из 214 строк",
+      rows: [["purchases_2026.xlsx, 12", "Альфа ТОО", "18 400"], ["purchases_2026.xlsx, 57", "Бета ТОО", "15 300"], ["purchases_2026.xlsx, 88", "Альфа ТОО", "18 900"]],
+    },
+    "ev-2": {
+      title: "18,4% выше медианы",
+      meta: [["Метод", "price_variance v1"], ["Уверенность", "высокая (0,91)"], ["Проверил", "А. Сейткали, 07.10.2026"], ["Сопоставление товара", "ЕНС ТРУ 222219.300.000001 (пример)"]],
+      method: "(средняя цена «Альфа» − медиана цен других поставщиков) ÷ медиана. Цены приведены к ₸ по курсу Нацбанка на дату закупки.",
+      caption: "6 строк, март–июнь 2026",
+      rows: [["purchases_2026.xlsx, 12", "Альфа ТОО", "18 400"], ["purchases_2026.xlsx, 88", "Альфа ТОО", "18 900"], ["purchases_2026.xlsx, 57", "Бета ТОО", "15 300"], ["purchases_2026.xlsx, 101", "Гамма ТОО", "15 900"]],
+    },
+  };
+  const drawer = document.getElementById("drawer"), scrim = document.getElementById("scrim");
+  let opener = null;
+  function open(id, from) {
+    const ev = EVIDENCE[id]; opener = from;
+    document.getElementById("ev-id").textContent = "Основание " + id;
+    document.getElementById("ev-title").textContent = ev.title;
+    document.getElementById("ev-meta").replaceChildren(...ev.meta.flatMap(([k, v]) => {
+      const dt = document.createElement("dt"); dt.textContent = k;
+      const dd = document.createElement("dd"); dd.textContent = v; return [dt, dd];
+    }));
+    document.getElementById("ev-method").textContent = ev.method;
+    document.getElementById("ev-caption").textContent = ev.caption;
+    document.getElementById("ev-rows").replaceChildren(...ev.rows.map(r => {
+      const tr = document.createElement("tr");
+      r.forEach((c, i) => { const td = document.createElement("td"); td.textContent = c; if (i === 2) td.className = "num"; tr.append(td); });
+      return tr;
+    }));
+    drawer.classList.add("open"); scrim.classList.add("open");
+    history.replaceState(null, "", "?evidence=" + id);
+    drawer.focus();
+  }
+  function close() {
+    drawer.classList.remove("open"); scrim.classList.remove("open");
+    history.replaceState(null, "", location.pathname);
+    opener?.focus();
+  }
+  document.querySelectorAll(".figure").forEach(b => b.addEventListener("click", () => open(b.dataset.ev, b)));
+  document.getElementById("close").addEventListener("click", close);
+  scrim.addEventListener("click", close);
+  document.addEventListener("keydown", e => {
+    if (!drawer.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "Tab") { // minimal focus trap
+      const f = [...drawer.querySelectorAll("button, [tabindex]")].filter(el => !el.disabled);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  const deep = new URLSearchParams(location.search).get("evidence");
+  if (deep && EVIDENCE[deep]) open(deep, document.querySelector(`[data-ev="${deep}"]`));
+</script>
+</body>
+</html>

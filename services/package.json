@@ -1,0 +1,7 @@
+{
+  "name": "@qazsupply/api",
+  "private": true,
+  "scripts": {
+    "dev": "uv run uvicorn services.gateway.app:app --app-dir .. --reload --port 8000"
+  }
+}

@@ -1,0 +1,9 @@
+/* Primitive layer only (M0). Semantic + component layers and dark mode land in M1. */
+:root {
+  --qs-frost: #eef1f3;
+  --qs-ink: #101418;
+  --qs-tengri: #0a8fb4;
+  --qs-gold: #c9a227;
+  --qs-risk: #c23b32;
+  --qs-ok: #2e7d5b;
+}

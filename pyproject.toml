@@ -1,0 +1,44 @@
+[project]
+name = "qazsupply"
+version = "0.0.0"
+description = "QazSupply modular monolith: services/* and connectors/* are deep modules of one deployable."
+requires-python = ">=3.13"
+dependencies = [
+  "fastapi==0.142.4",
+  "uvicorn==0.54.0",
+]
+
+[dependency-groups]
+dev = [
+  "httpx==0.28.1",
+  "mypy==2.4.0",
+  "pip-audit==2.10.1",
+  "pip-licenses==5.5.5",
+  "pre-commit==4.6.2",
+  "pytest==9.1.1",
+  "ruff==0.16.10",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["services", "connectors", "scripts"]
+norecursedirs = ["vendor", "node_modules", ".venv"]
+pythonpath = ["."]
+markers = ["contract: connector contract and source-register checks"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["infra/supabase", "docs", "vendor", "scripts/vendor.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "T20", "BLE"]
+ignore = ["S101"]
+
+[tool.mypy]
+strict = true
+files = ["services", "connectors", "scripts"]
+exclude = ["scripts/vendor\\.py$"]

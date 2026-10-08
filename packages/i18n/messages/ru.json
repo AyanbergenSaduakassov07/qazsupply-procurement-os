@@ -1,0 +1,9 @@
+{
+  "app.name": "QazSupply",
+  "home.title": "Платформа закупок и поставок",
+  "home.notice": "Это технический каркас. Функций продукта пока нет.",
+  "home.status.label": "Состояние API",
+  "home.status.ok": "Работает",
+  "home.status.down": "Недоступно",
+  "nav.language": "Язык"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@qazsupply/i18n",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

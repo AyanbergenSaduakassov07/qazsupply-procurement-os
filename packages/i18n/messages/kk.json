@@ -1,0 +1,9 @@
+{
+  "app.name": "QazSupply",
+  "home.title": "Сатып алу және жеткізу платформасы",
+  "home.notice": "Бұл техникалық негіз. Өнім функциялары әзірге жоқ.",
+  "home.status.label": "API күйі",
+  "home.status.ok": "Жұмыс істеп тұр",
+  "home.status.down": "Қолжетімсіз",
+  "nav.language": "Тіл"
+}

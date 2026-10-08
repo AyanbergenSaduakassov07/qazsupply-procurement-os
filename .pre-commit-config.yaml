@@ -1,0 +1,37 @@
+# `make install` registers these for pre-commit and commit-msg stages.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents] # pnpm 12 lockfile is multi-document
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: detect-private-key
+      - id: end-of-file-fixer
+        exclude: ^vendor/
+      - id: trailing-whitespace
+        exclude: ^(vendor/|.*\.md$)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.10
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [--strict, feat, fix, docs, chore, refactor, test, ci, build, perf, revert]
+  - repo: local
+    hooks:
+      - id: biome
+        name: biome
+        entry: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true
+        language: system
+        types_or: [ts, tsx, javascript, json]

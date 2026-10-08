@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype: Shipment timeline</title>
+<!--
+  THROWAWAY PROTOTYPE (M0). Tests: vertical timeline of Legs + events with source badges
+  and confidence; conflicting sources shown, not hidden; ETA as a band, not a date;
+  "delayed" as a flag, not a state. Phone-first. Fake data. Do not import.
+-->
+<style>
+  :root {
+    --frost: #eef1f3; --ink: #101418; --muted: #4a5560; --line: #cfd6db; --surface: #fff;
+    --tengri-700: #076f8c; --tengri: #0a8fb4; --risk: #c23b32; --ok-700: #276b4e; --gold: #c9a227;
+    --dur: 200ms;
+  }
+  @media (prefers-reduced-motion: reduce) { :root { --dur: 0ms; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; background: var(--frost); color: var(--ink); }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  .note { color: var(--muted); font-size: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin: 12px 0; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .chip { font-size: 13px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+  .chip.risk { border-color: var(--risk); color: var(--risk); font-weight: 600; }
+  .chip.risk::before { content: "▲ "; }
+  .eta-bar { position: relative; height: 28px; background: var(--frost); border-radius: 6px; margin: 8px 0 4px; }
+  .eta-band { position: absolute; top: 4px; bottom: 4px; background: repeating-linear-gradient(45deg, var(--tengri) 0 6px, #3fa9c6 6px 12px); border-radius: 4px; }
+  .eta-promise { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--ink); }
+  .scale { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  ol.timeline { list-style: none; margin: 0; padding: 0; }
+  .leg { margin-top: 20px; font-weight: 650; }
+  .event { position: relative; padding: 0 0 16px 28px; border-left: 2px solid var(--line); margin-left: 8px; }
+  .event::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--tengri-700); }
+  .event.done::before { background: var(--tengri-700); }
+  .event.ignored { color: var(--muted); }
+  .event.ignored::before { border-style: dashed; border-color: var(--muted); }
+  .src { font-size: 12px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
+  details summary { cursor: pointer; color: var(--tengri-700); min-height: 44px; display: flex; align-items: center; }
+  details > div { animation: in var(--dur) ease-out; }
+  @keyframes in { from { opacity: 0; transform: translateY(-4px); } }
+  time { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <p class="note">Прототип (M0). Данные вымышлены.</p>
+  <div class="card">
+    <div class="row">
+      <h1 style="font-size:20px;margin:0">SH-0142 · Урумчи → Караганда</h1>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <span class="chip">На границе</span>
+      <span class="chip risk">Риск опоздания</span>
+      <span class="chip">Обновлено 08.10 07:40 · КТЖ</span>
+    </div>
+    <h2 style="font-size:16px;margin:16px 0 0">Прибытие (прогноз)</h2>
+    <div class="eta-bar" role="img" aria-label="80% вероятности прибытия между 14 и 19 октября. Обещано 15 октября. Вероятность прибыть к обещанной дате 34%.">
+      <div class="eta-band" style="left:30%;width:50%"></div>
+      <div class="eta-promise" style="left:40%"></div>
+    </div>
+    <div class="scale"><span>11.10</span><span>14.10</span><span>17.10</span><span>20.10</span></div>
+    <p style="margin:8px 0 0"><strong>34%</strong> вероятность прибыть к 15.10 (обещано). 80% интервал: <time>14.10</time>–<time>19.10</time>.</p>
+    <details>
+      <summary>Почему так и что изменилось со вчера</summary>
+      <div class="note">Медленнее обычного на Достык (очередь выше медианы за 30 дней). Вчера было 51%. Модель: базовая статистическая, 42 похожих перевозки. <em>Это не измерение, а оценка.</em></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="font-size:16px;margin:0">История перевозки</h2>
+    <ol class="timeline">
+      <li class="leg">Плечо 1 · авто · Урумчи → Достык (перевозчик А)</li>
+      <li class="event done"><time>03.10 09:10</time> Груз принят <span class="src">CMR, скан</span> <span class="note">уверенность высокая</span></li>
+      <li class="event done"><time>05.10 18:30</time> Прибыл на Достык <span class="src">API перевозчика</span></li>
+      <li class="leg">Плечо 2 · ж/д · Достык → Караганда (КТЖ)</li>
+      <li class="event done"><time>06.10 11:00</time> На таможенном контроле <span class="src">вручную, Д. Ким</span></li>
+      <li class="event ignored">
+        <time>06.10 12:15</time> «Выпущен» <span class="src">e-mail перевозчика</span>
+        <details>
+          <summary>Не учтено: противоречит более надёжному источнику</summary>
+          <div class="note">Ручная запись (06.10 11:00) и данные КТЖ показывают, что груз ещё на контроле. Правило: ручная запись и документы важнее e-mail (ADR 0003).</div>
+        </details>
+      </li>
+      <li class="event"><time>08.10 07:40</time> Ожидает отправки <span class="src">КТЖ</span> <span class="note">уверенность средняя</span></li>
+    </ol>
+  </div>
+</main>
+</body>
+</html>

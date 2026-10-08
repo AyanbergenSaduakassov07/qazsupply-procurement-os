@@ -1,0 +1,9 @@
+{
+  "app.name": "QazSupply",
+  "home.title": "Procurement and supply platform",
+  "home.notice": "This is the technical scaffold. No product features yet.",
+  "home.status.label": "API status",
+  "home.status.ok": "Operational",
+  "home.status.down": "Unavailable",
+  "nav.language": "Language"
+}
