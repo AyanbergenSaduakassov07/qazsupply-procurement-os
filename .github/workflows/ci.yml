@@ -80,6 +80,7 @@ jobs:
     env:
       API_URL: http://localhost:8000
       SUPABASE_URL: http://127.0.0.1:54321
+      APP_URL: http://localhost:3000 # plain http in CI: no Secure cookies / https upgrade
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -112,6 +113,7 @@ jobs:
           path: |
             e2e/playwright-report
             e2e/test-results
+            e2e/tests/__screenshots__
             api.log
             web.log
           retention-days: 7

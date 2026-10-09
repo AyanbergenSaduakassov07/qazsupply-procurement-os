@@ -81,7 +81,10 @@
             "type": "array"
           }
         },
-        "required": ["chain_intact", "entries"],
+        "required": [
+          "chain_intact",
+          "entries"
+        ],
         "title": "AuditLog",
         "type": "object"
       },
@@ -196,7 +199,12 @@
             "type": "string"
           }
         },
-        "required": ["finding_id", "type", "report_id", "reviewed_by"],
+        "required": [
+          "finding_id",
+          "type",
+          "report_id",
+          "reviewed_by"
+        ],
         "title": "EvidenceFinding",
         "type": "object"
       },
@@ -325,7 +333,10 @@
       "Health": {
         "properties": {
           "db": {
-            "enum": ["ok", "down"],
+            "enum": [
+              "ok",
+              "down"
+            ],
             "title": "Db",
             "type": "string"
           },
@@ -335,7 +346,10 @@
             "type": "string"
           }
         },
-        "required": ["status", "db"],
+        "required": [
+          "status",
+          "db"
+        ],
         "title": "Health",
         "type": "object"
       },
@@ -365,7 +379,11 @@
             "type": "string"
           }
         },
-        "required": ["user_id", "email", "memberships"],
+        "required": [
+          "user_id",
+          "email",
+          "memberships"
+        ],
         "title": "Me",
         "type": "object"
       },
@@ -381,12 +399,22 @@
             "type": "string"
           },
           "role": {
-            "enum": ["client_admin", "client_user", "reviewer", "qazsupply_admin", "supplier"],
+            "enum": [
+              "client_admin",
+              "client_user",
+              "reviewer",
+              "qazsupply_admin",
+              "supplier"
+            ],
             "title": "Role",
             "type": "string"
           }
         },
-        "required": ["org_id", "org_name", "role"],
+        "required": [
+          "org_id",
+          "org_name",
+          "role"
+        ],
         "title": "Membership",
         "type": "object"
       },
@@ -476,7 +504,11 @@
             "type": "string"
           }
         },
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError",
         "type": "object"
       }

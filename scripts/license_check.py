@@ -25,7 +25,13 @@ ALIASES = {
     "Mozilla Public License 2.0 (MPL 2.0)": "MPL-2.0",
 }
 # Reviewed exceptions: package -> reason. Keep this short and justified.
-EXCEPTIONS: dict[str, str] = {}
+EXCEPTIONS: dict[str, str] = {
+    # docs/compliance/third-party-licenses.md policy 2: LGPL is allowed when installed
+    # unmodified from a registry (dynamic linking, no vendoring, no edits).
+    "psycopg": "LGPL-3.0, unmodified PyPI install (policy 2)",
+    "psycopg-binary": "LGPL-3.0, unmodified PyPI install (policy 2)",
+    "psycopg-pool": "LGPL-3.0, unmodified PyPI install (policy 2)",
+}
 
 log = logging.getLogger("license_check")
 

@@ -11,7 +11,9 @@
       "!**/.next",
       "!**/node_modules",
       "!docs/design/prototypes",
-      "!infra/supabase"
+      "!infra/supabase",
+      "!packages/api-client/openapi.json",
+      "!packages/api-client/src/schema.d.ts"
     ]
   },
   "formatter": {

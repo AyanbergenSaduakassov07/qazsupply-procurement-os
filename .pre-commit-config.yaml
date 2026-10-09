@@ -10,7 +10,7 @@ repos:
         args: [--maxkb=500]
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: ^vendor/
+        exclude: ^(vendor/|packages/api-client/(openapi\.json|src/schema\.d\.ts))
       - id: trailing-whitespace
         exclude: ^(vendor/|.*\.md$)
   - repo: https://github.com/astral-sh/ruff-pre-commit

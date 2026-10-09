@@ -55,7 +55,12 @@ export function secondsUntilExpiry(jwt: string): number {
 
 type CookieWriter = Pick<NextResponse["cookies"], "set">;
 
-const secure = process.env.NODE_ENV === "production";
+/** Secure cookies whenever the public URL is HTTPS (always in production; plain http only for local/CI runs). */
+// Fails closed: without APP_URL a production build still uses secure cookies.
+export const httpsOnly = process.env.APP_URL
+  ? process.env.APP_URL.startsWith("https://")
+  : process.env.NODE_ENV === "production";
+const secure = httpsOnly;
 
 export function writeTokens(jar: CookieWriter, tokens: Tokens): void {
   jar.set(ACCESS_TOKEN_COOKIE, tokens.access_token, {

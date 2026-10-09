@@ -139,3 +139,22 @@ test("phone: settings page carries theme, transparency and language", async ({
   await expect(page).toHaveURL(/\/kk\/settings$/);
   await expectNoAxeViolations(page);
 });
+
+test("CSP is enforced with a nonce and no page violates it", async ({ page }) => {
+  const violations: string[] = [];
+  page.on("console", (msg) => {
+    if (/Content Security Policy|Refused to/i.test(msg.text())) violations.push(msg.text());
+  });
+  const response = await page.goto("/en");
+  const csp = response?.headers()["content-security-policy"] ?? "";
+  expect(csp).toMatch(/script-src 'self' 'nonce-[^']+' 'strict-dynamic'/);
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
+  for (const path of ["/en/gallery", "/en/audit", "/en/settings"]) {
+    await page.goto(path);
+    await page.waitForLoadState("networkidle");
+  }
+  await page.goto("/en/gallery");
+  await page.getByRole("button", { name: "Open evidence" }).first().click();
+  expect(violations).toEqual([]);
+});

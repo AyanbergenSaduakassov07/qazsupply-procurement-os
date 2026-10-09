@@ -1,7 +1,7 @@
 import { isLocale, locales, t } from "@qazsupply/i18n";
 import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { REDUCE_TRANSPARENCY_COOKIE } from "../../lib/cookies";
@@ -39,6 +39,7 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
 
   const reduceTransparency = (await cookies()).get(REDUCE_TRANSPARENCY_COOKIE)?.value === "1";
+  const nonce = (await headers()).get("x-nonce") ?? undefined; // set per request by proxy.ts (CSP)
 
   return (
     <html
@@ -48,7 +49,7 @@ export default async function LocaleLayout({
       data-reduce-transparency={reduceTransparency ? "true" : undefined}
     >
       <body>
-        <Providers>{children}</Providers>
+        <Providers nonce={nonce}>{children}</Providers>
       </body>
     </html>
   );

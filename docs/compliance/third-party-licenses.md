@@ -246,3 +246,11 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | locustio/locust | MIT | PERMISSIVE | D | `5187530e5d` | M9 |  |
 | openfga/openfga | Apache-2.0 | PERMISSIVE | S | `526995eb20` | M9 |  |
 | temporalio/temporal | MIT | PERMISSIVE | S | `d7f7d26196` | M9 |  |
+
+## Package dependencies outside the permissive allowlist (reviewed)
+
+`scripts/license_check.py` fails CI on any licence outside the allowlist unless it is listed here and in its `EXCEPTIONS`.
+
+| Package | Licence | Why allowed | Reviewed |
+|---|---|---|---|
+| psycopg, psycopg-binary, psycopg-pool | LGPL-3.0-only | Policy 2: installed unmodified from PyPI, dynamically used, never vendored or edited | 2026-10-08 (M1) |

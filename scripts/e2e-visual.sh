@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Render or compare visual baselines in the Linux Playwright image (same pixels as CI).
 # Needs running: local Supabase, API on :8000, and a PRODUCTION web build on :3000
-# (`pnpm --filter @qazsupply/web build && pnpm --filter @qazsupply/web start`).
+# (`pnpm --filter @qazsupply/web build && pnpm --filter @qazsupply/web start`), started with
+# APP_URL set to the http URL the container uses (macOS: http://host.docker.internal:3000).
 # Usage: scripts/e2e-visual.sh [--update-snapshots] [extra playwright args]
 set -euo pipefail
 cd "$(dirname "$0")/.."
