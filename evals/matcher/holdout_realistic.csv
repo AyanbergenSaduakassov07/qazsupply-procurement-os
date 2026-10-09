@@ -1,0 +1,51 @@
+id,text,label,lang,split
+H01,"Перчатки рабочие с нитриловым покрытием, р.9",SYN-PPE-001,ru,holdout
+H02,Перчатки трикотажные х/б с ПВХ точкой,SYN-PPE-002,ru,holdout
+H03,Перчатки латексные смотровые,NONE,ru,holdout
+H04,Каска шахтерская с креплением для фонаря,SYN-PPE-003,ru,holdout
+H05,"Очки защитные открытые, прозрачные",SYN-PPE-004,ru,holdout
+H06,Респиратор ФFP2 с клапаном,SYN-PPE-005,ru,holdout
+H07,Ботинки кожаные с металлическим подноском р.43,SYN-PPE-006,ru,holdout
+H08,Жилет сигнальный 2 класса защиты оранжевый,SYN-PPE-007,ru,holdout
+H09,Беруши одноразовые (пара),SYN-PPE-008,ru,holdout
+H10,Подшипник SKF 6205-2RS,SYN-BRG-001,ru,holdout
+H11,Подшипник 6310 ZZ,SYN-BRG-002,ru,holdout
+H12,Подшипник 22222 EK/C3 роликовый,SYN-BRG-003,ru,holdout
+H13,Подшипник 6206,NONE,ru,holdout
+H14,"Дизельное топливо ЕВРО-5, межсезонное",SYN-FUL-001,ru,holdout
+H15,Масло Shell Rimula R4 15W40 209л,SYN-FUL-002,ru,holdout
+H16,Масло гидравлическое ВМГЗ,SYN-FUL-003,ru,holdout
+H17,Смазка Литол-24 ведро 18кг,SYN-FUL-004,ru,holdout
+H18,Масло трансмиссионное 80W-90,NONE,ru,holdout
+H19,Кабель ВВГнг-LS 3х2.5,SYN-ELC-001,ru,holdout
+H20,Кабель КГ 3*16+1*6,SYN-ELC-002,ru,holdout
+H21,Лампа LED 10W E27 светодиодная,SYN-ELC-003,ru,holdout
+H22,Выключатель автоматический ВА47-29 1P 16A,SYN-ELC-004,ru,holdout
+H23,Болт М12х60 оцинкованный,SYN-FST-001,ru,holdout
+H24,Гайка М12 DIN 934,SYN-FST-002,ru,holdout
+H25,Шайба М12 плоская оцинк.,SYN-FST-003,ru,holdout
+H26,Болт М16х80,NONE,ru,holdout
+H27,Лента конвейерная резинотканевая 1200 мм,SYN-MIN-001,ru,holdout
+H28,Коронка буровая штыревая 45 мм,SYN-MIN-002,ru,holdout
+H29,Шары мелющие д.100 мм,SYN-MIN-003,ru,holdout
+H30,Канат стальной 16.5 мм,SYN-MIN-004,ru,holdout
+H31,Шина 40.00R57 для БелАЗ,SYN-MIN-005,ru,holdout
+H32,Фильтр масляный двигателя Komatsu,SYN-MIN-006,ru,holdout
+H33,Фильтр воздушный кабины,SYN-MIN-007,ru,holdout
+H34,Электроды МР-3 д.4 мм,SYN-WLD-001,ru,holdout
+H35,Кислород газообразный баллон 40л,SYN-WLD-002,ru,holdout
+H36,Цемент ПЦ 400 Д20 в мешках,SYN-CNS-001,ru,holdout
+H37,Арматура А500С д.12,SYN-CNS-002,ru,holdout
+H38,Бумага SvetoCopy A4 500л,SYN-OFC-001,ru,holdout
+H39,Картридж HP 85A,SYN-OFC-002,ru,holdout
+H40,Вода питьевая 19л,SYN-OFC-003,ru,holdout
+H41,Вывоз ТБО за октябрь,SYN-SRV-001,ru,holdout
+H42,ТО автомобилей Toyota Hilux,SYN-SRV-002,ru,holdout
+H43,Нитрилді қолғап 9 өлшем,SYN-PPE-001,kk,holdout
+H44,Қорғаныс каскасы ақ түсті,SYN-PPE-003,kk,holdout
+H45,Дизель отыны (ДТ-Л),SYN-FUL-001,kk,holdout
+H46,Болат арқан 16 мм,SYN-MIN-004,kk,holdout
+H47,Кеңсе қағазы А4,SYN-OFC-001,kk,holdout
+H48,Жарықдиодты шам 12 Вт,SYN-ELC-003,kk,holdout
+H49,Ауыз су 19 литр,SYN-OFC-003,kk,holdout
+H50,Мойынтірек 6205,SYN-BRG-001,kk,holdout

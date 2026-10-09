@@ -5,9 +5,12 @@ description = "QazSupply modular monolith: services/* and connectors/* are deep 
 requires-python = ">=3.13"
 dependencies = [
   "fastapi==0.142.4",
+  "openpyxl==3.1.5",
   "psycopg[binary]==3.3.6",
   "psycopg-pool==3.3.3",
   "pyjwt[crypto]==2.15.0",
+  "python-multipart==0.0.32",
+  "rapidfuzz==3.14.6",
   "uvicorn==0.54.0",
 ]
 
@@ -15,6 +18,7 @@ dependencies = [
 dev = [
   "fonttools==4.66.0",
   "httpx==0.28.1",
+  "hypothesis==6.168.1",
   "mypy==2.4.0",
   "pip-audit==2.10.1",
   "pip-licenses==5.5.5",
@@ -27,7 +31,7 @@ dev = [
 package = false
 
 [tool.pytest.ini_options]
-testpaths = ["services", "connectors", "scripts"]
+testpaths = ["services", "connectors", "scripts", "evals"]
 norecursedirs = ["vendor", "node_modules", ".venv"]
 pythonpath = ["."]
 markers = [
@@ -45,11 +49,15 @@ extend-exclude = ["infra/supabase", "docs", "vendor", "scripts/vendor.py"]
 select = ["E", "F", "I", "B", "UP", "S", "T20", "BLE"]
 ignore = ["S101"]
 
+[tool.ruff.lint.per-file-ignores]
+# Eval CLIs print their reports and use seeded, non-crypto randomness on purpose.
+"evals/**" = ["T201", "S311", "S607"]
+
 [tool.mypy]
 strict = true
-files = ["services", "connectors", "scripts"]
+files = ["services", "connectors", "scripts", "evals"]
 exclude = ["scripts/vendor\\.py$"]
 
 [[tool.mypy.overrides]]
-module = ["fontTools.*"]
+module = ["fontTools.*", "openpyxl.*"]
 ignore_missing_imports = true

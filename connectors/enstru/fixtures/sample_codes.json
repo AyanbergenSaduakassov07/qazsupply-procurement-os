@@ -1,0 +1,271 @@
+{
+  "_note": "SYNTHETIC SAMPLE, not ЕНС ТРУ. Codes are invented (prefix SYN-) so they can never be mistaken for real classifier codes. Kazakh names: UNVERIFIED, need native review. Replace via the goszakup OWS path in docs/compliance/data-sources.md.",
+  "codes": [
+    {
+      "code": "SYN-PPE-001",
+      "family": "PPE",
+      "unit": "pair",
+      "name_ru": "Перчатки нитриловые",
+      "name_kk": "Нитрилді қолғаптар"
+    },
+    {
+      "code": "SYN-PPE-002",
+      "family": "PPE",
+      "unit": "pair",
+      "name_ru": "Перчатки хлопчатобумажные",
+      "name_kk": "Мақта-мата қолғаптар"
+    },
+    {
+      "code": "SYN-PPE-003",
+      "family": "PPE",
+      "unit": "pcs",
+      "name_ru": "Каска защитная",
+      "name_kk": "Қорғаныс каскасы"
+    },
+    {
+      "code": "SYN-PPE-004",
+      "family": "PPE",
+      "unit": "pcs",
+      "name_ru": "Очки защитные",
+      "name_kk": "Қорғаныс көзілдірігі"
+    },
+    {
+      "code": "SYN-PPE-005",
+      "family": "PPE",
+      "unit": "pcs",
+      "name_ru": "Респиратор противопылевой",
+      "name_kk": "Шаңнан қорғайтын респиратор"
+    },
+    {
+      "code": "SYN-PPE-006",
+      "family": "PPE",
+      "unit": "pair",
+      "name_ru": "Ботинки защитные",
+      "name_kk": "Қорғаныс бәтеңкелері"
+    },
+    {
+      "code": "SYN-PPE-007",
+      "family": "PPE",
+      "unit": "pcs",
+      "name_ru": "Жилет сигнальный",
+      "name_kk": "Сигналдық жилет"
+    },
+    {
+      "code": "SYN-PPE-008",
+      "family": "PPE",
+      "unit": "pair",
+      "name_ru": "Беруши",
+      "name_kk": "Құлаққа арналған тығындар"
+    },
+    {
+      "code": "SYN-BRG-001",
+      "family": "BRG",
+      "unit": "pcs",
+      "name_ru": "Подшипник шариковый 6205",
+      "name_kk": "6205 шарикті мойынтірек"
+    },
+    {
+      "code": "SYN-BRG-002",
+      "family": "BRG",
+      "unit": "pcs",
+      "name_ru": "Подшипник шариковый 6310",
+      "name_kk": "6310 шарикті мойынтірек"
+    },
+    {
+      "code": "SYN-BRG-003",
+      "family": "BRG",
+      "unit": "pcs",
+      "name_ru": "Подшипник роликовый сферический 22222",
+      "name_kk": "22222 сфералық роликті мойынтірек"
+    },
+    {
+      "code": "SYN-FUL-001",
+      "family": "FUL",
+      "unit": "l",
+      "name_ru": "Топливо дизельное",
+      "name_kk": "Дизель отыны"
+    },
+    {
+      "code": "SYN-FUL-002",
+      "family": "FUL",
+      "unit": "l",
+      "name_ru": "Масло моторное 15W-40",
+      "name_kk": "15W-40 мотор майы"
+    },
+    {
+      "code": "SYN-FUL-003",
+      "family": "FUL",
+      "unit": "l",
+      "name_ru": "Масло гидравлическое",
+      "name_kk": "Гидравликалық май"
+    },
+    {
+      "code": "SYN-FUL-004",
+      "family": "FUL",
+      "unit": "kg",
+      "name_ru": "Смазка пластичная Литол-24",
+      "name_kk": "Литол-24 пластикалық майлағыш"
+    },
+    {
+      "code": "SYN-ELC-001",
+      "family": "ELC",
+      "unit": "m",
+      "name_ru": "Кабель силовой ВВГ 3х2,5",
+      "name_kk": "ВВГ 3х2,5 күштік кабелі"
+    },
+    {
+      "code": "SYN-ELC-002",
+      "family": "ELC",
+      "unit": "m",
+      "name_ru": "Кабель гибкий КГ 3х16",
+      "name_kk": "КГ 3х16 иілгіш кабелі"
+    },
+    {
+      "code": "SYN-ELC-003",
+      "family": "ELC",
+      "unit": "pcs",
+      "name_ru": "Лампа светодиодная",
+      "name_kk": "Жарықдиодты шам"
+    },
+    {
+      "code": "SYN-ELC-004",
+      "family": "ELC",
+      "unit": "pcs",
+      "name_ru": "Автоматический выключатель 16 А",
+      "name_kk": "16 А автоматты ажыратқыш"
+    },
+    {
+      "code": "SYN-FST-001",
+      "family": "FST",
+      "unit": "pcs",
+      "name_ru": "Болт М12",
+      "name_kk": "М12 болт"
+    },
+    {
+      "code": "SYN-FST-002",
+      "family": "FST",
+      "unit": "pcs",
+      "name_ru": "Гайка М12",
+      "name_kk": "М12 сомын"
+    },
+    {
+      "code": "SYN-FST-003",
+      "family": "FST",
+      "unit": "pcs",
+      "name_ru": "Шайба плоская М12",
+      "name_kk": "М12 жалпақ тығырық"
+    },
+    {
+      "code": "SYN-MIN-001",
+      "family": "MIN",
+      "unit": "m",
+      "name_ru": "Лента конвейерная",
+      "name_kk": "Конвейер таспасы"
+    },
+    {
+      "code": "SYN-MIN-002",
+      "family": "MIN",
+      "unit": "pcs",
+      "name_ru": "Коронка буровая",
+      "name_kk": "Бұрғылау коронкасы"
+    },
+    {
+      "code": "SYN-MIN-003",
+      "family": "MIN",
+      "unit": "t",
+      "name_ru": "Шары мелющие стальные",
+      "name_kk": "Болат ұнтақтағыш шарлар"
+    },
+    {
+      "code": "SYN-MIN-004",
+      "family": "MIN",
+      "unit": "m",
+      "name_ru": "Канат стальной",
+      "name_kk": "Болат арқан"
+    },
+    {
+      "code": "SYN-MIN-005",
+      "family": "MIN",
+      "unit": "pcs",
+      "name_ru": "Шина для карьерного самосвала",
+      "name_kk": "Карьерлік өзі аударғышқа арналған шина"
+    },
+    {
+      "code": "SYN-MIN-006",
+      "family": "MIN",
+      "unit": "pcs",
+      "name_ru": "Фильтр масляный",
+      "name_kk": "Май сүзгісі"
+    },
+    {
+      "code": "SYN-MIN-007",
+      "family": "MIN",
+      "unit": "pcs",
+      "name_ru": "Фильтр воздушный",
+      "name_kk": "Ауа сүзгісі"
+    },
+    {
+      "code": "SYN-WLD-001",
+      "family": "WLD",
+      "unit": "kg",
+      "name_ru": "Электроды сварочные",
+      "name_kk": "Дәнекерлеу электродтары"
+    },
+    {
+      "code": "SYN-WLD-002",
+      "family": "WLD",
+      "unit": "pcs",
+      "name_ru": "Кислород технический в баллонах",
+      "name_kk": "Баллондағы техникалық оттегі"
+    },
+    {
+      "code": "SYN-CNS-001",
+      "family": "CNS",
+      "unit": "t",
+      "name_ru": "Цемент М400",
+      "name_kk": "М400 цемент"
+    },
+    {
+      "code": "SYN-CNS-002",
+      "family": "CNS",
+      "unit": "t",
+      "name_ru": "Арматура стальная",
+      "name_kk": "Болат арматура"
+    },
+    {
+      "code": "SYN-OFC-001",
+      "family": "OFC",
+      "unit": "pack",
+      "name_ru": "Бумага офисная А4",
+      "name_kk": "А4 кеңсе қағазы"
+    },
+    {
+      "code": "SYN-OFC-002",
+      "family": "OFC",
+      "unit": "pcs",
+      "name_ru": "Картридж для принтера",
+      "name_kk": "Принтерге арналған картридж"
+    },
+    {
+      "code": "SYN-OFC-003",
+      "family": "OFC",
+      "unit": "pcs",
+      "name_ru": "Вода питьевая бутилированная 19 л",
+      "name_kk": "19 л бөтелкеге құйылған ауыз су"
+    },
+    {
+      "code": "SYN-SRV-001",
+      "family": "SRV",
+      "unit": "service",
+      "name_ru": "Услуги по вывозу твердых бытовых отходов",
+      "name_kk": "Қатты тұрмыстық қалдықтарды шығару қызметтері"
+    },
+    {
+      "code": "SYN-SRV-002",
+      "family": "SRV",
+      "unit": "service",
+      "name_ru": "Услуги по техническому обслуживанию автотранспорта",
+      "name_kk": "Автокөлікке техникалық қызмет көрсету қызметтері"
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+id,text,label,lang,split
+S000,malo motornoe 15w-40 L,SYN-FUL-002,latin,train
+S001,Мешки полипропиленовые №5,NONE,ru,test
+S002,Шайба плоская М12 №5,SYN-FST-003,ru,train
+S003,Каска / Қорғаныс каскасы кор.,SYN-PPE-003,mixed,test
+S004,lampa svetodiodnaya уп. 100 шт,SYN-ELC-003,latin,train
+S005,shina dlya karernogo samosvala №5,SYN-MIN-005,latin,test
+S006,для притера Картридж (по ГОСТ),SYN-OFC-002,ru,train
+S007,/ Болат арматура Арматура уп. 100 шт,SYN-CNS-002,mixed,test
+S008,УСЛУГИ ПО ВЫВОУЗ ТВЕРДЫХ БЫТОВЫХ ОТХОДОВ уп. 100 шт,SYN-SRV-001,ru,train
+S009,жилет сигнальныый кор.,SYN-PPE-007,ru,test
+S010,Коронка буровая р-р 10,SYN-MIN-002,ru,train
+S011,"Лента конвейерная, импорт",SYN-MIN-001,ru,test
+S012,беруши уп. 100 шт,SYN-PPE-008,ru,train
+S013,Очки защитные,SYN-PPE-004,ru,test
+S014,Ауа сүзгісі р-р 10,SYN-MIN-007,kk,train
+S015,БЕРУШИ L,SYN-PPE-008,ru,test
+S016,Аау сүзгісі (аналог),SYN-MIN-007,kk,train
+S017,Краска фасадная №5,NONE,ru,test
+S018,Кислород / Баллондағы техникалық №5,SYN-WLD-002,mixed,train
+S019,м12 жалпақ тығырық (аналог),SYN-FST-003,kk,test
+S020,жлпак тыгырык м12 №5,SYN-FST-003,kk,train
+S021,Шайба плокая М12 1 сорт,SYN-FST-003,ru,test
+S022,"Каат стал., импорт",SYN-MIN-004,ru,train
+S023,ZASCITNYE BOTINKI (аналог),SYN-PPE-006,latin,test
+S024,ШАЙБА ПЛОСКАЯ М12 (по ГОСТ),SYN-FST-003,ru,train
+S025,Электродды сварочные,SYN-WLD-001,ru,test
+S026,автомат. выключатель 16 а (по ГОСТ),SYN-ELC-004,ru,train
+S027,Шина / Карьерлік өзі,SYN-MIN-005,mixed,test
+S028,Электроды сварочные кор.,SYN-WLD-001,ru,train
+S029,Перчаткки нитрил. 1 сорт,SYN-PPE-001,ru,test
+S030,Мешки полипропиленовые р-р 10,NONE,ru,train
+S031,респиратор противопылевой L,SYN-PPE-005,ru,test
+S032,"Мақта-мата қолғаптар, импорт",SYN-PPE-002,kk,train
+S033,kabel gibkiy kg 3kh16,SYN-ELC-002,latin,test
+S034,Автоматический / 16 А кор.,SYN-ELC-004,mixed,train
+S035,шарик. 6310 подшипник (по ГОСТ),SYN-BRG-002,ru,test
+S036,Фильтр масляный р-р 10,SYN-MIN-006,ru,train
+S037,Картридж для принтера,SYN-OFC-002,ru,test
+S038,картридж для принтера,SYN-OFC-002,ru,train
+S039,Услуги по вывозу твердых бытовых отхоодв (по ГОСТ),SYN-SRV-001,ru,test
+S040,Чайник электрический (по ГОСТ),NONE,ru,train
+S041,май Гидарвликалық р-р 10,SYN-FUL-003,kk,test
+S042,Услуги по техническому обслуживанию автотранспорта (аналог),SYN-SRV-002,ru,train
+S043,Смазка / Литол-24 пластикалық,SYN-FUL-004,mixed,test
+S044,МАСЛО МОТОРНОЕ 15W-40 №5,SYN-FUL-002,ru,train
+S045,Коронка буровая + услуги по вывозу твердых бытовых отходов (комплект),BUNDLED,ru,test
+S046,РЕСПИРАТОР / ШАҢНАН ҚОРРҒАЙТЫН,SYN-PPE-005,mixed,train
+S047,КАНАТ СТАЛ. уп. 100 шт,SYN-MIN-004,ru,test
+S048,жилет Сигналдык (аналог),SYN-PPE-007,kk,train
+S049,Канат стал. кор.,SYN-MIN-004,ru,test
+S050,ЖИЛЕТ СИГН. (по ГОСТ),SYN-PPE-007,ru,train
+S051,toplivo dizelone (по ГОСТ),SYN-FUL-001,latin,test
+S052,Бургылау коронкасы кор.,SYN-MIN-002,kk,train
+S053,а4 кеңсе қағазы №5,SYN-OFC-001,kk,test
+S054,15W-40 мотор мйы (по ГОСТ),SYN-FUL-002,kk,train
+S055,"кабель силовой ввг 3х2,5, импорт",SYN-ELC-001,ru,test
+S056,масло гидравлическое (по ГОСТ),SYN-FUL-003,ru,train
+S057,Вода питьевая буутилированная 19 л,SYN-OFC-003,ru,test
+S058,каабель / кг 3х16 (по ГОСТ),SYN-ELC-002,mixed,train
+S059,zhliet signalnyy кор.,SYN-PPE-007,latin,test
+S060,арналған ытғындар құлаққа кор.,SYN-PPE-008,kk,train
+S061,Беруши,SYN-PPE-008,ru,test
+S062,Краска фасадная,NONE,ru,train
+S063,Подшипник роликовый сферический 22222,SYN-BRG-003,ru,test
+S064,Дрель аккумуляторная кор.,NONE,ru,train
+S065,бумаага офис. а4 1 сорт,SYN-OFC-001,ru,test
+S066,ПЕРЧАТКИ НИТРИЛ.,SYN-PPE-001,ru,train
+S067,/ Құлаққа арналған Беруши р-р 10,SYN-PPE-008,mixed,test
+S068,Песок строительный №5,NONE,ru,train
+S069,"Беруши / Құлаққа арналған, импорт",SYN-PPE-008,mixed,test
+S070,"Жарықдиодты шам, импорт",SYN-ELC-003,kk,train
+S071,буровая Коронка L,SYN-MIN-002,ru,test
+S072,беруши,SYN-PPE-008,ru,train
+S073,Шина для карьерного самосвала + арматура стальная (комплект),BUNDLED,ru,test
+S074,Май сзгиси,SYN-MIN-006,kk,train
+S075,Мешки полипропиленовые,NONE,ru,test
+S076,по техническому обслужживанию автотранспорта услуги (аналог),SYN-SRV-002,ru,train
+S077,Қорғаныс каскасы р-р 10,SYN-PPE-003,kk,test
+S078,"Масло гидр., импорт",SYN-FUL-003,ru,train
+S079,"Кабель / ВВГ 3х2,5",SYN-ELC-001,mixed,test
+S080,Аренда спецтехники 1 сорт,NONE,ru,train
+S081,КАССКА / ҚОРҒАНЫС КАСКАСЫ №5,SYN-PPE-003,mixed,test
+S082,22222 сфералық роликті мойынтірек р-р 10,SYN-BRG-003,kk,train
+S083,Цемент М400 р-р 10,SYN-CNS-001,ru,test
+S084,Кабель гибкий КГ 3х16,SYN-ELC-002,ru,train
+S085,"22222 сферлаык роликти мойынтирек, импорт",SYN-BRG-003,kk,test
+S086,РЕСПИРАТОР ПРОТИВОПЫЛЕВОЙ,SYN-PPE-005,ru,train
+S087,ФИЛЬТР ВОЗДУШШНЫЙ №5,SYN-MIN-007,ru,test
+S088,"арматура стальная, импорт",SYN-CNS-002,ru,train
+S089,Подшипник шарик. 6205 L,SYN-BRG-001,ru,test
+S090,КОНВЕЙЕРНАЯ ЛЕНТА (по ГОСТ),SYN-MIN-001,ru,train
+S091,Коронка буровая + лампа светодиодная (комплект),BUNDLED,ru,test
+S092,Дрель аккумуляторная р-р 10,NONE,ru,train
+S093,Коронка буровая №5,SYN-MIN-002,ru,test
+S094,kartriddzh dlya printera,SYN-OFC-002,latin,train
+S095,БУМАГА / А4 КЕҢСЕ кор.,SYN-OFC-001,mixed,test
+S096,ПОДШИПНИК / 22222 СЕФРАЛЫҚ,SYN-BRG-003,mixed,train
+S097,"silovoy vvg 3kh2,5 kabeel р-р 10",SYN-ELC-001,latin,test
+S098,Болт / М12 болт,SYN-FST-001,mixed,train
+S099,Жилет сигн. (аналог),SYN-PPE-007,ru,test
+S100,сүзгісі Ауа,SYN-MIN-007,kk,train
+S101,по етхническому обслуживанию автотранспорта Услуги L,SYN-SRV-002,ru,test
+S102,Аренда спецтехники,NONE,ru,train
+S103,Шары мелющие стал. №5,SYN-MIN-003,ru,test
+S104,Жилет / Сигналдық жиет,SYN-PPE-007,mixed,train
+S105,kanat stalnoy (по ГОСТ),SYN-MIN-004,latin,test
+S106,ЦЕМЕНТ М400 уп. 100 шт,SYN-CNS-001,ru,train
+S107,Лента конвейерная (аналог),SYN-MIN-001,ru,test
+S108,Перчатки нитрил. р-р 10,SYN-PPE-001,ru,train
+S109,Бургылау коронкасы,SYN-MIN-002,kk,test
+S110,арматура Болат уп. 100 шт,SYN-CNS-002,kk,train
+S111,Услуги охраны,NONE,ru,test
+S112,шарик. 6205 Подшипник р-р 10,SYN-BRG-001,ru,train
+S113,rolikovyy sfericheskiy 22222 podshipnik р-р 10,SYN-BRG-003,latin,test
+S114,"filtr maslyanyy, импорт",SYN-MIN-006,latin,train
+S115,КОРГАНЫС БАТЕНКЕЛЕРИ (аналог),SYN-PPE-006,kk,test
+S116,Ноутбук 15 дюймов р-р 10,NONE,ru,train
+S117,Ноутбук 15 дюймов №5,NONE,ru,test
+S118,Подшипник роликовый сферическйи 22222 №5,SYN-BRG-003,ru,train
+S119,м12 сомын (аналог),SYN-FST-002,kk,test
+S120,Автоматический выключатель 16 А + услуги по техническому обслуживанию автотранспорта (комплект),BUNDLED,ru,train
+S121,каска защитная 1 сорт,SYN-PPE-003,ru,test
+S122,Подшипник шарик. 6205 (по ГОСТ),SYN-BRG-001,ru,train
+S123,канат / болат арқан уп. 100 шт,SYN-MIN-004,mixed,test
+S124,"3х2,5 күштік кабелі ВВГ L",SYN-ELC-001,kk,train
+S125,"Огнетушитель ОП-4, импорт",NONE,ru,test
+S126,"Кресло руководителя, импорт",NONE,ru,train
+S127,Ауа сүзгісі,SYN-MIN-007,kk,test
+S128,Перчатки хлопчатобумажные,SYN-PPE-002,ru,train
+S129,toplivo dizelnoe р-р 10,SYN-FUL-001,latin,test
+S130,Подшипинк шариковый 6205 р-р 10,SYN-BRG-001,ru,train
+S131,"svvarochnye elektrody, импорт",SYN-WLD-001,latin,test
+S132,Огнетушитель ОП-4 уп. 100 шт,NONE,ru,train
+S133,"Перчатки / Нитрлиді қолғаптар, импорт",SYN-PPE-001,mixed,test
+S134,"КИСЛОРОД ТЕХНИЧЕСКИЙ В БАЛЛОНАХ, импорт",SYN-WLD-002,ru,train
+S135,смазка / литол-24 пластиикалық (аналог),SYN-FUL-004,mixed,test
+S136,Чайник электрический L,NONE,ru,train
+S137,сигнальный Жилет 1 сорт,SYN-PPE-007,ru,test
+S138,"SVVAROCHNYE ELEKTRODY, импорт",SYN-WLD-001,latin,train
+S139,БУМАГА ОФИСНАЯ А4,SYN-OFC-001,ru,test
+S140,шайба плоская м12 уп. 100 шт,SYN-FST-003,ru,train
+S141,Подшипнк / 6205 шарикті №5,SYN-BRG-001,mixed,test
+S142,Канат стальной уп. 100 шт,SYN-MIN-004,ru,train
+S143,беруши (аналог),SYN-PPE-008,ru,test
+S144,Очки защтиные 1 сорт,SYN-PPE-004,ru,train
+S145,"Краска фасадная, импорт",NONE,ru,test
+S146,Шайба плоская М12,SYN-FST-003,ru,train
+S147,болат унтактагы шшарлар кор.,SYN-MIN-003,kk,test
+S148,М12 болт кор.,SYN-FST-001,kk,train
+S149,Цемент М400 + беруши (комплект),BUNDLED,ru,test
+S150,Лампа светодоидная кор.,SYN-ELC-003,ru,train
+S151,сигналдык жилет уп. 100 шт,SYN-PPE-007,kk,test
+S152,цемент / м400 цемент (аналог),SYN-CNS-001,mixed,train
+S153,"лампа светодиод., импорт",SYN-ELC-003,ru,test
+S154,заащ. Ботинки (аналог),SYN-PPE-006,ru,train
+S155,БОЛАТ АРКАН 1 сорт,SYN-MIN-004,kk,test
+S156,Автоколикке техникалык кызмет корсету кызметтери р-р 10,SYN-SRV-002,kk,train
+S157,Услуги связи,NONE,ru,test
+S158,Услуи по вывозу твердых бытовых отходов кор.,SYN-SRV-001,ru,train
+S159,Фильтр / Ауа сүзгісі кор.,SYN-MIN-007,mixed,test
+S160,"А4 кесңе қағазы, импорт",SYN-OFC-001,kk,train
+S161,Чайник электрический (аналог),NONE,ru,test
+S162,Мешки полипропиленовые,NONE,ru,train
+S163,"Кабель силовой ВВГ 3х2,5 р-р 10",SYN-ELC-001,ru,test
+S164,Топливо диз. №5,SYN-FUL-001,ru,train
+S165,Краска фасадная 1 сорт,NONE,ru,test
+S166,Смазка плластичная Литол-24 кор.,SYN-FUL-004,ru,train
+S167,Стол офисный,NONE,ru,test
+S168,shary melyuschie stalnye,SYN-MIN-003,latin,train
+S169,Услуги п вывозу твердых бытовых отходов,SYN-SRV-001,ru,test
+S170,Каска / Қорғаныс касккасы кор.,SYN-PPE-003,mixed,train
+S171,Болат ұнтақтағыш шарлар 1 сорт,SYN-MIN-003,kk,test
+S172,Канат / Болат арқан р-р 10,SYN-MIN-004,mixed,train
+S173,Перчатки нитриловые,SYN-PPE-001,ru,test
+S174,Ботинки / Қорғаныс бәтеңкелеі (аналог),SYN-PPE-006,mixed,train
+S175,сталььная Арматура,SYN-CNS-002,ru,test
+S176,ботинки защ.,SYN-PPE-006,ru,train
+S177,/ Карьерлік өзі Шина кор.,SYN-MIN-005,mixed,test
+S178,"Перчатки нитрловые, импорт",SYN-PPE-001,ru,train
+S179,KARTIDZH DLYA PRINTERA,SYN-OFC-002,latin,test
+S180,ШАЙБА / М12 ЖАЛПАҚ,SYN-FST-003,mixed,train
+S181,/ Құлаққа арналған Беруши р-р 10,SYN-PPE-008,mixed,test
+S182,шары мелющие стал. р-р 10,SYN-MIN-003,ru,train
+S183,ШАРЫ / БОЛАТ ҰНТАҚТАҒЫШ р-р 10,SYN-MIN-003,mixed,test
+S184,po vyvozu tverdykh bytovykh otkhdoov uslugi кор.,SYN-SRV-001,latin,train
+S185,Смазка пласт. Литол-24 (аналог),SYN-FUL-004,ru,test
+S186,"Болат унтактагыш шарлар, импорт",SYN-MIN-003,kk,train
+S187,Қатты тұрмыстық қалдықтарды шығару қызметтері р-р 10,SYN-SRV-001,kk,test
+S188,М12 жалпка тыгырык уп. 100 шт,SYN-FST-003,kk,train
+S189,Жилет / Сигналдық жилет уп. 100 шт,SYN-PPE-007,mixed,test
+S190,для карьерного самосавла Шина №5,SYN-MIN-005,ru,train
+S191,ботинки / қорғаныс бәтеңкелері уп. 100 шт,SYN-PPE-006,mixed,test
+S192,Лампа светодиод. (по ГОСТ),SYN-ELC-003,ru,train
+S193,"Жилет ссигн., импорт",SYN-PPE-007,ru,test
+S194,Гайка М12 1 сорт,SYN-FST-002,ru,train
+S195,Электроды сварочные,SYN-WLD-001,ru,test
+S196,Гайка / М12 сомыын L,SYN-FST-002,mixed,train
+S197,avtomaticheskiy vyklyuchatel 16 a уп. 100 шт,SYN-ELC-004,latin,test
+S198,қатты тұрмыстық қалдықтарды шығару қызметтеері,SYN-SRV-001,kk,train
+S199,Конвейер таспасы,SYN-MIN-001,kk,test
+S200,ТОПЛИВО / ДИЗЕЛ ОТЫНЫ №5,SYN-FUL-001,mixed,train
+S201,Аренда спецтехники L,NONE,ru,test
+S202,кабель гибкиий кг 3х16 1 сорт,SYN-ELC-002,ru,train
+S203,gayka m12 кор.,SYN-FST-002,latin,test
+S204,22222 сфералық роликті мойынтірек р-р 10,SYN-BRG-003,kk,train
+S205,Корганыс батенкелери №5,SYN-PPE-006,kk,test
+S206,"Подшипник шариковый 6310, импорт",SYN-BRG-002,ru,train
+S207,шина для карьерного самосвала 1 сорт,SYN-MIN-005,ru,test
+S208,ПЕРЧАТКИ Х/Б 1 сорт,SYN-PPE-002,ru,train
+S209,"КИСЛОРОД ТЕХН. В БАЛЛОНАХ, импорт",SYN-WLD-002,ru,test
+S210,Коронка буровая (аналог),SYN-MIN-002,ru,train
+S211,Арматура стальная + канат стальной (комплект),BUNDLED,ru,test
+S212,"Песок строительный, импорт",NONE,ru,train
+S213,berushi кор.,SYN-PPE-008,latin,test
+S214,Баллондағы техникалық оттегі №5,SYN-WLD-002,kk,train
+S215,/ Конвейер таспасы Лента №5,SYN-MIN-001,mixed,test
+S216,подшипник шарик. 6205 L,SYN-BRG-001,ru,train
+S217,Дрель аккумуляторная,NONE,ru,test
+S218,podshipnik rolikovyy sfericheskiy 22222,SYN-BRG-003,latin,train
+S219,Электроыд сварочные уп. 100 шт,SYN-WLD-001,ru,test
+S220,Лампа / Жарықдиодты шам,SYN-ELC-003,mixed,train
+S221,Кабель гибкий ГК 3х16 №5,SYN-ELC-002,ru,test
+S222,КГ 3х16 иігліш кабелі уп. 100 шт,SYN-ELC-002,kk,train
+S223,плоская М12 Шайба кор.,SYN-FST-003,ru,test
+S224,плоская м12 шайба №5,SYN-FST-003,ru,train
+S225,Бершуи кор.,SYN-PPE-008,ru,test
+S226,топливо диз. (по ГОСТ),SYN-FUL-001,ru,train
+S227,М12 Болт,SYN-FST-001,ru,test
+S228,М12 жалпак тыгырык,SYN-FST-003,kk,train
+S229,Масл гидравлическое р-р 10,SYN-FUL-003,ru,test
+S230,Каска защ. (по ГОСТ),SYN-PPE-003,ru,train
+S231,/ БОЛАТ АРҚАН КАНАТ (аналог),SYN-MIN-004,mixed,test
+S232,Каска защитная,SYN-PPE-003,ru,train
+S233,Чайник электрический 1 сорт,NONE,ru,test
+S234,Фильтр масляный 1 сорт,SYN-MIN-006,ru,train
+S235,автомат. выключатель 16 А L,SYN-ELC-004,ru,test
+S236,"м400 цемент, импорт",SYN-CNS-001,ru,train
+S237,kislorod tekhnicheski yv ballonakh,SYN-WLD-002,latin,test
+S238,Баллондағы техникалық оттегі (аналог),SYN-WLD-002,kk,train
+S239,Каска защ. L,SYN-PPE-003,ru,test
+S240,Ауа сүзгісі кор.,SYN-MIN-007,kk,train
+S241,кабель гиббкий кг 3х16,SYN-ELC-002,ru,test
+S242,Услуги охраны №5,NONE,ru,train
+S243,signalnyy zhilet р-р 10,SYN-PPE-007,latin,test
+S244,Гака / М12 сомын 1 сорт,SYN-FST-002,mixed,train
+S245,perchatki khlopchatobumazhnye кор.,SYN-PPE-002,latin,test
+S246,канат стальной кор.,SYN-MIN-004,ru,train
+S247,Бреуши,SYN-PPE-008,ru,test
+S248,БОЛТ М12 уп. 100 шт,SYN-FST-001,ru,train
+S249,ПЕРЧАТКИ НИТРИЛ. кор.,SYN-PPE-001,ru,test
+S250,арматура Болат 1 сорт,SYN-CNS-002,kk,train
+S251,подшипник / 6205 шшарикті (аналог),SYN-BRG-001,mixed,test
+S252,Перчатки / Мақта-мата қолғаптар кор.,SYN-PPE-002,mixed,train
+S253,Шайба плоская М12 + кислород технический в баллонах (комплект),BUNDLED,ru,test
+S254,м12 алпак тыгырык,SYN-FST-003,kk,train
+S255,"кабель силовойй ввг 3х2,5 уп. 100 шт",SYN-ELC-001,ru,test
+S256,Мешки полипропиленовые L,NONE,ru,train
+S257,Фильтр маслянный (по ГОСТ),SYN-MIN-006,ru,test
+S258,ГАКЙА М12 (по ГОСТ),SYN-FST-002,ru,train
+S259,Огнетушитель ОП-4 (аналог),NONE,ru,test
+S260,Цемент М400,SYN-CNS-001,ru,train
+S261,Коронка буровая р-р 10,SYN-MIN-002,ru,test
+S262,Перчатки нитриловые + коронка буровая (комплект),BUNDLED,ru,train
+S263,БУРГЫЛАУ КОРОНКАСЫ №5,SYN-MIN-002,kk,test
+S264,оифсная А4 Бумага (по ГОСТ),SYN-OFC-001,ru,train
+S265,"каблеь гибкий кг 3х16, импорт",SYN-ELC-002,ru,test
+S266,Фильтр воздушный,SYN-MIN-007,ru,train
+S267,Шары мелюющие стальные 1 сорт,SYN-MIN-003,ru,test
+S268,"22222 сфералық роликті мойынтірек, импорт",SYN-BRG-003,kk,train
+S269,КОНВ. ЛЕНТА 1 сорт,SYN-MIN-001,ru,test
+S270,"Кабель силовой ВВ Г3х2,5",SYN-ELC-001,ru,train
+S271,МЕЛЮЩИЕ СТАЛ. ШАРЫ L,SYN-MIN-003,ru,test
+S272,Огнетушитель ОП-4 (аналог),NONE,ru,train
+S273,ФИЛЬТ ВОЗДУШНЫЙ р-р 10,SYN-MIN-007,ru,test
+S274,/ конвейер таспасы лента кор.,SYN-MIN-001,mixed,train
+S275,Ботинки зщ. L,SYN-PPE-006,ru,test
+S276,"сүзгісі май, импорт",SYN-MIN-006,kk,train
+S277,НИТРИЛДИ КОЛГАПТАР 1 сорт,SYN-PPE-001,kk,test
+S278,Шайба / М12 жалпақ (аналог),SYN-FST-003,mixed,train
+S279,Куулакка арналган тыгындар,SYN-PPE-008,kk,test
+S280,Беруши + топливо дизельное (комплект),BUNDLED,ru,train
+S281,Перчатки нитриловые,SYN-PPE-001,ru,test
+S282,услуги по техническому обслуживанию автортанспорта L,SYN-SRV-002,ru,train
+S283,koronak burovaya кор.,SYN-MIN-002,latin,test
+S284,сварочные Элетроды №5,SYN-WLD-001,ru,train
+S285,"Арматура стальная, импорт",SYN-CNS-002,ru,test
+S286,perchatki nitrilovye уп. 100 шт,SYN-PPE-001,latin,train
+S287,очки защитные №5,SYN-PPE-004,ru,test
+S288,Ботинки защитные,SYN-PPE-006,ru,train
+S289,Бургылау коронкасы,SYN-MIN-002,kk,test
+S290,қорғаныс бәтеңкелері,SYN-PPE-006,kk,train
+S291,"Мақта-мата қолғаптар, импорт",SYN-PPE-002,kk,test
+S292,Болт М12 L,SYN-FST-001,ru,train
+S293,АВТМАТ. ВЫКЛЮЧАТЕЛЬ 16 А L,SYN-ELC-004,ru,test
+S294,МАСЛО / ГИДРАВЛИКАЛЫҚ МАЙ L,SYN-FUL-003,mixed,train
+S295,картридж для принтера L,SYN-OFC-002,ru,test
+S296,стальная арматура уп. 100 шт,SYN-CNS-002,ru,train
+S297,Канаат стальной уп. 100 шт,SYN-MIN-004,ru,test
+S298,Шина / Карьерлік өзі р-р 10,SYN-MIN-005,mixed,train
+S299,/ қорғаныс бәтеңкелері ботинки (по ГОСТ),SYN-PPE-006,mixed,test
