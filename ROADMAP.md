@@ -2,12 +2,8 @@
 
 A phase ends only when its gate passes. Failing a gate means fixing quality, not starting the next phase.
 
-## Progress (2026-10-09)
-| Prompt | State | Evidence |
-|---|---|---|
-| M0 Foundation + blueprint | built; gate needs owner answers to Q1-Q6 | PR merged to `main`; `docs/discovery/grill.md` |
-| M1 Data platform, design system, shell | built, in review | PR #1: RLS suite (127 pgTAP), advisors clean (local), Lighthouse a11y 96-100, 54 visual baselines |
-| M2 Spend X-ray engine | next | blocked on Q1 (vertical) and ЕНС ТРУ access |
+## Progress
+Live stage, gate evidence and next prompt: [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md). This file keeps phases and gate definitions only.
 
 | Phase | Product | Prompt | Exit gate |
 |---|---|---|---|

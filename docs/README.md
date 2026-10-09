@@ -15,7 +15,7 @@ Start here, in this order: [`../README.md`](../README.md) -> [`../CONTEXT.md`](.
 | [`compliance/`](compliance/) | Data sources register, data classification, retention, third-party licences | `data-sources.md` |
 | [`runbooks/`](runbooks/) | How we operate: agent harness boundaries, (later) incidents and restore drills | `agent-harness.md` |
 | [`research/`](research/) | Primary-source research, OSS catalogue | |
-| [`prompts/`](prompts/README.md) | The M0-M9 build prompts, run in order | |
+| [`prompts/`](prompts/README.md) | The M0-M9 build prompts, run in order | `PROGRESS.md` (current stage), `RUN-NEXT.md` (runner) |
 | [`tech-debt.md`](tech-debt.md) | Known shortcuts with owner and trigger to fix | |
 
 Conventions: Markdown, sentence-case headings, no marketing language, every unverified claim marked `UNVERIFIED`.
