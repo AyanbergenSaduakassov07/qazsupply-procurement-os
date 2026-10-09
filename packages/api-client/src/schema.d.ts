@@ -89,6 +89,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Uploads */
+        get: operations["uploads_orgs__org_id__uploads_get"];
+        put?: never;
+        /** Upload */
+        post: operations["upload_orgs__org_id__uploads_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/uploads/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload Preview */
+        post: operations["upload_preview_orgs__org_id__uploads_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -123,6 +158,27 @@ export interface components {
             chain_intact: boolean;
             /** Entries */
             entries: components["schemas"]["AuditEntry"][];
+        };
+        /** Body_upload_orgs__org_id__uploads_post */
+        Body_upload_orgs__org_id__uploads_post: {
+            /** File */
+            file: string;
+            /** Header Row */
+            header_row?: number | null;
+            /**
+             * Mapping
+             * @description JSON object: field -> 0-based column
+             */
+            mapping: string;
+            /** Sheet */
+            sheet?: string | null;
+        };
+        /** Body_upload_preview_orgs__org_id__uploads_preview_post */
+        Body_upload_preview_orgs__org_id__uploads_preview_post: {
+            /** File */
+            file: string;
+            /** Sheet */
+            sheet?: string | null;
         };
         /** Evidence */
         Evidence: {
@@ -269,6 +325,79 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** RowError */
+        RowError: {
+            /** Code */
+            code: string;
+            /** Column */
+            column: string | null;
+            /** Row */
+            row: number;
+        };
+        /** UploadPreview */
+        UploadPreview: {
+            /** Columns */
+            columns: string[];
+            /** Errors By Code */
+            errors_by_code: {
+                [key: string]: number;
+            };
+            /** Header Row */
+            header_row: number;
+            /** Mapping */
+            mapping: {
+                [key: string]: number;
+            };
+            /** Missing Required */
+            missing_required: string[];
+            /** Rows Total */
+            rows_total: number;
+            /** Sample */
+            sample: string[][];
+            /** Sha256 */
+            sha256: string;
+            /** Sheet */
+            sheet: string;
+            /** Sheets */
+            sheets: string[];
+        };
+        /** UploadResult */
+        UploadResult: {
+            /** Duplicate */
+            duplicate: boolean;
+            /** Errors */
+            errors: components["schemas"]["RowError"][];
+            /**
+             * File Id
+             * Format: uuid
+             */
+            file_id: string;
+            /** Inserted */
+            inserted: number;
+            /** Rejected */
+            rejected: number;
+        };
+        /** UploadSummary */
+        UploadSummary: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Lines */
+            lines: number;
+            /** Name */
+            name: string;
+            /** Rows Rejected */
+            rows_rejected: number;
+            /** Rows Total */
+            rows_total: number;
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -414,6 +543,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Report"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    uploads_orgs__org_id__uploads_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_orgs__org_id__uploads_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_orgs__org_id__uploads_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_preview_orgs__org_id__uploads_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_preview_orgs__org_id__uploads_preview_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadPreview"];
                 };
             };
             /** @description Validation Error */

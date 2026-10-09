@@ -1,5 +1,6 @@
 """Tenancy module: who am I, which orgs, audit log. RLS does the filtering."""
 
+import json
 from typing import Any
 from uuid import UUID
 
@@ -36,3 +37,18 @@ def audit_log(conn: UserConn, org_id: UUID, limit: int) -> list[dict[str, Any]]:
 def audit_chain_intact(conn: UserConn, org_id: UUID) -> bool:
     row = conn.execute("select private.verify_audit_chain(%s) as broken", (org_id,)).fetchone()
     return row is not None and row["broken"] is None
+
+
+def append_audit(
+    conn: UserConn,
+    org_id: UUID,
+    action: str,
+    entity: str,
+    entity_id: UUID | None,
+    details: dict[str, Any],
+) -> None:
+    """The only write path to the audit log: actor is always the caller (auth.uid())."""
+    conn.execute(
+        "select private.append_audit(%s, %s, %s, %s, %s)",
+        (org_id, action, entity, entity_id, json.dumps(details)),
+    )

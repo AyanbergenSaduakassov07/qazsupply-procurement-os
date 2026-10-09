@@ -11,10 +11,22 @@ import subprocess  # noqa: S404 - fixed argv, no shell
 import sys
 
 ALLOWED = {
-    "0BSD", "Apache-2.0", "BlueOak-1.0.0", "BSD-2-Clause", "BSD-3-Clause", "CC0-1.0",
-    "CC-BY-4.0", "ISC", "MIT", "MIT-0", "MPL-2.0", "PostgreSQL", "PSF-2.0", "Python-2.0",
+    "0BSD",
+    "Apache-2.0",
+    "BlueOak-1.0.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "CC-BY-4.0",
+    "ISC",
+    "MIT",
+    "MIT-0",
+    "MPL-2.0",
+    "PostgreSQL",
+    "PSF-2.0",
+    "Python-2.0",
     "Unlicense",
-}  # fmt: skip
+}
 # Classifier-style names pip-licenses reports, normalised to SPDX.
 ALIASES = {
     "MIT License": "MIT",

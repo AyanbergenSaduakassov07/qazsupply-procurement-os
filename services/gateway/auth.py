@@ -30,6 +30,7 @@ class Verifier:
                 algorithms=["ES256", "RS256"],
                 audience="authenticated",
                 options={"require": ["exp", "sub", "aud"]},
+                leeway=30,  # tolerate clock skew between the auth server and this host
             )
         except (jwt.PyJWTError, ValueError) as e:
             raise AuthError(type(e).__name__) from e

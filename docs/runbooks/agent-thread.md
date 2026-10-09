@@ -9,3 +9,9 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Failed / honest:** M2 gate NOT evaluated (no owner-labelled set). Holdout is now "seen" (general fixes came from its misses).
 - **Next:** slice 2 ingest (parse csv/xlsx, mapping, validation, idempotent upload, 50k rows < 60 s).
 - **Blockers for the real gate:** OWS token for real ЕНС ТРУ; owner's 300 hand-labelled lines.
+
+## 2026-10-09 | M2 | slice 2: ingest
+- **Done:** migration `20261009000000_m2_spend_engine.sql` (upload metadata, normalised line fields, supplier_bin, match_feedback append-only, finding subjects, per-org analysis_config); pgTAP `m2_rls.test.sql` (raw values immutable, feedback cannot be forged, supplier role blocked); `services/ingest` (csv/xlsx, cp1251, header detection, ru/kk/en mapping, row-level error codes, idempotent by sha256, raw cells kept); 10 synthetic messy fixtures + macro file; API `POST /uploads/preview`, `POST /uploads`, `GET /uploads` (router `routes_spend.py`), audit entry per upload, RLS denials -> 403.
+- **Results:** 140 pgTAP pass; advisors clean; 91 pytest pass incl. 8 upload integration tests; **50k rows ingested in 3.6 s** (target < 60 s).
+- **Fixed on the way:** JWT verification had zero clock-skew leeway (flaky 401 after auth restarts) -> 30 s leeway; `make rls` resets the local DB and waits for auth.
+- **Next:** slice 3 normalisation run (match lines, units, FX, supplier resolution) + review queue API.

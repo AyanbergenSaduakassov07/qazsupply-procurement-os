@@ -15,11 +15,13 @@ from uuid import UUID
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from psycopg import errors as pg_errors
 from pydantic import BaseModel
 
 from services.evidence import api as evidence
-from services.gateway import log
+from services.gateway import log, routes_spend
 from services.gateway.auth import AuthError, Principal, Verifier
 from services.gateway.db import Database, UserConn
 from services.gateway.settings import load
@@ -51,6 +53,13 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type", "X-Request-Id"],
 )
+
+
+@app.exception_handler(pg_errors.InsufficientPrivilege)
+async def rls_denied(request: Request, exc: pg_errors.InsufficientPrivilege) -> JSONResponse:
+    # RLS or a missing grant refused the write: the caller lacks the role, not a server bug.
+    logger.info("write denied by database policy", extra={"error_type": "InsufficientPrivilege"})
+    return JSONResponse(status_code=403, content={"detail": {"code": "forbidden"}})
 
 
 @app.middleware("http")
@@ -110,6 +119,8 @@ def member_conn(org_id: UUID, conn: Annotated[UserConn, Depends(user_conn)]) -> 
         raise HTTPException(404, "not found")
     return conn
 
+
+app.include_router(routes_spend.build(member_conn))
 
 Who = Annotated[Principal, Depends(principal)]
 Conn = Annotated[UserConn, Depends(user_conn)]

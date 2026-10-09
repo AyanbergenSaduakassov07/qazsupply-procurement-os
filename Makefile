@@ -22,7 +22,10 @@ check:
 	uv run ruff check . && uv run ruff format --check . && uv run mypy
 	uv run pytest -m "not contract and not integration" && uv run pytest -m contract
 
+# Resets the LOCAL database first so pgTAP sees exactly the seed (audit rows are append-only).
 rls: db
+	$(SUPABASE) db reset
+	@for i in $$(seq 1 30); do curl -sf -o /dev/null http://127.0.0.1:54321/auth/v1/health && break; sleep 1; done
 	$(SUPABASE) test db
 	bash scripts/advisors.sh
 	uv run pytest -m integration

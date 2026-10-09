@@ -57,3 +57,6 @@ e2e/.auth/
 # Local agent/tool state
 .freebuff/
 .claude/settings.local.json
+!services/**/fixtures/*.csv
+!services/**/fixtures/*.xlsx
+!services/**/fixtures/*.xlsm

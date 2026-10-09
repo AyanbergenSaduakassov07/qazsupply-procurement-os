@@ -117,3 +117,8 @@ insert into public.audit_log (org_id, actor_id, action, entity, entity_id, detai
    '20000000-0000-4000-a000-00000000000a', '{"rows":3}', '', ''),
   ('10000000-0000-4000-a000-00000000000a', '00000000-0000-4000-a000-0000000000c1', 'report.released', 'reports',
    '40000000-0000-4000-a000-00000000000a', '{"version":1}', '', '');
+
+-- M2: one review-feedback row in Org B (tenant-isolation tests need a B row in every org table).
+insert into public.match_feedback (org_id, purchase_line_id, action, chosen_code, reviewer_id)
+select org_id, id, 'accept', 'SYN-PPE-001', '00000000-0000-4000-a000-0000000000b1'
+from public.purchase_lines where org_id = '10000000-0000-4000-a000-00000000000b' limit 1;
