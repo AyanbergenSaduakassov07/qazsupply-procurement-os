@@ -1,0 +1,25 @@
+name: Bug
+description: Something does not work as specified.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: What happened, description: "Observed vs expected. Exact error text." }
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes: { label: Steps to reproduce, description: "Minimal steps. Use seed users only, never real client data." }
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [web, api, database / RLS, llm gateway, connectors, ci / tooling, docs]
+    validations: { required: true }
+  - type: checkboxes
+    id: data
+    attributes:
+      label: Data hygiene
+      options:
+        - label: This issue contains no client data, credentials or personal data.
+          required: true

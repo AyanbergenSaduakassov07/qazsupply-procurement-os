@@ -1,0 +1,15 @@
+name: Feature or change
+description: New behaviour. Link the spec; behaviour is specified before it is built.
+labels: [enhancement]
+body:
+  - type: input
+    id: spec
+    attributes: { label: Spec, description: "docs/specs/... or ticket id (docs/tickets)", placeholder: "docs/specs/C03-findings-engine.md" }
+    validations: { required: true }
+  - type: textarea
+    id: outcome
+    attributes: { label: Outcome, description: "Who gets what, and how we know it works (acceptance criteria)." }
+    validations: { required: true }
+  - type: textarea
+    id: gates
+    attributes: { label: Human gate and data, description: "Which human approves? Which data sources (registered in docs/compliance/data-sources.md)?" }

@@ -53,3 +53,7 @@ data/
 
 # Playwright signed-in sessions (local test users)
 e2e/.auth/
+
+# Local agent/tool state
+.freebuff/
+.claude/settings.local.json

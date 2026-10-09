@@ -2,18 +2,20 @@
 
 Each ticket is a thin vertical slice (DB -> service -> API -> UI -> e2e) that runs end to end, then later tickets thicken it. "Blocked by" lists hard dependencies. Size: S <= 2 days, M <= 1 week, L <= 2 weeks (at Q3 capacity, UNVERIFIED). Every ticket's done = repo Definition of Done (CLAUDE.md).
 
-## Phase 1a: platform (M1)
+## Phase 1a: platform (M1): done (PR #1)
+
+✅ = merged or in the open M1 PR. QS-005 ships the gateway with a test provider; the real Anthropic adapter is D11 in `docs/tech-debt.md`.
 | Id | Ticket | Size | Blocked by | Acceptance (summary) |
 |---|---|---|---|---|
-| QS-001 | Auth + org switcher tracer: sign in, see your org name from DB via API | M | M0 | RLS test: user A never sees org B via UI/API; e2e |
-| QS-002 | Tenancy context in gateway: request id, org from JWT, structured logs without PII | S | QS-001 | Log scan test finds no emails/BINs |
-| QS-003 | Audit log (append-only, hash chain) + viewer for admins | M | QS-001 | Tamper test breaks chain; pgTAP no UPDATE/DELETE |
-| QS-004 | Evidence model + `get_evidence(id)` drill-down + Evidence drawer component (from prototype) | M | QS-001 | A seeded figure opens drawer with rows + method; axe clean |
-| QS-005 | LLM gateway skeleton: one task (`echo_redacted`), redaction, budget, kill switch, `llm_calls` | M | QS-002 | Kill switch test; redaction unit tests; no raw content stored |
-| QS-006 | Design tokens 3 layers + dark mode + font glyph test (kk) | M | M0 | Glyph coverage report committed; contrast test |
-| QS-007 | App shell: nav, language switch, Ask entry (disabled), notification center (empty) | M | QS-006 | Visual baselines 3 viewports x 2 themes x 3 langs |
-| QS-008 | Reserve logistics tables with RLS + tests (no logic) | S | QS-001 | pgTAP per policy |
-| QS-009 | Import-linter rule: no cross-module internal imports | S | M0 | CI fails on a planted violation |
+| QS-001 ✅ | Auth + org switcher tracer: sign in, see your org name from DB via API | M | M0 | RLS test: user A never sees org B via UI/API; e2e |
+| QS-002 ✅ | Tenancy context in gateway: request id, org from JWT, structured logs without PII | S | QS-001 | Log scan test finds no emails/BINs |
+| QS-003 ✅ | Audit log (append-only, hash chain) + viewer for admins | M | QS-001 | Tamper test breaks chain; pgTAP no UPDATE/DELETE |
+| QS-004 ✅ | Evidence model + `get_evidence(id)` drill-down + Evidence drawer component (from prototype) | M | QS-001 | A seeded figure opens drawer with rows + method; axe clean |
+| QS-005 ✅ | LLM gateway skeleton: one task (`echo_redacted`), redaction, budget, kill switch, `llm_calls` | M | QS-002 | Kill switch test; redaction unit tests; no raw content stored |
+| QS-006 ✅ | Design tokens 3 layers + dark mode + font glyph test (kk) | M | M0 | Glyph coverage report committed; contrast test |
+| QS-007 ✅ | App shell: nav, language switch, Ask entry (disabled), notification center (empty) | M | QS-006 | Visual baselines 3 viewports x 2 themes x 3 langs |
+| QS-008 ✅ | Reserve logistics tables with RLS + tests (no logic) | S | QS-001 | pgTAP per policy |
+| QS-009 ✅ | Import-linter rule: no cross-module internal imports | S | M0 | CI fails on a planted violation |
 
 ## Phase 1b: Spend X-ray engine (M2)
 | Id | Ticket | Size | Blocked by | Acceptance |

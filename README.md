@@ -1,8 +1,10 @@
 # QazSupply AI
 
+[![ci](https://github.com/AyanbergenSaduakassov07/QazSupply/actions/workflows/ci.yml/badge.svg)](https://github.com/AyanbergenSaduakassov07/QazSupply/actions/workflows/ci.yml)
+
 AI procurement, supplier-vetting and shipment-control platform for Kazakhstan and Central Asia.
 
-> **Status: M0 done (harness + blueprint), awaiting owner review.** No product features yet. Next: answer Q1-Q6 (`ROADMAP.md`), then prompt **M1**.
+> **Status:** M0 (harness + blueprint) and M1 (multi-tenant data platform, design system, app shell) are built. No product features yet. Next: owner answers Q1-Q6 ([`ROADMAP.md`](ROADMAP.md)), then **M2 Spend X-ray engine**.
 
 ## What it is
 
@@ -12,8 +14,6 @@ Three products on one platform:
 2. **Supplier 360 and Procurement OS (the detective):** supplier dossiers, sanctions and beneficial-owner screening, RFQs, offer comparison, technical-spec checks, catalogue with analogs.
 3. **Logistics Control Tower and Risk Radar:** multi-source shipment tracking, probabilistic ETA, border-queue forecasts, reroute options, and alerts linked to your suppliers and orders.
 
-Later: supplier marketplace, group purchases, financing and insurance referrals, digital batch passport, regional expansion (Uzbekistan, Kyrgyzstan).
-
 ## Non-negotiable principles
 
 1. SQL and Python compute every number. The LLM reads text, extracts fields and explains. No figure without an Evidence id.
@@ -22,56 +22,80 @@ Later: supplier marketplace, group purchases, financing and insurance referrals,
 4. Multi-tenant by design: row-level security on every table, each policy tested.
 5. All external text (supplier files, news, emails, PDFs) is untrusted.
 
-Full rules: [`CLAUDE.md`](CLAUDE.md). Vocabulary: [`CONTEXT.md`](CONTEXT.md).
+Full rules: [`CLAUDE.md`](CLAUDE.md). Vocabulary: [`CONTEXT.md`](CONTEXT.md). How to contribute: [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Architecture at a glance
+
+```mermaid
+flowchart LR
+  B[Browser] -->|httpOnly session| W[apps/web<br/>Next.js 16]
+  W -->|Bearer JWT| G[services/gateway<br/>FastAPI]
+  G -->|role authenticated + JWT claims| DB[(Postgres + RLS<br/>Supabase)]
+  W -->|sign-in / refresh| AUTH[Supabase Auth]
+  G -. JWKS .-> AUTH
+  G --> M[services/* deep modules]
+  M --> LLM[services/llm gateway] --> P[Model provider]
+  C[connectors/*] --> M
+```
+
+- **Modular monolith** (ADR 0001): one Python deployable; modules talk only through `services.<module>.api` (enforced by a test).
+- **Tenant isolation in the database** (ADR 0002): RLS on every table; the API runs every query as the signed-in user, so a bug in the API cannot read another tenant's rows.
+- **LLM behind a gateway** (ADR 0004): redaction, budgets, kill switch, ledger. Models never produce figures.
+- Deeper: [`docs/architecture/`](docs/architecture/) and [`docs/adr/`](docs/adr/README.md).
+
+## Quickstart
+
+Needs Node 24 (`.nvmrc`; corepack provides pnpm), [uv](https://docs.astral.sh/uv/), Docker, Supabase CLI.
+
+```bash
+make dev          # install, start local Supabase (seeded), run web :3000 + API :8000
+```
+
+Open http://localhost:3000 and sign in with a seeded test user from `e2e/fixtures/users.json` (local only).
+
+| Command | What it runs |
+|---|---|
+| `make check` | Biome lint, TS + mypy typecheck, unit + contract tests |
+| `make rls` | pgTAP suites (RLS, roles, append-only, tamper detection), Supabase advisor lints, API isolation tests |
+| `make e2e` | Playwright on desktop, tablet and phone (auth, tenant isolation through the UI, a11y, CSP) |
+| `make visual` | Visual baselines (3 screens x 3 viewports x 2 themes x 3 languages) in the Linux Playwright image |
+| `make lighthouse` | Lighthouse accessibility gate (>= 95) |
 
 ## Repository layout
 
 ```text
 QazSupply/
-├─ CLAUDE.md            # rules and skill routing for Claude Code
-├─ CONTEXT.md           # domain glossary (ubiquitous language)
-├─ ROADMAP.md           # 5-year phases and quality gates
-├─ docs/                # adr, specs, prompts, runbooks, compliance, research, design, security
-├─ apps/                # web, review, supplier-portal, marketing   (Next.js)
-├─ packages/            # ui, design-tokens, motion, i18n, api-client, config, agent-skills
-├─ vendor/              # third-party source we own as native code (pinned, licence-tracked)
-├─ services/            # Python deep modules (ingest ... logistics ... finance)
-├─ connectors/          # one adapter per external source, with fixtures
-├─ evals/               # golden sets and scorers
-├─ e2e/                 # Playwright suites
-├─ infra/               # Supabase migrations, docker, terraform, CI
-└─ scripts/             # loaders, seeds, anonymizers
+├─ apps/web/             Next.js client app (shell, sign-in, settings, audit, gallery)
+├─ apps/{review,supplier-portal,marketing}/   planned (M3, M8)
+├─ packages/
+│  ├─ api-client/        typed client generated from the API's OpenAPI (CI checks drift)
+│  ├─ design-tokens/     3-layer tokens, light/dark, contrast-tested
+│  ├─ i18n/              kk / ru / en catalogs (key parity + Kazakh orthography tested)
+│  ├─ motion/            anime.js v4 presets, reduced-motion safe
+│  └─ ui/                components (Evidence drawer, data table, charts, ...)
+├─ services/             Python deep modules; gateway = composition root
+├─ connectors/           one adapter per external source (contract in _contract/)
+├─ infra/supabase/       migrations, seed (local only), pgTAP tests
+├─ e2e/                  Playwright suites and visual baselines
+├─ evals/                golden sets and scorers (from M2)
+├─ scripts/              advisors, licence gate, visual + Lighthouse runners, vendoring
+├─ vendor/               pinned third-party source (licence-tracked)
+├─ docs/                 ADRs, architecture, specs, tickets, design, security, compliance
+└─ .github/              CI, CODEOWNERS, Dependabot, PR and issue templates, ruleset
 ```
 
-Every folder has a `README.md` stating its purpose and public interface.
+Every folder has a `README.md` stating its purpose and public interface. Documentation map: [`docs/README.md`](docs/README.md).
+
+## Quality gates (CI, all required)
+
+`lint` · `typecheck` (+ api-client drift) · `unit` · `contract` (+ vendor check) · `rls` (pgTAP, advisors, API isolation on real Supabase) · `e2e` (functional, visual, Lighthouse) · `security-scan` (gitleaks on full history, OSV, SBOM) · `license-scan`.
+
+Dependencies are exact-pinned and at least 14 days old (pnpm release-age gate; Dependabot cooldown). Actions are pinned to commit SHAs.
 
 ## Open-source building blocks
 
-226 unique GitHub repos were verified on 2026-10-08 (exists, licence, last commit, pinned SHA) and mapped to the prompts that use them: see [`docs/research/oss-catalog.md`](docs/research/oss-catalog.md). Licence policy and register: [`docs/compliance/third-party-licenses.md`](docs/compliance/third-party-licenses.md). Vendoring workflow: [`vendor/README.md`](vendor/README.md).
+226 GitHub repos verified on 2026-10-08 and mapped to the prompts that use them: [`docs/research/oss-catalog.md`](docs/research/oss-catalog.md). Licence policy and register: [`docs/compliance/third-party-licenses.md`](docs/compliance/third-party-licenses.md).
 
-## Stack (planned)
+## Security and confidentiality
 
-Next.js, React, Tailwind, shadcn, anime.js v4 | FastAPI and Python workers | Postgres with pgvector and RLS (Supabase) | Claude API behind an LLM gateway | Playwright for end-to-end tests.
-
-## How to work in this repo
-
-1. Open the folder in Claude Code. `CLAUDE.md` loads automatically.
-2. Run the prompts in order from `docs/prompts/` (M0 to M9). Do not start the next one until the previous gate passes (see `ROADMAP.md`).
-3. Every change ships with tests, an updated `CONTEXT.md` if new terms appear, and a PR section listing what was NOT verified.
-
-## Quickstart
-
-Needs Node >= 24 (corepack), uv, Docker (for RLS tests), Supabase CLI.
-
-```bash
-make dev        # installs JS + Python deps and git hooks, then runs web (:3000) + API (:8000)
-make check      # lint, typecheck, unit + contract tests (JS and Python)
-make e2e        # Playwright smoke (starts both servers itself)
-make rls        # local Supabase + pgTAP RLS tests
-```
-
-Blueprint: `docs/specs/`, `docs/adr/`, `docs/architecture/domain-model.md`, `docs/design/`, `docs/security/`, `docs/tickets/`. Agent boundaries: `docs/runbooks/agent-harness.md`.
-
-## Confidentiality
-
-Proprietary. Never commit real client data, API keys or credentials. See `.env.example` for variable names only.
+Proprietary ([`LICENSE`](LICENSE)). Report vulnerabilities privately: [`SECURITY.md`](SECURITY.md). Never commit real client data, keys or credentials; `.env.example` lists variable names only.
