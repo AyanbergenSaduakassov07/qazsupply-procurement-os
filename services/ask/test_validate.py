@@ -111,3 +111,16 @@ def test_links_to_any_domain_and_emails_are_dropped_but_decimals_are_not() -> No
         assert not check(answer((text, [])), FIGURES).answerable, text
     assert check(answer(("Exactly 117504.30 ₸.", ["ev-cement"])), FIGURES).answerable
     assert check(answer(("Цемент М400 т.е. cement.", ["ev-cement"])), FIGURES).answerable
+
+
+def test_citation_refs_are_read_in_the_forms_models_write_them() -> None:
+    figs = {"F1": Figure(ref="F1", amounts=(Decimal("13718.00"),)), REPORT_REF: REPORT}
+    for ids in (["[F1]"], ["f1"], [" F1 "], ["F1, report"], ["Report", "F1"]):
+        out = check(answer(("Bolts: 13 718 ₸.", ids)), figs)
+        assert out.answerable, ids
+    assert not check(answer(("Bolts: 13 718 ₸.", ["F9"])), figs).answerable
+    bad_type: dict[str, object] = {
+        "answerable": True,
+        "sentences": [{"text": "Bolts: 13 718 ₸.", "evidence_ids": [7]}],
+    }
+    assert not check(bad_type, figs).answerable

@@ -99,6 +99,19 @@ def _shingles(text: str) -> set[tuple[str, ...]]:
     return {tuple(words[i : i + SHINGLE]) for i in range(len(words) - SHINGLE + 1)}
 
 
+def _refs(ids: list[object], figures: dict[str, Figure]) -> list[str]:
+    """Citation refs matched to the given ones, case- and bracket-insensitively: models write
+    "[F1]", "f1" or "F1, F2" for F1. An unmatched ref stays as is (and counts as unknown)."""
+    known = {k.upper(): k for k in figures}
+    out: list[str] = []
+    for raw in ids:
+        parts = raw.split(",") if isinstance(raw, str) else [""]
+        for part in parts:
+            ref = re.sub(r"[\[\]\s]", "", part)
+            out.append(known.get(ref.upper(), ref or "?"))
+    return out
+
+
 def check(raw: object, figures: dict[str, Figure], instructions: str = "") -> Checked:
     """Validate the model's JSON answer against the figures it was given. A sentence that repeats
     SHINGLE or more consecutive words of `instructions` (the prompt's rules) is a leak: dropped."""
@@ -115,10 +128,11 @@ def check(raw: object, figures: dict[str, Figure], instructions: str = "") -> Ch
         if not isinstance(text, str) or not text.strip() or not isinstance(ids, list):
             out.dropped += 1
             continue
-        cited = [figures[i] for i in ids if isinstance(i, str) and i in figures]
+        refs = _refs(ids, figures)
+        cited = [figures[r] for r in refs if r in figures]
         numbers = _numbers(text, [n for f in cited for n in f.names])
         out.numbers_total += len(numbers)
-        unknown_ref = len(cited) != len(ids)
+        unknown_ref = len(cited) != len(refs)
         plain, percents = _allowed(cited)
         unbacked = any(n not in (percents if pct else plain) for n, pct in numbers)
         leak = bool(secret & _shingles(text))
