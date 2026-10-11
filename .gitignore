@@ -60,3 +60,6 @@ e2e/.auth/
 !services/**/fixtures/*.csv
 !services/**/fixtures/*.xlsx
 !services/**/fixtures/*.xlsm
+
+# Hypothesis example database
+.hypothesis/
