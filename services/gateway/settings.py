@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[2]
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
-DEV_ASK_MODEL = "google/gemma-4-31b-it:free"
+DEV_ASK_MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
 
 
 @dataclass(frozen=True)
