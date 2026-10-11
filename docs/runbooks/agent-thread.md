@@ -54,3 +54,10 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Fixed on the way:** findings select policy must use row columns (INSERT ... RETURNING cannot see the new row by id).
 - **Results:** `make check` green; `make rls` PASS (4 pgTAP suites, advisors clean, 25 integration incl. the new end-to-end gate test).
 - **Next:** slice 2: review console UI (`/[locale]/review`), then report narrative + PDF, then Ask.
+
+## 2026-10-12 | M3 | slice 2: review console UI
+- **Done:** console on `/[locale]/spend/reports/[id]` for staff (submit, per-finding keep / keep with note / reject with J K A E R, approve with note, reject, reopen, return, two-step release); SLA timer in text on the console and the reports list (`submitted_at` added to the list API); decision history with before -> after; 47 `gate.*` strings kk/ru/en (homoglyph guard now also approves `E`, `Esc`); e2e `review.spec.ts` full journey.
+- **Results:** e2e on a production build (as CI): 117 passed, 0 failed, 2 flaky (passed on retry), 11 skipped (visual + desktop-only).
+- **Local test hygiene:** `make rls` leaves integration rows in Org A; reset the DB (`supabase --workdir infra db reset`) before `make e2e`, or auth.spec audit/report counts fail. Run e2e against `next start`, not `next dev` (dev server races under parallel load: "Unexpected end of JSON input").
+- **Known flake (pre-existing, M2):** `spend.spec` injection test vs the desktop keyboard-review test: the injection row sorts first in the Org B queue and the keyboard test briefly marks the first line. Fix: give the keyboard test its own uploaded line. Not changed in this slice.
+- **Next:** slice 3: client report narrative + Evidence "who reviewed" + PDF (react-pdf + IBM Plex woff; OFL exception proposed in harness PR #4).
