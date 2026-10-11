@@ -13,6 +13,7 @@ const SCREENS = [
   { name: "sign-in", path: "sign-in", signedIn: false },
   { name: "overview", path: "", signedIn: true },
   { name: "audit", path: "/audit", signedIn: true },
+  { name: "upload", path: "/spend", signedIn: true },
 ] as const;
 
 for (const screen of SCREENS) {

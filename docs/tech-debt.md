@@ -18,3 +18,9 @@ Budget: 20% of each phase (docs/product/prioritization.md). A phase gate cannot 
 | D12 | Kazakh microcopy not reviewed by a native speaker | No reviewer yet | Before first kk-speaking client | open, **blocker for kk launch** |
 | D13 | `style-src 'unsafe-inline'` in CSP | SSR'd inline style attributes from UI primitives | When primitives move to class-only positioning | open |
 | D14 | Branch protection not enforced by GitHub | Private repo on GitHub Free; rulesets need a paid plan | When the repo moves to an organization plan | open |
+| D15 | FX rates and the ЕНС ТРУ sample are loaded from files, not a DB reference table | A new global table needs a change to the locked pgTAP structure test (separate harness PR) | Harness-change PR: add `fx_rates` / `enstru_codes` reference tables (ADR 0006) | open |
+| D16 | Second (SQL) implementation covers price variance and outliers only | Repeat/split/concentration claim no saving or an explicit assumption | Before any of them produces a headline saving | open |
+| D17 | M2 gates measured on synthetic data only | No real ЕНС ТРУ access, no owner-labelled lines, no hand-audited datasets | When the owner provides them: run `evals/matcher` and `evals/findings` on the real sets | open, **blocker for Gate A** |
+| D18 | Matcher calibration fitted on synthetic data (realistic holdout abstains 46%) | Calibration needs real labelled lines | Refit `evals/matcher/train.py` on the owner's set | open |
+| D19 | No separate cap on decompressed .xlsx size | openpyxl read-only streams rows; row/column caps bound memory | Before accepting files from untrusted external parties (supplier portal, M8) | open |
+| D20 | Reviewer UI "choose" offers only the top-5 candidates; free search exists in the API (`/classifier`) but not in the UI | M2 scope | M3 review console | open |

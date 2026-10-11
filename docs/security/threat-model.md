@@ -68,3 +68,23 @@ New surface introduced in M1 and its residual risk:
 | T23 | Forged `qs_org` cookie | Honoured only if the user is a member; API re-checks membership (404) | Low (tested) |
 | T24 | Security-definer helpers (`private.*`) misused | Fixed `search_path=''`, schema not exposed by PostgREST, execute granted to `authenticated` only | Low |
 | T25 | Service-role paths (ledger, future pipelines) bypass RLS | Only `PostgresLedger` uses a service connection in M1; every future one needs its own isolation test | Medium |
+
+## M2 update (2026-10-11): spend upload, matching, analysis
+
+Reviewed: `services/ingest`, `services/normalize`, `services/analyze`, `connectors/{enstru,fx}`, `routes_spend.py`, `apps/web/app/spend-actions.ts`, spend UI, migration `20261009000000`.
+
+| # | STRIDE | Threat | Mitigation in M2 | Test | Residual |
+|---|---|---|---|---|---|
+| T26 | Tampering / DoS | Malicious upload: macro workbook, zip bomb, huge sheet, corrupt file | Macro (vbaProject.bin) and .xls/.xlsm rejected; 25 MB cap enforced while reading; 200k rows / 60 columns caps; openpyxl read-only, values only (formulas never evaluated) | `test_ingest.py`, upload integration + e2e | Medium: decompression size of a crafted .xlsx not capped separately (D19) |
+| T27 | Tampering | Formula injection when data is exported back to Excel (`=HYPERLINK`, `@SUM`) | Stored as text; never evaluated server-side | `10_injection.csv` | Medium until CSV/PDF export (M3) escapes `= + - @` |
+| T28 | Info disclosure / injection | Prompt injection in item text reaching an LLM | No LLM in the M2 path; future re-rank may only choose among retrieved codes (`test_reranker_cannot_introduce_a_code_outside_the_candidates`); prompts escape `<data>` | matcher + llm tests; e2e shows injected text inert | Low now; re-assess when the Anthropic adapter lands (D11) |
+| T29 | XSS | Script in a supplier name rendered in review UI | React escaping; nonce CSP; no dangerouslySetInnerHTML | e2e: `<script>` text visible, no dialog, no script element contains it | Low |
+| T30 | Elevation | Client writes findings or runs analysis to fabricate savings | Analysis endpoint staff-only and findings/evidence insert policies staff-only under RLS (no service-role bypass) | pgTAP m2 (client cannot write evidence), API 403, e2e no button | Low |
+| T31 | Tampering | Wrong money from a bug in one implementation | Every run recomputes price-variance and outlier savings in independent exact-numeric SQL; any mismatch aborts before writing | `cross_check`, end-to-end integration | Medium: repeat/split/concentration not double-implemented (D16) |
+| T32 | Repudiation | Reviewer denies a match decision | `match_feedback` append-only, reviewer forced to `auth.uid()`; uploads and analysis write audit entries | pgTAP m2, integration | Low |
+| T33 | Tampering | Raw purchase values edited to change findings | Column grants allow only match fields to be updated; raw/price/date immutable for users | pgTAP m2 | Low |
+| T34 | Info disclosure | Cross-tenant review or evidence access by id | Line lookup scoped by org + RLS; 404 for foreign ids | integration `test_cannot_review_another_tenants_line` | Low |
+| T35 | DoS | Upload via server action floods memory | 26 MB action body cap; API re-checks 25 MB | e2e macro/size paths | Low |
+| T36 | Supply chain | New deps (rapidfuzz, openpyxl, hypothesis, python-multipart) | Exact pins >= 14 days old; licence gate; OSV in CI | license_check, security-scan | Low |
+| T37 | Tampering | Hostile XML from the FX source (XXE / entity expansion) | DOCTYPE/ENTITY refused, 256 KB cap, no network in tests | `test_hostile_xml_is_refused` | Low |
+| T38 | Integrity | Controlled purge abused to erase audit history | DELETE-only, privileged roles only, inside a `qs.purge` transaction; UPDATE never allowed; runbook + owner approval | pgTAP m2 purge tests | Medium (privileged access is trusted by design) |

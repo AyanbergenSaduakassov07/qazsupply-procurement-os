@@ -94,7 +94,15 @@ export default async function AuditPage({ params }: { params: Promise<{ locale: 
               aria-label={t(locale, "audit.title")}
               className="overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--qs-focus)]"
             >
-              <table className="w-full min-w-[36rem] text-left text-sm">
+              {/* Fixed layout: column widths never depend on content (dates vary in length). */}
+              <table className="w-full min-w-[36rem] table-fixed text-left text-sm">
+                <colgroup>
+                  <col className="w-48" />
+                  <col className="w-28" />
+                  <col />
+                  <col className="w-28" />
+                  <col className="w-36" />
+                </colgroup>
                 <thead className="bg-surface-raised text-xs text-muted">
                   <tr>
                     <th scope="col" className="px-4 py-2 font-medium">
@@ -117,7 +125,7 @@ export default async function AuditPage({ params }: { params: Promise<{ locale: 
                 <tbody>
                   {data.entries.map((entry) => (
                     <tr key={entry.id} className="border-line border-t">
-                      <td className="px-4 py-2 text-muted">
+                      <td className="truncate px-4 py-2 text-muted tabular-nums">
                         <time dateTime={entry.created_at}>
                           {dateFormat.format(new Date(entry.created_at))}
                         </time>

@@ -11,6 +11,10 @@ Conventions: every client-data entity carries `org_id` (its Organization). "Inva
 ## Spend X-ray
 - **Upload:** one client file (xlsx/csv) with its sha256. *Invariant:* the same hash in the same Organization is ingested once (idempotent).
 - **Purchase Line:** one row of historical spend: item text, quantity, unit, unit price, currency, date, supplier text, source Upload + row number. *Invariants:* always traceable to Upload + row; original values are kept beside normalized ones; never edited in place (corrections are new versions).
+- **Review queue:** Purchase Lines the matcher sent to a human (`match_status` review or bundled). Decisions are accept / choose / reject / undo. *Invariant:* every decision is written to **Match feedback** (append-only, reviewer = the signed-in user); feedback becomes eval data only after review.
+- **Sample classifier:** the synthetic stand-in for ЕНС ТРУ (codes `SYN-*`) used until real access exists. *Invariant:* always shown with a "sample" badge; never presented as real classifier data.
+- **Rate date:** the National Bank rate date actually used to convert a line to KZT (nearest published date on or before the purchase date). Stored on the line; shown in Evidence.
+- **Analysis run:** one execution of the detectors for an Organization, identified by a `computation_id`; produces a draft Report. *Invariant:* the money is recomputed by an independent SQL implementation and the run writes nothing if they disagree.
 - **Item:** a normalized product or service identified by an ЕНС ТРУ code (later: HS code for imports). *Invariant:* a Purchase Line maps to 0 or 1 Item, with a confidence and method (`exact`, `lexical`, `embedding+rerank`, `human`).
 - **Bundled line:** a Purchase Line that contains several Items in one row. Default (Q5): flagged, excluded from price comparison, split only by a human.
 - **Supplier:** a legal entity that sells, resolved from names and BIN/IIN. *Invariants:* merges are reversible and logged; a Supplier without BIN is "unresolved" and is never screened as if resolved.

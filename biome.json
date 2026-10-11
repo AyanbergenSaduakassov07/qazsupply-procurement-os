@@ -33,7 +33,8 @@
     {
       "includes": [
         "packages/ui/src/components/evidence-drawer.tsx",
-        "apps/web/app/\\[locale\\]/(app)/audit/page.tsx"
+        "apps/web/app/\\[locale\\]/(app)/audit/page.tsx",
+        "apps/web/components/spend/upload-wizard.tsx"
       ],
       "linter": {
         "rules": {

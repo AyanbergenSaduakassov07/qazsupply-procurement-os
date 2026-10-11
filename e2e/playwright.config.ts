@@ -28,7 +28,8 @@ export default defineConfig({
   use: { baseURL, trace: "retain-on-failure", storageState: ".auth/clientAdminA.json" },
   // Baselines are Linux-only (rendered in the Playwright image, same as CI): no {platform} suffix.
   snapshotPathTemplate: "{testDir}/__screenshots__/{testFilePath}/{arg}-{projectName}{ext}",
-  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
+  // Rendering is pinned to one Linux image, so noise is ~0: a missed menu item must fail.
+  expect: { toHaveScreenshot: { maxDiffPixels: 100 } },
   projects: [
     {
       name: "setup",

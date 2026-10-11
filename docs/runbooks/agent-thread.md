@@ -28,3 +28,9 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Bugs found by the eval and fixed:** double-counted savings (outlier lines inside a price_variance finding), one spike making a supplier "overpriced" (now supplier median), outliers on tight price bands (now also >= 30% above median). Generator artifacts fixed (split prices, balanced background).
 - **Results:** synthetic precision 1.00 / 1.00, recall 0.95 / 1.00 (concentration verified by definition, reported separately); detector property tests (non-negative, exact scaling, reconciles to its evidence lines); end-to-end integration upload -> normalise -> analysis -> evidence with Python == SQL money.
 - **Next:** slice 5 UX (upload wizard, review queue, findings) + Playwright, then phase-end checks and PR.
+
+## 2026-10-11 | M2 | slice 5 + phase end
+- **Done:** spend UI (upload wizard with mapping preview and plain-language row errors; keyboard-first review queue with "why", batch accept, undo, focus management; findings with Evidence drawer on every number; staff-only analysis button); 99+7 kk/ru/en strings; Playwright `spend.spec.ts` (upload, macro refusal, row errors, injection inert, client cannot analyse, keyboard review, analysis + evidence); visual baselines now include the upload screen; Lighthouse covers the spend pages.
+- **Fixed:** visual gate was too lenient (1% of pixels let a changed menu pass) -> max 100 px; audit table columns depended on content length -> fixed table layout; local auth rate limit made runs flaky -> raised in local config only; parallel viewports shared the review queue -> keyboard journey on desktop only.
+- **Phase end:** STRIDE M2 update (T26-T38), tech debt D15-D20, CONTEXT terms, module READMEs, eval report `evals/REPORT-M2.md`, PROGRESS -> blocked (gate needs real data).
+- **Next:** owner review of the M2 PR (stacked on PR #1); provide real data to evaluate the gate. M3 is after Gate A and must not start before.

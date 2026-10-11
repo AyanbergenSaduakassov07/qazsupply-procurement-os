@@ -13,14 +13,16 @@ const load = (l) => JSON.parse(readFileSync(new URL(`../messages/${l}.json`, imp
 const kk = load("kk");
 const ru = load("ru");
 
-// Product/brand tokens and standard acronyms that legitimately appear in kk text.
-const APPROVED_LATIN = /\b(QazSupply|API|RFQ|X-ray|KPI|ETA)\b/g;
+// Product/brand tokens, file formats, currency codes and single-letter keyboard shortcuts that
+// legitimately appear in kk text. Whole tokens only, so look-alike letters inside words still fail.
+const APPROVED_LATIN =
+  /\b(QazSupply|API|RFQ|X-ray|KPI|ETA|SAP|Excel|CSV|csv|UTF-8|xlsx|xlsm|xls|KZT|USD|RUB|EUR|CNY|[JKARU])\b/g;
 const LATIN = /[A-Za-z]/;
 const CYRILLIC = /[\u0400-\u04ff]/;
 
 test("kk never mixes unapproved Latin with Cyrillic (homoglyph guard)", () => {
   for (const [key, value] of Object.entries(kk)) {
-    const stripped = value.replace(APPROVED_LATIN, "");
+    const stripped = value.replace(/\{[a-z_]+\}/g, "").replace(APPROVED_LATIN, ""); // {row} placeholders
     assert.ok(
       !(LATIN.test(stripped) && CYRILLIC.test(value)),
       `${key} mixes Latin and Cyrillic: "${value}"`,
