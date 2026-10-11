@@ -149,12 +149,15 @@ export function ConcentrationPareto({
   description,
   table,
   height = 260,
+  seriesNames = { bar: "spend", line: "cumulative %" },
 }: {
   data: ConcentrationDatum[];
   title: string;
   description?: string;
   table: ChartTable;
   height?: number;
+  /** Legend names; pass translated strings (the defaults are for the gallery only). */
+  seriesNames?: { bar: string; line: string };
 }) {
   return (
     <ChartFrame title={title} description={description} table={table} height={height}>
@@ -181,7 +184,7 @@ export function ConcentrationPareto({
           <Bar
             yAxisId="spend"
             dataKey="spend"
-            name="spend"
+            name={seriesNames.bar}
             fill="var(--qs-accent)"
             isAnimationActive={false}
           />
@@ -189,7 +192,7 @@ export function ConcentrationPareto({
             yAxisId="cumulative"
             type="monotone"
             dataKey="cumulative"
-            name="cumulative %"
+            name={seriesNames.line}
             stroke="var(--qs-gold-text)"
             strokeDasharray="4 2"
             strokeWidth={2}

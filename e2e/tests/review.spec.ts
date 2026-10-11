@@ -1,5 +1,12 @@
 import AxeBuilder from "@axe-core/playwright";
-import { type Browser, expect, type Page, test } from "@playwright/test";
+import {
+  type Browser,
+  type BrowserContextOptions,
+  expect,
+  type Page,
+  test,
+} from "@playwright/test";
+import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 /**
  * M3 review gate through the UI: upload -> analysis -> review -> release -> client view.
@@ -47,16 +54,34 @@ async function axe(page: Page) {
   expect(violations).toEqual([]);
 }
 
-async function as(browser: Browser, user: string): Promise<Page> {
-  const context = await browser.newContext({ storageState: `.auth/${user}.json` });
+async function as(
+  browser: Browser,
+  user: string,
+  options: BrowserContextOptions = {},
+): Promise<Page> {
+  const context = await browser.newContext({ storageState: `.auth/${user}.json`, ...options });
   return context.newPage();
 }
+
+/** All text of a PDF, whitespace removed (Intl uses narrow no-break spaces in amounts). */
+async function pdfText(bytes: Buffer): Promise<string> {
+  const doc = await getDocument({ data: new Uint8Array(bytes) }).promise;
+  let text = "";
+  for (let i = 1; i <= doc.numPages; i++) {
+    const content = await (await doc.getPage(i)).getTextContent();
+    text += content.items.map((item) => ("str" in item ? item.str : "")).join("");
+  }
+  return squash(text);
+}
+
+const squash = (text: string) => text.replace(/\s+/gu, "");
 
 test("a report reaches the client only after review and release", async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "one project owns the shared review queue");
   test.setTimeout(120_000);
 
-  const client = await as(browser, "clientAdminB");
+  // Reduced motion: the headline count-up must land instantly (and the figure is then stable).
+  const client = await as(browser, "clientAdminB", { reducedMotion: "reduce" });
   await client.goto("/en/spend");
   await client.getByTestId("upload-input").setInputFiles({
     name: "review-journey.csv",
@@ -105,18 +130,58 @@ test("a report reaches the client only after review and release", async ({ brows
   await reviewer.getByRole("button", { name: "Save decision" }).click();
   await expect(reviewer.getByTestId("report-status")).toHaveText("Approved");
 
-  // Approved but not released: still invisible to the client.
+  // Approved but not released: still invisible to the client, on screen and as a PDF.
   await client.goto(reportUrl);
   await expect(client.getByTestId("findings")).toHaveCount(0);
+  expect((await client.request.get(`${reportUrl}/pdf`)).status()).toBe(404);
 
   await reviewer.getByRole("button", { name: "Release to client" }).click();
   await reviewer.getByTestId("release-confirm").click();
   await expect(reviewer.getByTestId("report-status")).toHaveText("Released");
   await expect(reviewer.getByRole("button", { name: "Save decision" })).toHaveCount(0);
 
-  // Released: the client sees the kept findings only.
+  // Released: the client sees the kept findings only, ranked, with the reviewer named.
   await client.goto(reportUrl);
-  await expect(client.getByTestId("findings").locator("li")).toHaveCount(total - 1);
+  const shown = client.getByTestId("report-finding");
+  await expect(shown).toHaveCount(total - 1);
   await expect(client.getByText("One-off emergency order")).toHaveCount(0);
+  await expect(client.getByTestId("reviewed-by")).toContainText("Reviewed by Demo Reviewer");
   await axe(client);
+
+  // Every number opens its evidence, with the person who reviewed it.
+  await shown.first().getByTestId("finding-saving").click();
+  const drawer = client.getByRole("dialog");
+  await expect(drawer.getByTestId("evidence-reviewed-by")).toContainText("Demo Reviewer");
+  await expect(drawer.getByRole("table")).toBeVisible();
+  await client.keyboard.press("Escape");
+  await client.getByTestId("report-headline").click();
+  await expect(drawer.getByTestId("evidence-parts").locator("li")).toHaveCount(total - 1);
+  await client.keyboard.press("Escape");
+
+  // PDF figures equal screen figures exactly (same model, same formatter).
+  const headline = squash(await client.getByTestId("report-headline").innerText()).replace(
+    "Potentialsavings",
+    "",
+  );
+  const savings = (await client.getByTestId("finding-saving").allInnerTexts()).map(squash);
+  const response = await client.request.get(`${reportUrl}/pdf`);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toBe("application/pdf");
+  const pdf = await pdfText(await response.body());
+  expect(pdf).toContain(headline);
+  for (const saving of savings) expect(pdf).toContain(saving);
+  expect(pdf).toContain(reportUrl.split("/").pop() ?? "missing-id"); // footer: report id
+  expect(pdf).toContain("DemoReviewer");
+
+  // Three languages, each with its own number and date formats.
+  for (const locale of ["kk", "ru"]) {
+    await client.goto(reportUrl.replace("/en/", `/${locale}/`));
+    await expect(client.getByTestId("report-finding")).toHaveCount(total - 1);
+    await axe(client);
+  }
+  // The Kazakh PDF carries Kazakh text (embedded font with a Unicode map), not just glyph shapes.
+  const kkPdf = await client.request.get(`${reportUrl.replace("/en/", "/kk/")}/pdf`);
+  const kkBody = await kkPdf.body();
+  await testInfo.attach("report-kk.pdf", { body: kkBody, contentType: "application/pdf" });
+  expect(await pdfText(kkBody)).toContain(squash("Ықтимал үнемдеу"));
 });

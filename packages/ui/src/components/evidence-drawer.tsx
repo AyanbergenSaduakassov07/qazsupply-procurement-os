@@ -28,6 +28,10 @@ export interface EvidenceDrawerProps {
     /** The computation in words, before the raw rows. */
     formula: string;
     result?: string;
+    /** Named human who decided on this figure ("who reviewed"). */
+    reviewedBy?: string;
+    /** For an aggregate figure: the figures it adds up, each with its own Evidence id. */
+    parts?: { label: string; value: string; evidenceId: string }[];
     sources: EvidenceSourceRow[];
   } | null;
   labels: {
@@ -46,6 +50,8 @@ export interface EvidenceDrawerProps {
     qty: string;
     price: string;
     date: string;
+    reviewed?: string;
+    parts?: string;
   };
 }
 
@@ -108,6 +114,14 @@ export function EvidenceDrawer({ open, onOpenChange, evidence, labels }: Evidenc
                   </dd>
                   <dt className="text-muted">{labels.version}</dt>
                   <dd className="font-mono text-xs text-ink">{evidence.codeVersion}</dd>
+                  {evidence.reviewedBy ? (
+                    <>
+                      <dt className="text-muted">{labels.reviewed}</dt>
+                      <dd className="text-ink" data-testid="evidence-reviewed-by">
+                        {evidence.reviewedBy}
+                      </dd>
+                    </>
+                  ) : null}
                 </dl>
 
                 <section>
@@ -118,50 +132,69 @@ export function EvidenceDrawer({ open, onOpenChange, evidence, labels }: Evidenc
                   ) : null}
                 </section>
 
-                <section>
-                  <h3 className="mb-2 text-xs font-medium text-muted">{labels.sources}</h3>
-                  <section
-                    tabIndex={0}
-                    aria-label={labels.sources}
-                    className="overflow-x-auto rounded-[var(--qs-radius-md)] border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--qs-focus)]"
-                  >
-                    <table className="w-full text-left text-xs">
-                      <caption className="sr-only">{labels.sources}</caption>
-                      <thead className="bg-surface-raised text-muted">
-                        <tr>
-                          <th className="px-3 py-2 font-medium">{labels.file}</th>
-                          <th className="px-3 py-2 font-medium">{labels.row}</th>
-                          <th className="px-3 py-2 font-medium">{labels.item}</th>
-                          <th className="px-3 py-2 font-medium">{labels.supplier}</th>
-                          <th className="px-3 py-2 font-medium">{labels.qty}</th>
-                          <th className="px-3 py-2 font-medium">{labels.price}</th>
-                          <th className="px-3 py-2 font-medium">{labels.date}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {evidence.sources.map((source) => (
-                          <tr key={source.id} className="border-line border-t">
-                            <td className="px-3 py-2 text-ink">{source.fileName}</td>
-                            <td className="px-3 py-2 tabular-nums text-ink">{source.sourceRow}</td>
-                            <td className="px-3 py-2 text-ink">{source.itemText ?? "—"}</td>
-                            <td className="px-3 py-2 text-ink">{source.supplierText ?? "—"}</td>
-                            <td className="px-3 py-2 text-right tabular-nums text-ink">
-                              {source.quantity ?? "—"}
-                            </td>
-                            <td className="px-3 py-2 text-right tabular-nums text-ink">
-                              {source.unitPrice
-                                ? `${source.unitPrice} ${source.currency ?? ""}`
-                                : "—"}
-                            </td>
-                            <td className="px-3 py-2 tabular-nums text-ink">
-                              {source.purchasedOn ?? "—"}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {evidence.parts?.length ? (
+                  <section>
+                    <h3 className="mb-2 text-xs font-medium text-muted">{labels.parts}</h3>
+                    <ul className="flex flex-col gap-1 text-sm" data-testid="evidence-parts">
+                      {evidence.parts.map((p) => (
+                        <li key={p.evidenceId} className="flex justify-between gap-3">
+                          <span className="text-ink">{p.label}</span>
+                          <span className="text-ink tabular-nums">{p.value}</span>
+                          <span className="sr-only">{p.evidenceId}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </section>
-                </section>
+                ) : null}
+
+                {evidence.sources.length || !evidence.parts?.length ? (
+                  <section>
+                    <h3 className="mb-2 text-xs font-medium text-muted">{labels.sources}</h3>
+                    <section
+                      tabIndex={0}
+                      aria-label={labels.sources}
+                      className="overflow-x-auto rounded-[var(--qs-radius-md)] border border-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--qs-focus)]"
+                    >
+                      <table className="w-full text-left text-xs">
+                        <caption className="sr-only">{labels.sources}</caption>
+                        <thead className="bg-surface-raised text-muted">
+                          <tr>
+                            <th className="px-3 py-2 font-medium">{labels.file}</th>
+                            <th className="px-3 py-2 font-medium">{labels.row}</th>
+                            <th className="px-3 py-2 font-medium">{labels.item}</th>
+                            <th className="px-3 py-2 font-medium">{labels.supplier}</th>
+                            <th className="px-3 py-2 font-medium">{labels.qty}</th>
+                            <th className="px-3 py-2 font-medium">{labels.price}</th>
+                            <th className="px-3 py-2 font-medium">{labels.date}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {evidence.sources.map((source) => (
+                            <tr key={source.id} className="border-line border-t">
+                              <td className="px-3 py-2 text-ink">{source.fileName}</td>
+                              <td className="px-3 py-2 tabular-nums text-ink">
+                                {source.sourceRow}
+                              </td>
+                              <td className="px-3 py-2 text-ink">{source.itemText ?? "—"}</td>
+                              <td className="px-3 py-2 text-ink">{source.supplierText ?? "—"}</td>
+                              <td className="px-3 py-2 text-right tabular-nums text-ink">
+                                {source.quantity ?? "—"}
+                              </td>
+                              <td className="px-3 py-2 text-right tabular-nums text-ink">
+                                {source.unitPrice
+                                  ? `${source.unitPrice} ${source.currency ?? ""}`
+                                  : "—"}
+                              </td>
+                              <td className="px-3 py-2 tabular-nums text-ink">
+                                {source.purchasedOn ?? "—"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </section>
+                  </section>
+                ) : null}
               </div>
             )}
           </div>

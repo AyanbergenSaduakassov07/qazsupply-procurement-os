@@ -1,17 +1,20 @@
 import { apiClient } from "@qazsupply/api-client";
 import { isLocale, t } from "@qazsupply/i18n";
 import { notFound } from "next/navigation";
-
+import {
+  type NarrativeReport,
+  ReportNarrative,
+} from "../../../../../../components/report/report-narrative";
 import {
   type ConsoleEntry,
   type ConsoleFinding,
   type ConsoleReport,
   ReviewConsole,
 } from "../../../../../../components/review/review-console";
-import { type FindingRow, FindingsView } from "../../../../../../components/spend/findings-view";
+import { narrativeLabels } from "../../../../../../lib/report-labels";
+import type { ModelFinding } from "../../../../../../lib/report-model";
 import { consoleLabels } from "../../../../../../lib/review-labels";
 import { getSession } from "../../../../../../lib/session";
-import { findingsLabels } from "../../../../../../lib/spend-labels";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 
@@ -56,10 +59,12 @@ export default async function ReportPage({
           locale={locale}
         />
       ) : (
-        <FindingsView
-          findings={(findings.data ?? []) as unknown as FindingRow[]}
-          labels={findingsLabels(locale)}
+        <ReportNarrative
+          report={report.data as unknown as NarrativeReport}
+          findings={(findings.data ?? []) as unknown as ModelFinding[]}
+          labels={narrativeLabels(locale)}
           locale={locale}
+          pdfHref={`/${locale}/spend/reports/${id}/pdf`}
         />
       )}
     </div>

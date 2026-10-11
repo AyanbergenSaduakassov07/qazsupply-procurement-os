@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const config: NextConfig = {
   transpilePackages: ["@qazsupply/i18n", "@qazsupply/ui", "@qazsupply/motion"],
   poweredByHeader: false,
+  // PDF export renders on the server; react-pdf loads fonts and wasm itself, so keep it unbundled.
+  serverExternalPackages: ["@react-pdf/renderer"],
   // Purchase exports go through a server action (keeps Next's CSRF origin check); the API
   // enforces the real 25 MB limit and returns a typed error code.
   experimental: { serverActions: { bodySizeLimit: "26mb" } },

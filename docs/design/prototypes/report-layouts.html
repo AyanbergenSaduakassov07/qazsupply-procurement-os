@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype: Spend X-ray report layouts</title>
+<!--
+  THROWAWAY PROTOTYPE (M3). Fake data. Not production code; do not import.
+  Question: which layout lets a CFO (persona 2, Ерлан) read the headline, find the biggest
+  finding and reach its evidence fastest, on screen AND on paper (PDF identical to screen)?
+  A = narrative column (headline -> ranked findings -> actions). B = dashboard grid (KPI tiles,
+  chart, table). Toggle with the buttons; both use the same data.
+-->
+<style>
+  :root { --frost:#eef1f3; --ink:#101418; --muted:#4a5560; --line:#cfd6db; --tengri:#076f8c; --gold:#c9a227; --risk:#c23b32; --ok:#2e7d5b; --surface:#fff; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:16px/1.5 system-ui, sans-serif; background:var(--frost); color:var(--ink); }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px; }
+  .switch button { font: inherit; padding: 6px 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
+  .switch button[aria-pressed="true"] { border-color: var(--tengri); outline: 2px solid var(--tengri); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .num { font-variant-numeric: tabular-nums; font-weight: 650; color: var(--tengri); border-bottom: 2px dotted var(--tengri); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .badge { display:inline-block; font-size: 13px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  /* A: narrative */
+  .a { max-width: 720px; display: grid; gap: 16px; }
+  .a .headline { font-size: 40px; }
+  .a ol { padding-left: 20px; margin: 0; display: grid; gap: 12px; }
+  /* B: dashboard */
+  .b { display: grid; gap: 12px; grid-template-columns: repeat(4, 1fr); }
+  .b .wide { grid-column: span 4; }
+  .b .half { grid-column: span 2; }
+  .bar { height: 14px; background: var(--tengri); border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { text-align: left; padding: 6px; border-bottom: 1px solid var(--line); }
+  @media (max-width: 700px) { .b { grid-template-columns: 1fr 1fr; } .b .wide, .b .half { grid-column: span 2; } }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <p class="switch" role="group" aria-label="Layout">
+    <button type="button" aria-pressed="true" data-layout="a">A. Narrative</button>
+    <button type="button" aria-pressed="false" data-layout="b">B. Dashboard</button>
+  </p>
+
+  <section class="a" data-view="a" aria-label="Layout A">
+    <header>
+      <h1>Spend X-ray, январь–июнь 2026</h1>
+      <p class="muted">Проверил: Айгерим С., 14.07.2026 · Отчёт QS-2026-014</p>
+    </header>
+    <div class="card">
+      <p class="muted">Потенциальная экономия</p>
+      <p class="headline"><button class="num" style="font:inherit;background:none;border:0;border-bottom:2px dotted var(--tengri)">12 480 000 ₸</button></p>
+      <p class="muted">6 замечаний, все проверены человеком. 3,1% закупок за период.</p>
+    </div>
+    <h2>Главные замечания</h2>
+    <ol>
+      <li class="card"><strong>Переплата: Подшипник 6205 у ТОО Альфа</strong> <span class="badge">уверенность 91%</span><br><span class="num">5 200 000 ₸</span> · <span class="muted">Действие: пересогласовать цену или перенести объём к ТОО Бета.</span></li>
+      <li class="card"><strong>Дробление закупки: Цемент М400</strong> <span class="badge">уверенность 78%</span><br><span class="num">3 100 000 ₸</span> · <span class="muted">Действие: проверить пороги согласования.</span></li>
+      <li class="card"><strong>Повторные закупки: Перчатки нитриловые</strong> <span class="badge">уверенность 70%</span><br><span class="num">2 400 000 ₸</span> · <span class="muted">Действие: рамочный договор.</span></li>
+    </ol>
+    <h2>Что сделать</h2>
+    <div class="card"><ul><li>Пересогласовать 2 позиции (7 600 000 ₸)</li><li>Рамочный договор на 1 позицию (2 400 000 ₸)</li><li>Второй поставщик для 1 позиции (концентрация 82%)</li></ul></div>
+  </section>
+
+  <section class="b" data-view="b" aria-label="Layout B" hidden>
+    <h1 class="wide">Spend X-ray, январь–июнь 2026</h1>
+    <div class="card"><p class="muted">Экономия</p><p class="num">12 480 000 ₸</p></div>
+    <div class="card"><p class="muted">Замечания</p><p class="num">6</p></div>
+    <div class="card"><p class="muted">Доля закупок</p><p class="num">3,1%</p></div>
+    <div class="card"><p class="muted">Концентрация</p><p class="num">82%</p></div>
+    <div class="card half"><p class="muted">Экономия по типу</p>
+      <p>Переплата <span class="bar" style="display:block;width:80%"></span></p>
+      <p>Дробление <span class="bar" style="display:block;width:48%"></span></p>
+      <p>Повторные <span class="bar" style="display:block;width:37%"></span></p></div>
+    <div class="card half"><p class="muted">Поставщики</p><p>ТОО Альфа 54% · ТОО Бета 28% · ТОО Гамма 18%</p></div>
+    <div class="card wide"><table><thead><tr><th>Тип</th><th>Позиция</th><th>Поставщик</th><th>Экономия</th><th>Уверенность</th></tr></thead>
+      <tbody><tr><td>Переплата</td><td>Подшипник 6205</td><td>ТОО Альфа</td><td class="num">5 200 000</td><td>91%</td></tr>
+      <tr><td>Дробление</td><td>Цемент М400</td><td>—</td><td class="num">3 100 000</td><td>78%</td></tr>
+      <tr><td>Повторные</td><td>Перчатки</td><td>—</td><td class="num">2 400 000</td><td>70%</td></tr></tbody></table></div>
+  </section>
+</main>
+<script>
+  for (const b of document.querySelectorAll("[data-layout]")) {
+    b.addEventListener("click", () => {
+      for (const o of document.querySelectorAll("[data-layout]")) o.setAttribute("aria-pressed", String(o === b));
+      for (const v of document.querySelectorAll("[data-view]")) v.hidden = v.dataset.view !== b.dataset.layout;
+    });
+  }
+</script>
+</body>
+</html>

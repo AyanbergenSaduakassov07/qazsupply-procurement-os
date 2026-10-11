@@ -120,7 +120,7 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | anthropics/claude-cookbooks | MIT | PERMISSIVE | R | `d7265d6ae9` | M3 |  |
 | apache/echarts | Apache-2.0 | PERMISSIVE | D | `34f4d927ea` | M3 |  |
 | assistant-ui/assistant-ui | MIT | PERMISSIVE | D | `6ca5ca4080` | M3 |  |
-| diegomura/react-pdf | MIT | PERMISSIVE | D | `e7b14db1e5` | M3 |  |
+| diegomura/react-pdf | MIT | PERMISSIVE | D | `e7b14db1e5` | M3 | ADOPTED 2026-10-12: `@react-pdf/renderer@4.9.0` (npm, MIT), report PDF export (`apps/web/components/report/report-pdf.tsx`); proven by the e2e PDF = screen check |
 | exceljs/exceljs | MIT | PERMISSIVE | D | `5bed18b45e` | M3 |  |
 | explodinggradients/ragas | Apache-2.0 | PERMISSIVE | D | `298b682742` | M3 |  |
 | guardrails-ai/guardrails | Apache-2.0 | PERMISSIVE | R | `06d0ff2c5f` | M3 |  |
@@ -254,3 +254,4 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | Package | Licence | Why allowed | Reviewed |
 |---|---|---|---|
 | psycopg, psycopg-binary, psycopg-pool | LGPL-3.0-only | Policy 2: installed unmodified from PyPI, dynamically used, never vendored or edited | 2026-10-08 (M1) |
+| @ibm/plex-sans | OFL-1.1 | **Proposed (owner to confirm):** fonts under the SIL Open Font License, used unmodified. OFL allows embedding in documents and bundling with software; it forbids selling the font alone and reusing the reserved name for modified versions, neither of which we do. Needed to embed the product font (full Kazakh Cyrillic, tabular figures) in report PDFs. The same font already ships to browsers via `next/font` (fetched at build time, so the npm scan never saw it). Licence text: `node_modules/@ibm/plex-sans/LICENSE.txt` | 2026-10-12 (M3); exception lands with harness PR #4 |
