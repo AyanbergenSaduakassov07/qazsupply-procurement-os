@@ -9,6 +9,12 @@ Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](
 - Integration tests share `services/gateway/testing.py` (seeded users, tokens, purge helper) and one `TestClient` fixture.
 - `make help`; `CHANGELOG.md`; READMEs updated for M2.
 
+### Removed
+- 36 README-only placeholder folders for unbuilt modules (apps, connectors, infra, services). Planned modules stay mapped in `docs/architecture/domain-model.md`; each phase creates its folders when it builds them.
+
+### Process
+- Trunk-based branching adopted (owner decision 2026-10-11): `main` always green, short-lived squash-merged branches. See `CONTRIBUTING.md`.
+
 ## M2: Spend X-ray engine (2026-10-09 to 2026-10-11): built, gate blocked
 
 Built on synthetic data. The gate needs real ЕНС ТРУ access, 300 owner-labelled lines and two hand-audited datasets.

@@ -67,15 +67,15 @@ Open http://localhost:3000 and sign in with a seeded test user from `e2e/fixture
 ```text
 QazSupply/
 ├─ apps/web/             Next.js client app (shell, sign-in, settings, audit, spend upload/review/findings)
-├─ apps/{review,supplier-portal,marketing}/   planned (M3, M8)
 ├─ packages/
+│  ├─ agent-skills/      plan for in-product agent skills and MCP tools (built M3, published M9)
 │  ├─ api-client/        typed client generated from the API's OpenAPI (CI checks drift)
 │  ├─ design-tokens/     3-layer tokens, light/dark, contrast-tested
 │  ├─ i18n/              kk / ru / en catalogs (key parity + Kazakh orthography tested)
 │  ├─ motion/            anime.js v4 presets, reduced-motion safe
 │  └─ ui/                components (Evidence drawer, data table, charts, ...)
 ├─ services/             Python deep modules (ingest, normalize, analyze, evidence, ...); gateway = HTTP edge
-├─ connectors/           one adapter per external source (contract in _contract/)
+├─ connectors/           one adapter per external source: enstru (mock), fx (NBK); contract in _contract/
 ├─ infra/supabase/       migrations, seed (local only), pgTAP tests
 ├─ e2e/                  Playwright suites and visual baselines
 ├─ evals/                synthetic golden sets, scorers and phase eval reports
@@ -85,7 +85,7 @@ QazSupply/
 └─ .github/              CI, CODEOWNERS, Dependabot, PR and issue templates, ruleset
 ```
 
-Every folder has a `README.md` stating its purpose and public interface. Documentation map: [`docs/README.md`](docs/README.md).
+Every module has a `README.md` stating its purpose and public interface. Folders exist only once a phase builds them; planned modules are mapped in [`docs/architecture/domain-model.md`](docs/architecture/domain-model.md). Documentation map: [`docs/README.md`](docs/README.md).
 
 ## Quality gates (CI, all required)
 

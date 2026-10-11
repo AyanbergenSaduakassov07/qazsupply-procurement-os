@@ -40,3 +40,4 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Results:** `make check` green (JS lint/typecheck/tests, ruff, mypy, 76 unit + 15 contract); full pytest incl. 24 integration green on the local stack.
 - **Not run:** e2e, visual and Lighthouse (no UI change in this branch).
 - **Next:** owner approval to push and open a draft PR against `m2-spend-xray-engine`.
+- **Update (same day):** removed 36 README-only placeholder folders (owner approved); owner chose trunk-based branching. Merge plan for the open stack (#1 -> #2 -> #3), squash only: owner merges #1; agent rebases the next branch onto `main` with `--onto`, force-pushes with lease, CI re-runs; repeat.
