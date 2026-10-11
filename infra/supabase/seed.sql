@@ -28,6 +28,12 @@ begin
   end loop;
 end $$;
 
+-- Display names for "who reviewed" (synthetic).
+update auth.users set raw_user_meta_data = '{"full_name": "Demo Reviewer"}'
+  where id = '00000000-0000-4000-a000-0000000000c1';
+update auth.users set raw_user_meta_data = '{"full_name": "Demo QazSupply Admin"}'
+  where id = '00000000-0000-4000-a000-0000000000c2';
+
 insert into public.organizations (id, name) values
   ('10000000-0000-4000-a000-00000000000a', 'Demo Mining A'),
   ('10000000-0000-4000-a000-00000000000b', 'Demo Logistics B');

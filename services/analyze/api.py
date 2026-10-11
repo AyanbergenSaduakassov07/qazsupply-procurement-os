@@ -162,7 +162,8 @@ def findings(conn: UserConn, org_id: UUID, report_id: UUID) -> list[dict[str, An
              (select fe.evidence_id from public.finding_evidence fe where fe.finding_id = f.id
               limit 1) as evidence_id,
              d.decision::text as decision, d.note as decision_note,
-             d.reviewer_id as decided_by, d.created_at as decided_at
+             d.reviewer_id as decided_by, private.staff_name(d.reviewer_id) as decided_by_name,
+             d.created_at as decided_at
            from public.findings f
            left join public.items i on i.id = f.item_id
            left join public.suppliers s on s.id = f.supplier_id

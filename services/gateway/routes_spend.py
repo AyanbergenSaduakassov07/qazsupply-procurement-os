@@ -271,4 +271,5 @@ class Finding(BaseModel):
     decision: Literal["approve", "edit", "reject"] | None
     decision_note: str | None
     decided_by: UUID | None
+    decided_by_name: str | None
     decided_at: datetime | None

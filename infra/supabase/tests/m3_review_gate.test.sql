@@ -145,5 +145,11 @@ select pg_temp.as_user((select reviewer from ids));
 select lives_ok($$update public.reports set status = 'released' where id = '4e000000-0000-4000-a000-000000000002'$$,
   'a different person releases');
 
+-- ------------------------------------------------------------------ reviewer names ("who reviewed")
+select pg_temp.as_user((select user_a from ids));
+select is(private.staff_name((select reviewer from ids)), 'Demo Reviewer', 'a client sees the name of a reviewer of their org');
+select is(private.staff_name((select admin_a from ids)), null, 'names are only returned for staff, not for client users');
+select is(private.staff_name('00000000-0000-4000-a000-0000000000b1'), null, 'another org''s client admin stays anonymous');
+
 select * from finish();
 rollback;

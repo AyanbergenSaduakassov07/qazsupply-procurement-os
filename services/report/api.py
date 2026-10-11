@@ -54,6 +54,8 @@ def get_report(conn: UserConn, org_id: UUID, report_id: UUID) -> dict[str, Any] 
         """select r.id, r.title, r.period_start, r.period_end, r.status::text as status,
              r.version, r.created_at, r.created_by, r.submitted_at, r.released_at, r.released_by,
              private.latest_report_approver(r.id) as approved_by,
+             private.staff_name(private.latest_report_approver(r.id)) as approved_by_name,
+             private.staff_name(r.released_by) as released_by_name,
              (select count(*)::int from public.findings f where f.report_id = r.id) as findings,
              private.undecided_findings(r.id) as undecided,
              coalesce((select sum(f.saving_estimate) from public.findings f

@@ -169,7 +169,8 @@ begin
      or new.reviewer_id is distinct from auth.uid() then
     return new;
   end if;
-  new.created_at := now();
+  -- Wall-clock, not transaction time: several decisions in one transaction must stay ordered.
+  new.created_at := clock_timestamp();
   select r.status into report_status from public.reports r where r.id = new.report_id;
   if report_status is distinct from 'in_review' then
     raise exception 'review_gate:report_not_in_review' using errcode = '23514';

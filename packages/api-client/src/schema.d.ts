@@ -580,6 +580,8 @@ export interface components {
             decided_at: string | null;
             /** Decided By */
             decided_by: string | null;
+            /** Decided By Name */
+            decided_by_name: string | null;
             /** Decision */
             decision: ("approve" | "edit" | "reject") | null;
             /** Decision Note */
@@ -752,6 +754,8 @@ export interface components {
         ReportDetail: {
             /** Approved By */
             approved_by: string | null;
+            /** Approved By Name */
+            approved_by_name: string | null;
             /**
              * Created At
              * Format: date-time
@@ -782,6 +786,8 @@ export interface components {
             released_at: string | null;
             /** Released By */
             released_by: string | null;
+            /** Released By Name */
+            released_by_name: string | null;
             /** Status */
             status: string;
             /** Submitted At */

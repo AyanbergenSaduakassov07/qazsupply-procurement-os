@@ -33,6 +33,8 @@ class ReportDetail(BaseModel):
     released_at: datetime | None
     released_by: UUID | None
     approved_by: UUID | None
+    approved_by_name: str | None
+    released_by_name: str | None
     findings: int
     undecided: int
     total_saving: Decimal

@@ -546,6 +546,17 @@
             ],
             "title": "Decided By"
           },
+          "decided_by_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By Name"
+          },
           "decision": {
             "anyOf": [
               {
@@ -657,6 +668,7 @@
           "decision",
           "decision_note",
           "decided_by",
+          "decided_by_name",
           "decided_at"
         ],
         "title": "Finding",
@@ -1079,6 +1091,17 @@
             ],
             "title": "Approved By"
           },
+          "approved_by_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved By Name"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -1143,6 +1166,17 @@
             ],
             "title": "Released By"
           },
+          "released_by_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Released By Name"
+          },
           "status": {
             "title": "Status",
             "type": "string"
@@ -1190,6 +1224,8 @@
           "released_at",
           "released_by",
           "approved_by",
+          "approved_by_name",
+          "released_by_name",
           "findings",
           "undecided",
           "total_saving",
