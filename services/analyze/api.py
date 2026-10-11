@@ -154,15 +154,22 @@ def run(conn: UserConn, org_id: UUID) -> AnalysisResult:
 
 
 def findings(conn: UserConn, org_id: UUID, report_id: UUID) -> list[dict[str, Any]]:
-    """Findings of one report (RLS hides unreleased reports from client roles)."""
+    """Findings of one report with the latest review decision (RLS hides unreleased reports and
+    rejected findings from client roles; notes on kept findings are client-visible)."""
     return conn.execute(
         """select f.id, f.type, f.saving_estimate, f.currency, f.method, f.confidence, f.details,
              i.name as item_name, i.enstru_code, s.name as supplier_name,
              (select fe.evidence_id from public.finding_evidence fe where fe.finding_id = f.id
-              limit 1) as evidence_id
+              limit 1) as evidence_id,
+             d.decision::text as decision, d.note as decision_note,
+             d.reviewer_id as decided_by, d.created_at as decided_at
            from public.findings f
            left join public.items i on i.id = f.item_id
            left join public.suppliers s on s.id = f.supplier_id
+           left join lateral (
+             select v.decision, v.note, v.reviewer_id, v.created_at from public.reviews v
+             where v.finding_id = f.id order by v.created_at desc, v.id desc limit 1
+           ) d on true
            where f.org_id = %s and f.report_id = %s
            order by f.saving_estimate desc, f.type""",
         (org_id, report_id),

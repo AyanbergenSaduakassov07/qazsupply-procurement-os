@@ -26,6 +26,11 @@ def is_admin(conn: UserConn, org_id: UUID) -> bool:
     return bool(row and row["ok"])
 
 
+def is_staff(conn: UserConn, org_id: UUID) -> bool:
+    row = conn.execute("select private.is_staff(%s) as ok", (org_id,)).fetchone()
+    return bool(row and row["ok"])
+
+
 def audit_log(conn: UserConn, org_id: UUID, limit: int) -> list[dict[str, Any]]:
     return conn.execute(
         """select id, actor_id, action, entity, entity_id, details, created_at, hash

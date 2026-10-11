@@ -268,3 +268,7 @@ class Finding(BaseModel):
     enstru_code: str | None
     supplier_name: str | None
     evidence_id: UUID | None
+    decision: Literal["approve", "edit", "reject"] | None
+    decision_note: str | None
+    decided_by: UUID | None
+    decided_at: datetime | None
