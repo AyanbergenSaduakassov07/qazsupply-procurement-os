@@ -1,8 +1,8 @@
 """Spend X-ray routes (M2): uploads. Thin handlers; logic lives in services.ingest.api."""
 
 import json
-from datetime import datetime
-from typing import Annotated, Any
+from datetime import date, datetime
+from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from services.gateway.db import UserConn
 from services.ingest import api as ingest
+from services.normalize import api as normalize
 from services.tenancy import api as tenancy
 
 
@@ -73,6 +74,46 @@ def build(member_conn: Any) -> APIRouter:
     def uploads(org_id: UUID, conn: OrgConn) -> list[UploadSummary]:
         return [UploadSummary(**r) for r in ingest.list_uploads(conn, org_id)]
 
+    @router.post("/orgs/{org_id}/normalize")
+    def normalize_run(org_id: UUID, conn: OrgConn, body: NormalizeRequest) -> NormalizeSummary:
+        r = normalize.run(conn, org_id, body.file_id)
+        return NormalizeSummary(**r.__dict__)
+
+    @router.get("/orgs/{org_id}/match-counts")
+    def match_counts(org_id: UUID, conn: OrgConn) -> dict[str, int]:
+        return normalize.counts(conn, org_id)
+
+    @router.get("/orgs/{org_id}/review-queue")
+    def review_queue(org_id: UUID, conn: OrgConn, limit: int = 50, offset: int = 0) -> ReviewQueue:
+        limit = max(1, min(limit, 200))
+        rows = normalize.queue(conn, org_id, limit, max(offset, 0))
+        return ReviewQueue(sample_classifier=True, lines=[QueueLine(**r) for r in rows])
+
+    @router.post("/orgs/{org_id}/purchase-lines/{line_id}/review")
+    def review_line(
+        org_id: UUID, line_id: UUID, conn: OrgConn, body: ReviewRequest
+    ) -> ReviewResult:
+        try:
+            r = normalize.review(conn, org_id, line_id, body.action, body.code)
+        except LookupError:
+            raise HTTPException(404, "not found") from None
+        except ValueError as e:
+            raise HTTPException(422, {"code": str(e).replace(" ", "_")}) from None
+        return ReviewResult(**r)
+
+    @router.get("/orgs/{org_id}/classifier")
+    def classifier_search(org_id: UUID, conn: OrgConn, q: str = "", limit: int = 20) -> Classifier:
+        needle = q.strip().lower()
+        hits = [
+            e
+            for e in normalize.classifier().values()
+            if not needle
+            or needle in e.name_ru.lower()
+            or needle in e.name_kk.lower()
+            or needle in e.code.lower()
+        ]
+        return Classifier(sample=True, entries=[ClassifierItem(**e.__dict__) for e in hits[:limit]])
+
     return router
 
 
@@ -117,3 +158,67 @@ class UploadSummary(BaseModel):
     rows_total: int
     rows_rejected: int
     lines: int
+
+
+class NormalizeRequest(BaseModel):
+    file_id: UUID | None = None
+
+
+class NormalizeSummary(BaseModel):
+    processed: int
+    auto: int
+    review: int
+    bundled: int
+    fx_missing: int
+    suppliers_created: int
+    sample_classifier: bool
+
+
+class Candidate(BaseModel):
+    code: str
+    score: float
+    matched: list[str]
+    name: str
+
+
+class QueueLine(BaseModel):
+    id: UUID
+    item_text: str | None
+    unit: str | None
+    unit_price: float | None
+    currency: str | None
+    purchased_on: date | None
+    supplier_text: str | None
+    match_status: str
+    match_confidence: float | None
+    match_candidates: list[Candidate]
+    source_row: int
+    file_name: str | None
+
+
+class ReviewQueue(BaseModel):
+    sample_classifier: bool
+    lines: list[QueueLine]
+
+
+class ReviewRequest(BaseModel):
+    action: Literal["accept", "choose", "reject", "undo"]
+    code: str | None = None
+
+
+class ReviewResult(BaseModel):
+    id: UUID
+    match_status: str
+    code: str | None
+
+
+class ClassifierItem(BaseModel):
+    code: str
+    name_ru: str
+    name_kk: str
+    unit: str
+
+
+class Classifier(BaseModel):
+    sample: bool
+    entries: list[ClassifierItem]

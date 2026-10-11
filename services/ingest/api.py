@@ -36,6 +36,7 @@ __all__ = [
     "validate",
     "list_uploads",
     "MAX_BYTES",
+    "normalise_unit",
 ]
 
 

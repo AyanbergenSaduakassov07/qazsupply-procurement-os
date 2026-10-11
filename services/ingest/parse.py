@@ -6,6 +6,7 @@ files or sheets. Cell text is untrusted data: it is stored and displayed escaped
 
 import csv
 import io
+import re
 import zipfile
 from dataclasses import dataclass
 
@@ -79,13 +80,13 @@ def _read_csv(data: bytes) -> Sheet:
             continue
     else:
         raise FileRejected("encoding")
-    sample = text[:4096]
-    try:
-        dialect: type[csv.Dialect] | csv.Dialect = csv.Sniffer().sniff(sample, delimiters=";,\t|")
-    except csv.Error:
-        dialect = csv.excel
+    # The header row decides the delimiter: the most frequent of ; , TAB | outside quotes.
+    # (csv.Sniffer guesses wrong when cells contain commas, e.g. =HYPERLINK("a","b").)
+    first = next((ln for ln in text.splitlines() if ln.strip()), "")
+    unquoted = re.sub(r'"[^"]*"', "", first)
+    delimiter = max(";,\t|", key=unquoted.count)
     rows: list[list[object]] = []
-    for i, row in enumerate(csv.reader(io.StringIO(text), dialect)):
+    for i, row in enumerate(csv.reader(io.StringIO(text), delimiter=delimiter)):
         if i >= MAX_ROWS:
             raise FileRejected("too_many_rows")
         rows.append(list(row[:MAX_COLS]))

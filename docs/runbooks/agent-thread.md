@@ -15,3 +15,10 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Results:** 140 pgTAP pass; advisors clean; 91 pytest pass incl. 8 upload integration tests; **50k rows ingested in 3.6 s** (target < 60 s).
 - **Fixed on the way:** JWT verification had zero clock-skew leeway (flaky 401 after auth restarts) -> 30 s leeway; `make rls` resets the local DB and waits for auth.
 - **Next:** slice 3 normalisation run (match lines, units, FX, supplier resolution) + review queue API.
+
+## 2026-10-11 | M2 | slice 3: normalisation run + review queue
+- **Done:** `connectors/fx` (NBK official rates via `get_rates.cfm?fdate=`, real snapshots as fixtures, nearest-earlier rule with the rate date recorded, hostile XML refused); `services/normalize/api.py` (run: unit, FX to KZT, match, supplier resolution by BIN then normalised name; queue; review accept/choose/reject/undo with match_feedback); routes `/normalize`, `/match-counts`, `/review-queue`, `/purchase-lines/{id}/review`, `/classifier`.
+- **Bugs found and fixed:** zero-score candidates were offered as suggestions; csv.Sniffer picked `,` when cells contained commas (now: header-row delimiter count); append-only trigger blocked tenant offboarding (now: DELETE-only purge for privileged roles in a `qs.purge` transaction, runbook `offboarding.md`, pgTAP proves UPDATE stays forbidden and app users gain nothing).
+- **Results:** 142 pgTAP, advisors clean, 23 integration + unit suites green.
+- **Env note:** OrbStack (Docker) had stopped between sessions; restarted with `orb start`.
+- **Next:** slice 4 analysis engine (detectors + second SQL implementation + property tests + precision eval).

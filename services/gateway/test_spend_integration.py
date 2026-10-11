@@ -33,6 +33,9 @@ def clean_uploads() -> Iterator[None]:
     """Remove files this module created (lines cascade). Seed files are kept."""
     yield
     with psycopg.connect(DB) as conn:
+        conn.execute(
+            "set local qs.purge = 'on'"
+        )  # local test cleanup only (runbooks/offboarding.md)
         conn.execute("delete from public.files where name like 'it-%'")
 
 

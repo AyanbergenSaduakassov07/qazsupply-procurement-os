@@ -71,3 +71,19 @@ create policy match_feedback_insert on public.match_feedback for insert to authe
   with check ((select private.is_reader(org_id)) and reviewer_id = (select auth.uid()));
 revoke all on public.match_feedback from anon, authenticated;
 grant select, insert on public.match_feedback to authenticated;
+
+-- ---------------------------------------------------------------- controlled purge (offboarding)
+-- Append-only tables reject UPDATE/DELETE, which also blocked tenant offboarding (cascade from
+-- organizations) required by docs/compliance/retention-policy.md. A privileged session may set
+-- `qs.purge = 'on'` for one transaction (runbook: docs/runbooks/offboarding.md). App users have no
+-- DELETE grant on these tables, so the setting cannot help them; UPDATE stays forbidden always.
+create or replace function private.reject_mutation() returns trigger
+language plpgsql set search_path = '' as $$
+begin
+  if tg_op = 'DELETE' and current_setting('qs.purge', true) = 'on'
+     and current_user in ('postgres', 'supabase_admin', 'service_role') then
+    return old;
+  end if;
+  raise exception '% is append-only', tg_table_name using errcode = '42501';
+end;
+$$;

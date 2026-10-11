@@ -156,3 +156,11 @@ def test_parsers_only_raise_value_error(text: str) -> None:
         except ValueError:
             pass
     normalise_unit(text)
+
+
+def test_delimiter_comes_from_the_header_even_with_commas_in_cells() -> None:
+    data = (
+        'Наименование;Цена;Дата\n"=HYPERLINK(""a"",""b"")";100;01.08.2026\nx, y, z;5;01.08.2026\n'
+    )
+    rows = read_file(data.encode(), "d.csv")[0].rows
+    assert rows[1] == ['=HYPERLINK("a","b")', "100", "01.08.2026"] and rows[2][0] == "x, y, z"

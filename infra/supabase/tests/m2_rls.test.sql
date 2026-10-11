@@ -1,7 +1,7 @@
 -- M2 role rules on top of the data-driven tenancy suite (m1_rls.test.sql covers cross-tenant access).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(8);
+select plan(10);
 
 create temp table ids as select
   '10000000-0000-4000-a000-00000000000a'::uuid as org_a,
@@ -43,6 +43,15 @@ select throws_ok(
   format($$insert into public.match_feedback (org_id, purchase_line_id, action) values (%L, %L, 'accept')$$,
          (select org_a from ids), (select line_a from ids)),
   '42501', null, 'supplier role cannot write review feedback');
+
+-- Controlled purge (runbooks/offboarding.md): DELETE only, never UPDATE, privileged roles only.
+reset role;
+set local qs.purge = 'on';
+select throws_ok($$update public.audit_log set details = '{}'$$, '42501', null,
+  'purge mode never allows UPDATE on append-only tables');
+set local role authenticated;
+select throws_ok($$delete from public.match_feedback$$, '42501', null,
+  'purge mode gives app users nothing (no DELETE grant)');
 
 select * from finish();
 rollback;

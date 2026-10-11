@@ -159,7 +159,9 @@ class Matcher:
             code = self._entries[entry_idx].code
             if entry_idx not in best or score > best[entry_idx].score:
                 best[entry_idx] = Candidate(code, round(score, 1), matched)
-        return sorted(best.values(), key=lambda c: (-c.score, c.code))[:TOP_K]
+        # A zero-score candidate is not a suggestion: never offer it to a reviewer.
+        ranked = sorted((c for c in best.values() if c.score > 0), key=lambda c: (-c.score, c.code))
+        return ranked[:TOP_K]
 
     def _is_bundle(self, text: str) -> bool:
         if not BUNDLE_HINT.search(text):

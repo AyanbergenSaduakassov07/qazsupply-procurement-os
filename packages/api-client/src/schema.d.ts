@@ -55,6 +55,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/classifier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Classifier Search */
+        get: operations["classifier_search_orgs__org_id__classifier_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/evidence/{evidence_id}": {
         parameters: {
             query?: never;
@@ -72,6 +89,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/match-counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Match Counts */
+        get: operations["match_counts_orgs__org_id__match_counts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/normalize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Normalize Run */
+        post: operations["normalize_run_orgs__org_id__normalize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/purchase-lines/{line_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Review Line */
+        post: operations["review_line_orgs__org_id__purchase_lines__line_id__review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/reports": {
         parameters: {
             query?: never;
@@ -81,6 +149,23 @@ export interface paths {
         };
         /** Reports */
         get: operations["reports_orgs__org_id__reports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/review-queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Review Queue */
+        get: operations["review_queue_orgs__org_id__review_queue_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -179,6 +264,35 @@ export interface components {
             file: string;
             /** Sheet */
             sheet?: string | null;
+        };
+        /** Candidate */
+        Candidate: {
+            /** Code */
+            code: string;
+            /** Matched */
+            matched: string[];
+            /** Name */
+            name: string;
+            /** Score */
+            score: number;
+        };
+        /** Classifier */
+        Classifier: {
+            /** Entries */
+            entries: components["schemas"]["ClassifierItem"][];
+            /** Sample */
+            sample: boolean;
+        };
+        /** ClassifierItem */
+        ClassifierItem: {
+            /** Code */
+            code: string;
+            /** Name Kk */
+            name_kk: string;
+            /** Name Ru */
+            name_ru: string;
+            /** Unit */
+            unit: string;
         };
         /** Evidence */
         Evidence: {
@@ -299,6 +413,58 @@ export interface components {
              */
             role: "client_admin" | "client_user" | "reviewer" | "qazsupply_admin" | "supplier";
         };
+        /** NormalizeRequest */
+        NormalizeRequest: {
+            /** File Id */
+            file_id?: string | null;
+        };
+        /** NormalizeSummary */
+        NormalizeSummary: {
+            /** Auto */
+            auto: number;
+            /** Bundled */
+            bundled: number;
+            /** Fx Missing */
+            fx_missing: number;
+            /** Processed */
+            processed: number;
+            /** Review */
+            review: number;
+            /** Sample Classifier */
+            sample_classifier: boolean;
+            /** Suppliers Created */
+            suppliers_created: number;
+        };
+        /** QueueLine */
+        QueueLine: {
+            /** Currency */
+            currency: string | null;
+            /** File Name */
+            file_name: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Item Text */
+            item_text: string | null;
+            /** Match Candidates */
+            match_candidates: components["schemas"]["Candidate"][];
+            /** Match Confidence */
+            match_confidence: number | null;
+            /** Match Status */
+            match_status: string;
+            /** Purchased On */
+            purchased_on: string | null;
+            /** Source Row */
+            source_row: number;
+            /** Supplier Text */
+            supplier_text: string | null;
+            /** Unit */
+            unit: string | null;
+            /** Unit Price */
+            unit_price: number | null;
+        };
         /** Report */
         Report: {
             /**
@@ -324,6 +490,35 @@ export interface components {
             title: string;
             /** Version */
             version: number;
+        };
+        /** ReviewQueue */
+        ReviewQueue: {
+            /** Lines */
+            lines: components["schemas"]["QueueLine"][];
+            /** Sample Classifier */
+            sample_classifier: boolean;
+        };
+        /** ReviewRequest */
+        ReviewRequest: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "accept" | "choose" | "reject" | "undo";
+            /** Code */
+            code?: string | null;
+        };
+        /** ReviewResult */
+        ReviewResult: {
+            /** Code */
+            code: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Match Status */
+            match_status: string;
         };
         /** RowError */
         RowError: {
@@ -493,6 +688,40 @@ export interface operations {
             };
         };
     };
+    classifier_search_orgs__org_id__classifier_get: {
+        parameters: {
+            query?: {
+                q?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Classifier"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     evidence_detail_orgs__org_id__evidence__evidence_id__get: {
         parameters: {
             query?: never;
@@ -525,6 +754,110 @@ export interface operations {
             };
         };
     };
+    match_counts_orgs__org_id__match_counts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    normalize_run_orgs__org_id__normalize_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NormalizeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NormalizeSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_line_orgs__org_id__purchase_lines__line_id__review_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                line_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     reports_orgs__org_id__reports_get: {
         parameters: {
             query?: never;
@@ -543,6 +876,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Report"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_queue_orgs__org_id__review_queue_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewQueue"];
                 };
             };
             /** @description Validation Error */

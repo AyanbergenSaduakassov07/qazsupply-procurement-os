@@ -155,6 +155,86 @@
         "title": "Body_upload_preview_orgs__org_id__uploads_preview_post",
         "type": "object"
       },
+      "Candidate": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "matched": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Matched",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "score",
+          "matched",
+          "name"
+        ],
+        "title": "Candidate",
+        "type": "object"
+      },
+      "Classifier": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/ClassifierItem"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "sample": {
+            "title": "Sample",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sample",
+          "entries"
+        ],
+        "title": "Classifier",
+        "type": "object"
+      },
+      "ClassifierItem": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "name_kk": {
+            "title": "Name Kk",
+            "type": "string"
+          },
+          "name_ru": {
+            "title": "Name Ru",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name_ru",
+          "name_kk",
+          "unit"
+        ],
+        "title": "ClassifierItem",
+        "type": "object"
+      },
       "Evidence": {
         "properties": {
           "code_version": {
@@ -485,6 +565,196 @@
         "title": "Membership",
         "type": "object"
       },
+      "NormalizeRequest": {
+        "properties": {
+          "file_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Id"
+          }
+        },
+        "title": "NormalizeRequest",
+        "type": "object"
+      },
+      "NormalizeSummary": {
+        "properties": {
+          "auto": {
+            "title": "Auto",
+            "type": "integer"
+          },
+          "bundled": {
+            "title": "Bundled",
+            "type": "integer"
+          },
+          "fx_missing": {
+            "title": "Fx Missing",
+            "type": "integer"
+          },
+          "processed": {
+            "title": "Processed",
+            "type": "integer"
+          },
+          "review": {
+            "title": "Review",
+            "type": "integer"
+          },
+          "sample_classifier": {
+            "title": "Sample Classifier",
+            "type": "boolean"
+          },
+          "suppliers_created": {
+            "title": "Suppliers Created",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "processed",
+          "auto",
+          "review",
+          "bundled",
+          "fx_missing",
+          "suppliers_created",
+          "sample_classifier"
+        ],
+        "title": "NormalizeSummary",
+        "type": "object"
+      },
+      "QueueLine": {
+        "properties": {
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "file_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "item_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Text"
+          },
+          "match_candidates": {
+            "items": {
+              "$ref": "#/components/schemas/Candidate"
+            },
+            "title": "Match Candidates",
+            "type": "array"
+          },
+          "match_confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Confidence"
+          },
+          "match_status": {
+            "title": "Match Status",
+            "type": "string"
+          },
+          "purchased_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purchased On"
+          },
+          "source_row": {
+            "title": "Source Row",
+            "type": "integer"
+          },
+          "supplier_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supplier Text"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Price"
+          }
+        },
+        "required": [
+          "id",
+          "item_text",
+          "unit",
+          "unit_price",
+          "currency",
+          "purchased_on",
+          "supplier_text",
+          "match_status",
+          "match_confidence",
+          "match_candidates",
+          "source_row",
+          "file_name"
+        ],
+        "title": "QueueLine",
+        "type": "object"
+      },
       "Report": {
         "properties": {
           "id": {
@@ -537,6 +807,88 @@
           "released_at"
         ],
         "title": "Report",
+        "type": "object"
+      },
+      "ReviewQueue": {
+        "properties": {
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/QueueLine"
+            },
+            "title": "Lines",
+            "type": "array"
+          },
+          "sample_classifier": {
+            "title": "Sample Classifier",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sample_classifier",
+          "lines"
+        ],
+        "title": "ReviewQueue",
+        "type": "object"
+      },
+      "ReviewRequest": {
+        "properties": {
+          "action": {
+            "enum": [
+              "accept",
+              "choose",
+              "reject",
+              "undo"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "ReviewRequest",
+        "type": "object"
+      },
+      "ReviewResult": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "match_status": {
+            "title": "Match Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "match_status",
+          "code"
+        ],
+        "title": "ReviewResult",
         "type": "object"
       },
       "RowError": {
@@ -877,6 +1229,74 @@
         "summary": "Audit Log"
       }
     },
+    "/orgs/{org_id}/classifier": {
+      "get": {
+        "operationId": "classifier_search_orgs__org_id__classifier_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Classifier"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Classifier Search",
+        "tags": [
+          "spend"
+        ]
+      }
+    },
     "/orgs/{org_id}/evidence/{evidence_id}": {
       "get": {
         "operationId": "evidence_detail_orgs__org_id__evidence__evidence_id__get",
@@ -932,6 +1352,184 @@
         "summary": "Evidence Detail"
       }
     },
+    "/orgs/{org_id}/match-counts": {
+      "get": {
+        "operationId": "match_counts_orgs__org_id__match_counts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Match Counts Orgs  Org Id  Match Counts Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Match Counts",
+        "tags": [
+          "spend"
+        ]
+      }
+    },
+    "/orgs/{org_id}/normalize": {
+      "post": {
+        "operationId": "normalize_run_orgs__org_id__normalize_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NormalizeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NormalizeSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Normalize Run",
+        "tags": [
+          "spend"
+        ]
+      }
+    },
+    "/orgs/{org_id}/purchase-lines/{line_id}/review": {
+      "post": {
+        "operationId": "review_line_orgs__org_id__purchase_lines__line_id__review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "line_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Line Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Review Line",
+        "tags": [
+          "spend"
+        ]
+      }
+    },
     "/orgs/{org_id}/reports": {
       "get": {
         "operationId": "reports_orgs__org_id__reports_get",
@@ -979,6 +1577,74 @@
           }
         ],
         "summary": "Reports"
+      }
+    },
+    "/orgs/{org_id}/review-queue": {
+      "get": {
+        "operationId": "review_queue_orgs__org_id__review_queue_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewQueue"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Review Queue",
+        "tags": [
+          "spend"
+        ]
       }
     },
     "/orgs/{org_id}/uploads": {
