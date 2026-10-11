@@ -6,20 +6,18 @@ from decimal import Decimal
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from services.analyze import api as analyze
-from services.gateway.db import UserConn
+from services.gateway.deps import OrgConn
 from services.ingest import api as ingest
 from services.normalize import api as normalize
 from services.tenancy import api as tenancy
 
 
-def build(member_conn: Any) -> APIRouter:
-    """`member_conn` is the gateway dependency that 404s non-members (injected to avoid a cycle)."""
+def build() -> APIRouter:
     router = APIRouter(tags=["spend"])
-    OrgConn = Annotated[UserConn, Depends(member_conn)]
 
     @router.post("/orgs/{org_id}/uploads/preview")
     async def upload_preview(

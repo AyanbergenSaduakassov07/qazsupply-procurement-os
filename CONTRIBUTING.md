@@ -24,7 +24,7 @@ Local test users live in `infra/supabase/seed.sql` and `e2e/fixtures/users.json`
 | You are adding | Do this |
 |---|---|
 | A table | Migration in `infra/supabase/migrations/` with `org_id`, RLS, explicit grants, covering indexes; the pgTAP suite picks it up automatically; `make advisors` must stay clean. Global reference data: ADR 0006. |
-| An API route | Thin handler in `services/gateway/app.py`; logic in a module's `api.py`; regenerate the client (`pnpm --filter @qazsupply/api-client run generate`); add an isolation test. |
+| An API route | Thin handler in a `services/gateway/routes_*.py` router (dependencies in `deps.py`); logic in a module's `api.py`; regenerate the client (`pnpm --filter @qazsupply/api-client run generate`); add an isolation test. |
 | A module | `services/<name>/` with a README stating its public interface; other modules import only `services.<name>.api` (enforced by `services/test_boundaries.py`). |
 | A data source | Row in `docs/compliance/data-sources.md` first (id = folder name), then `connectors/<id>/` with fixtures and a contract test. |
 | An LLM task | Prompt file `services/llm/prompts/<task>/v1.txt`, a golden set in `evals/`, calls only through `services.llm.Gateway`. No figure may come from a model. |
