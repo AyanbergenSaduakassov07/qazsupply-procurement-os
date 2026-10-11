@@ -63,3 +63,4 @@ e2e/.auth/
 
 # Hypothesis example database
 .hypothesis/
+.demo/

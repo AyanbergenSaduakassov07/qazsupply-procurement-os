@@ -12,7 +12,8 @@
     "format": "biome check --write .",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "e2e": "pnpm --filter @qazsupply/e2e run e2e"
+    "e2e": "pnpm --filter @qazsupply/e2e run e2e",
+    "demo": "bash scripts/demo.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

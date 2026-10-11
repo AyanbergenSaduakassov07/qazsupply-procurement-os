@@ -1,5 +1,5 @@
 # One command from a fresh clone: `make dev` (installs, starts local Supabase, runs web + API).
-.PHONY: help install db dev check e2e visual lighthouse rls advisors
+.PHONY: help install db dev demo check e2e visual lighthouse rls advisors
 
 SUPABASE := supabase --workdir infra
 SKIP := studio,imgproxy,inbucket,edge-runtime,logflare,vector,supavisor,realtime,storage-api,postgres-meta
@@ -19,6 +19,9 @@ db:  ## Start local Supabase if it is not running
 
 dev: install db  ## Run web :3000 + API :8000 against local Supabase
 	SUPABASE_PUBLISHABLE_KEY=$(PUBLISHABLE_KEY) pnpm dev
+
+demo:  ## Full local demo with data (pnpm demo; --fresh / --ai via ARGS=)
+	bash scripts/demo.sh $(ARGS)
 
 check:  ## Lint, typecheck, unit + contract tests
 	pnpm lint && pnpm typecheck && pnpm test

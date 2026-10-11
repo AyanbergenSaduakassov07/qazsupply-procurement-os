@@ -48,14 +48,19 @@ flowchart LR
 Needs Node 24 (`.nvmrc`; corepack provides pnpm), [uv](https://docs.astral.sh/uv/), Docker, Supabase CLI.
 
 ```bash
-make dev          # install, start local Supabase (seeded), run web :3000 + API :8000
+pnpm demo         # the full product with demo data: opens http://localhost:3000, prints the logins
+pnpm demo --fresh # same, starting from a clean database
+make dev          # plain development: install, start local Supabase (seeded), run web :3000 + API :8000
 ```
+
+`pnpm demo` starts Docker if needed, the local database, the API and the web app. It then loads a released report (30 findings, one rejected, one with a reviewer note), switches Ask on, and leaves a second report as a draft for the reviewer. Ctrl+C stops it. Ask answers with a deterministic local stand-in; add `--ai` to use the real free model (`OPENROUTER_API_KEY` in `.env.local`).
 
 Open http://localhost:3000 and sign in with a seeded test user from `e2e/fixtures/users.json` (local only).
 
 | Command | What it runs |
 |---|---|
 | `make help` | List the targets below |
+| `pnpm demo` / `make demo` | Full local demo with data (see above) |
 | `make check` | Biome lint, TS + mypy typecheck, unit + contract tests |
 | `make rls` | pgTAP suites (RLS, roles, append-only, tamper detection), Supabase advisor lints, API isolation tests |
 | `make e2e` | Playwright on desktop, tablet and phone (auth, tenant isolation through the UI, a11y, CSP) |
