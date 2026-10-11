@@ -32,7 +32,7 @@ package = false
 
 [tool.pytest.ini_options]
 testpaths = ["services", "connectors", "scripts", "evals"]
-norecursedirs = ["vendor", "node_modules", ".venv"]
+norecursedirs = [".*", "vendor", "node_modules", "build", "dist"]
 pythonpath = ["."]
 markers = [
   "contract: connector contract and source-register checks",

@@ -9,6 +9,9 @@ PRICES: dict[str, tuple[Decimal, Decimal]] = {
     "claude-opus-5-5": (Decimal("4.00"), Decimal("20.00")),
     "claude-sonnet-5-5": (Decimal("2.00"), Decimal("10.00")),
     "claude-haiku-5-5": (Decimal("0.10"), Decimal("0.50")),
+    # Development only (ADR 0008): OpenRouter free endpoints, synthetic data only.
+    "google/gemma-4-31b-it:free": (Decimal(0), Decimal(0)),
+    "nvidia/nemotron-3-super-120b-a12b:free": (Decimal(0), Decimal(0)),
 }
 MILLION = Decimal(1_000_000)
 

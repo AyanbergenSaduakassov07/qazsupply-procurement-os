@@ -17,10 +17,11 @@ from fastapi.responses import JSONResponse
 from psycopg import errors as pg_errors
 from pydantic import BaseModel
 
-from services.gateway import log, routes_core, routes_report, routes_spend
+from services.gateway import log, routes_ask, routes_core, routes_report, routes_spend
 from services.gateway.auth import Verifier
 from services.gateway.db import Database
-from services.gateway.settings import load
+from services.gateway.settings import Settings, load
+from services.llm.api import OpenRouterProvider, Provider
 
 logger = logging.getLogger("gateway")
 settings = load()
@@ -32,12 +33,28 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     log.configure()
     app.state.db = Database(settings.database_url)
     app.state.verifier = Verifier(settings.jwks_url)
+    app.state.llm_provider = llm_provider(settings)
+    app.state.ask_model = settings.ask_model
     try:
         app.state.db.open()
     except Exception as e:  # noqa: BLE001 - API must start even when the DB is down; /health reports it
         logger.warning("database unavailable at startup", extra={"error_type": type(e).__name__})
     yield
     app.state.db.close()
+
+
+def llm_provider(s: Settings) -> Provider | None:
+    """Ask's model provider, or None (Ask answers 503 ask_unavailable)."""
+    if s.llm_provider != "openrouter":
+        return None
+    if not s.database_is_local:
+        # Free development endpoints only ever see the local synthetic seed (ADR 0008).
+        logger.warning("openrouter refused: database is not local")
+        return None
+    if not s.openrouter_api_key:
+        logger.warning("openrouter selected but OPENROUTER_API_KEY is not set")
+        return None
+    return OpenRouterProvider(s.openrouter_api_key)
 
 
 app = FastAPI(title="QazSupply API", version="0.1.0", lifespan=lifespan)
@@ -103,3 +120,4 @@ def health(request: Request, response: Response) -> Health:
 app.include_router(routes_spend.build())
 app.include_router(routes_core.router)
 app.include_router(routes_report.router)
+app.include_router(routes_ask.router)

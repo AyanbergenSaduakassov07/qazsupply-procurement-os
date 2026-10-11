@@ -4,9 +4,10 @@ caller's JWT claims, so Postgres RLS applies to the API exactly as it does to pg
 import json
 from collections.abc import Iterator
 from contextlib import contextmanager
+from typing import cast
 
 from psycopg import Connection
-from psycopg.rows import DictRow, dict_row
+from psycopg.rows import DictRow, TupleRow, dict_row, tuple_row
 from psycopg_pool import ConnectionPool
 
 from services.gateway.auth import Principal
@@ -33,6 +34,19 @@ class Database:
     def ping(self) -> bool:
         with self._pool.connection() as conn:
             return conn.execute("select 1 as ok").fetchone() is not None
+
+    @contextmanager
+    def service(self) -> Iterator[Connection[TupleRow]]:
+        """Privileged connection for platform bookkeeping only (the LLM ledger). Never use it to
+        read or write tenant data on a user's behalf: that is what `as_user` is for."""
+        with self._pool.connection() as conn:
+            plain = cast("Connection[TupleRow]", conn)
+            plain.row_factory = tuple_row
+            try:
+                with plain.transaction():
+                    yield plain
+            finally:
+                conn.row_factory = dict_row
 
     @contextmanager
     def as_user(self, principal: Principal) -> Iterator[UserConn]:

@@ -13,15 +13,15 @@ from services.gateway.testing import auth as h
 pytestmark = pytest.mark.integration
 
 
+CREATED: list[str] = []
+
+
 @pytest.fixture(autouse=True)
 def clean() -> Iterator[None]:
     yield
+    # Exactly the reports this test created (a title pattern would also match seed reports).
     purge(
-        (
-            "delete from public.reports where org_id = %s and title like 'Spend X-ray %%-%%'"
-            " and created_at > now() - interval '1 hour'",
-            (ORG_A,),
-        ),
+        *[("delete from public.reports where id = %s", (rid,)) for rid in CREATED],
         (
             "delete from public.evidence where computation_id like 'analyze-%%'"
             " and created_at > now() - interval '1 hour' and org_id = %s",
@@ -29,6 +29,7 @@ def clean() -> Iterator[None]:
         ),
         ("delete from public.files where name like 'it-%%'", ()),
     )
+    CREATED.clear()
 
 
 def _analysed_report(client: TestClient) -> str:
@@ -45,7 +46,8 @@ def _analysed_report(client: TestClient) -> str:
     assert norm.status_code == 200, norm.text
     run = client.post(f"/orgs/{ORG_A}/analysis", headers=h("reviewer"))
     assert run.status_code == 200, run.text
-    return str(run.json()["report_id"])
+    CREATED.append(str(run.json()["report_id"]))
+    return CREATED[-1]
 
 
 def test_a_report_reaches_the_client_only_through_the_full_review(client: TestClient) -> None:

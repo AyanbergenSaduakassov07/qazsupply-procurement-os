@@ -208,6 +208,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/reports/{report_id}/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask Report */
+        post: operations["ask_report_orgs__org_id__reports__report_id__ask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/reports/{report_id}/findings": {
         parameters: {
             query?: never;
@@ -414,6 +431,47 @@ export interface components {
             report_id: string | null;
             /** Total Saving Kzt */
             total_saving_kzt: string;
+        };
+        /** AskAnswer */
+        AskAnswer: {
+            /** Answerable */
+            answerable: boolean;
+            /** Dropped */
+            dropped: number;
+            /** Sentences */
+            sentences: components["schemas"]["AskSentence"][];
+        };
+        /** AskRequest */
+        AskRequest: {
+            /** History */
+            history?: components["schemas"]["AskTurn"][];
+            /**
+             * Locale
+             * @default ru
+             * @enum {string}
+             */
+            locale: "kk" | "ru" | "en";
+            /** Question */
+            question: string;
+        };
+        /** AskSentence */
+        AskSentence: {
+            /** Cites Report */
+            cites_report: boolean;
+            /** Evidence Ids */
+            evidence_ids: string[];
+            /** Text */
+            text: string;
+        };
+        /** AskTurn */
+        AskTurn: {
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+            /** Text */
+            text: string;
         };
         /** AuditEntry */
         AuditEntry: {
@@ -1317,6 +1375,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_report_orgs__org_id__reports__report_id__ask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AskAnswer"];
                 };
             };
             /** @description Validation Error */

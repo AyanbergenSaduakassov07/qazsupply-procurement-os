@@ -48,6 +48,115 @@
         "title": "AnalysisSummary",
         "type": "object"
       },
+      "AskAnswer": {
+        "properties": {
+          "answerable": {
+            "title": "Answerable",
+            "type": "boolean"
+          },
+          "dropped": {
+            "title": "Dropped",
+            "type": "integer"
+          },
+          "sentences": {
+            "items": {
+              "$ref": "#/components/schemas/AskSentence"
+            },
+            "title": "Sentences",
+            "type": "array"
+          }
+        },
+        "required": [
+          "answerable",
+          "sentences",
+          "dropped"
+        ],
+        "title": "AskAnswer",
+        "type": "object"
+      },
+      "AskRequest": {
+        "properties": {
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/AskTurn"
+            },
+            "maxItems": 8,
+            "title": "History",
+            "type": "array"
+          },
+          "locale": {
+            "default": "ru",
+            "enum": [
+              "kk",
+              "ru",
+              "en"
+            ],
+            "title": "Locale",
+            "type": "string"
+          },
+          "question": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Question",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "title": "AskRequest",
+        "type": "object"
+      },
+      "AskSentence": {
+        "properties": {
+          "cites_report": {
+            "title": "Cites Report",
+            "type": "boolean"
+          },
+          "evidence_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Ids",
+            "type": "array"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "evidence_ids",
+          "cites_report"
+        ],
+        "title": "AskSentence",
+        "type": "object"
+      },
+      "AskTurn": {
+        "properties": {
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 2000,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "text"
+        ],
+        "title": "AskTurn",
+        "type": "object"
+      },
       "AuditEntry": {
         "properties": {
           "action": {
@@ -2261,6 +2370,74 @@
         "summary": "Approve",
         "tags": [
           "review"
+        ]
+      }
+    },
+    "/orgs/{org_id}/reports/{report_id}/ask": {
+      "post": {
+        "operationId": "ask_report_orgs__org_id__reports__report_id__ask_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Report Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskAnswer"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Ask Report",
+        "tags": [
+          "ask"
         ]
       }
     },
