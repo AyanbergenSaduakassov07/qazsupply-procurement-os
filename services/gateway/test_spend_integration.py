@@ -1,42 +1,32 @@
 """Upload API against the local Supabase stack: real auth, real RLS, real inserts."""
 
 import time
-import uuid
 from collections.abc import Iterator
-from pathlib import Path
 
 import httpx
-import psycopg
 import pytest
 from fastapi.testclient import TestClient
 
-from services.gateway.app import app
-from services.gateway.test_api_integration import ORG_A, ORG_B, token
-
-pytestmark = pytest.mark.integration
-FIX = Path(__file__).resolve().parents[1] / "ingest" / "fixtures"
-DB = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-RU_MAPPING = (
-    '{"item_text":0,"quantity":1,"unit":2,"unit_price":3,"purchased_on":4,'
-    '"supplier_text":5,"supplier_bin":6}'
+from services.gateway.testing import (
+    INGEST_FIXTURES as FIX,
+)
+from services.gateway.testing import (
+    ORG_A,
+    ORG_B,
+    RU_MAPPING,
+    purge,
+    token,
+    unique,
 )
 
-
-@pytest.fixture(scope="module")
-def client() -> Iterator[TestClient]:
-    with TestClient(app) as c:
-        yield c
+pytestmark = pytest.mark.integration
 
 
 @pytest.fixture(autouse=True)
 def clean_uploads() -> Iterator[None]:
     """Remove files this module created (lines cascade). Seed files are kept."""
     yield
-    with psycopg.connect(DB) as conn:
-        conn.execute(
-            "set local qs.purge = 'on'"
-        )  # local test cleanup only (runbooks/offboarding.md)
-        conn.execute("delete from public.files where name like 'it-%'")
+    purge(("delete from public.files where name like 'it-%%'", ()))
 
 
 def post(
@@ -49,10 +39,6 @@ def post(
         data=form,
     )
     return response
-
-
-def unique(data: bytes) -> bytes:
-    return data + f"\n#{uuid.uuid4()}".encode()  # new sha256, same content for the parser
 
 
 def test_preview_suggests_mapping_without_storing(client: TestClient) -> None:

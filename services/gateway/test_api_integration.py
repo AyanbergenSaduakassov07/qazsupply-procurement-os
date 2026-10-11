@@ -3,57 +3,16 @@
 Real sign-ins with the seeded users, real JWKS verification, real RLS.
 """
 
-import json
-import os
-import subprocess  # noqa: S404 - fixed argv
-from collections.abc import Iterator
-from functools import cache
-from pathlib import Path
-
 import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from services.gateway.app import app
+from services.gateway.testing import ORG_A, ORG_B, USERS, token
 
 pytestmark = pytest.mark.integration
-ROOT = Path(__file__).resolve().parents[2]
-FIXTURE = json.loads((ROOT / "e2e/fixtures/users.json").read_text())
-ORG_A, ORG_B = FIXTURE["orgs"]["A"], FIXTURE["orgs"]["B"]
 RELEASED_EVIDENCE = "60000000-0000-4000-a000-00000000000a"
 DRAFT_EVIDENCE = "60000000-0000-4000-a000-0000000000a2"
 B_EVIDENCE = "60000000-0000-4000-a000-00000000000b"
-
-
-@cache
-def publishable_key() -> str:
-    if key := os.environ.get("SUPABASE_PUBLISHABLE_KEY"):
-        return key
-    out = subprocess.run(  # noqa: S603
-        ["supabase", "status", "--workdir", "infra", "-o", "json"],  # noqa: S607
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout
-    return str(json.loads(out)["PUBLISHABLE_KEY"])
-
-
-@cache
-def token(user: str) -> str:
-    r = httpx.post(
-        "http://127.0.0.1:54321/auth/v1/token?grant_type=password",
-        headers={"apikey": publishable_key()},
-        json={"email": FIXTURE["users"][user], "password": FIXTURE["password"]},
-    )
-    r.raise_for_status()
-    return str(r.json()["access_token"])
-
-
-@pytest.fixture(scope="module")
-def client() -> Iterator[TestClient]:
-    with TestClient(app) as c:
-        yield c
 
 
 def get(client: TestClient, user: str, path: str) -> httpx.Response:
@@ -68,7 +27,7 @@ def test_health_sees_the_database(client: TestClient) -> None:
 def test_me_lists_only_own_memberships(client: TestClient) -> None:
     body = get(client, "clientAdminA", "/me").json()
     assert {m["org_id"] for m in body["memberships"]} == {ORG_A}
-    assert body["email"] == FIXTURE["users"]["clientAdminA"]
+    assert body["email"] == USERS["users"]["clientAdminA"]
 
 
 @pytest.mark.parametrize(

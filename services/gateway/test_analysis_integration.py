@@ -3,13 +3,11 @@
 import random
 from collections.abc import Iterator
 
-import psycopg
 import pytest
 from fastapi.testclient import TestClient
 
-from services.gateway.app import app
-from services.gateway.test_api_integration import ORG_A, ORG_B, token
-from services.gateway.test_spend_integration import DB, RU_MAPPING
+from services.gateway.testing import ORG_A, ORG_B, RU_MAPPING, purge
+from services.gateway.testing import auth as h
 
 pytestmark = pytest.mark.integration
 ITEMS = [
@@ -48,39 +46,29 @@ def spend_csv(seed: int = 7) -> bytes:
     return ("\n".join(rows) + "\n").encode()
 
 
-@pytest.fixture(scope="module")
-def client() -> Iterator[TestClient]:
-    with TestClient(app) as c:
-        yield c
-
-
 @pytest.fixture(autouse=True)
 def clean() -> Iterator[None]:
     yield
-    with psycopg.connect(DB) as conn:
-        conn.execute("set local qs.purge = 'on'")
-        conn.execute(
-            "delete from public.findings where report_id in "
-            "(select id from public.reports where title like 'Spend X-ray %%' and org_id = %s "
-            " and status = 'draft' and created_at > now() - interval '1 hour')",
+    purge(
+        (
+            "delete from public.findings where report_id in (select id from public.reports"
+            " where title like 'Spend X-ray %%' and org_id = %s and status = 'draft'"
+            " and created_at > now() - interval '1 hour')",
             (ORG_A,),
-        )
-        conn.execute(
-            "delete from public.reports where org_id = %s and status = 'draft' "
-            "and title like 'Spend X-ray %%-%%' and created_at > now() - interval '1 hour'",
+        ),
+        (
+            "delete from public.reports where org_id = %s and status = 'draft'"
+            " and title like 'Spend X-ray %%-%%' and created_at > now() - interval '1 hour'",
             (ORG_A,),
-        )
+        ),
         # Evidence pins its source lines (no cascade by design): remove this run's evidence first.
-        conn.execute(
-            "delete from public.evidence where computation_id like 'analyze-%%' "
-            "and created_at > now() - interval '1 hour' and org_id = %s",
+        (
+            "delete from public.evidence where computation_id like 'analyze-%%'"
+            " and created_at > now() - interval '1 hour' and org_id = %s",
             (ORG_A,),
-        )
-        conn.execute("delete from public.files where name like 'it-%'")
-
-
-def h(user: str) -> dict[str, str]:
-    return {"Authorization": f"Bearer {token(user)}"}
+        ),
+        ("delete from public.files where name like 'it-%%'", ()),
+    )
 
 
 def test_analysis_end_to_end_with_sql_cross_check(client: TestClient) -> None:
