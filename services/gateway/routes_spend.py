@@ -2,12 +2,14 @@
 
 import json
 from datetime import date, datetime
+from decimal import Decimal
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
 
+from services.analyze import api as analyze
 from services.gateway.db import UserConn
 from services.ingest import api as ingest
 from services.normalize import api as normalize
@@ -113,6 +115,29 @@ def build(member_conn: Any) -> APIRouter:
             or needle in e.code.lower()
         ]
         return Classifier(sample=True, entries=[ClassifierItem(**e.__dict__) for e in hits[:limit]])
+
+    @router.post("/orgs/{org_id}/analysis")
+    def analysis_run(org_id: UUID, conn: OrgConn) -> AnalysisSummary:
+        try:
+            r = analyze.run(conn, org_id)
+        except analyze.NotStaff:
+            raise HTTPException(403, {"code": "staff_only"}) from None
+        except analyze.SavingsMismatch:
+            raise HTTPException(500, {"code": "savings_cross_check_failed"}) from None
+        if r.report_id:
+            tenancy.append_audit(
+                conn,
+                org_id,
+                "analysis.completed",
+                "reports",
+                r.report_id,
+                {"findings": r.findings, "computation_id": r.computation_id},
+            )
+        return AnalysisSummary(**r.__dict__)
+
+    @router.get("/orgs/{org_id}/reports/{report_id}/findings")
+    def report_findings(org_id: UUID, report_id: UUID, conn: OrgConn) -> list[Finding]:
+        return [Finding(**r) for r in analyze.findings(conn, org_id, report_id)]
 
     return router
 
@@ -222,3 +247,26 @@ class ClassifierItem(BaseModel):
 class Classifier(BaseModel):
     sample: bool
     entries: list[ClassifierItem]
+
+
+class AnalysisSummary(BaseModel):
+    report_id: UUID | None
+    computation_id: str
+    findings: int
+    total_saving_kzt: Decimal
+    lines_used: int
+    lines_excluded: int
+
+
+class Finding(BaseModel):
+    id: UUID
+    type: str
+    saving_estimate: Decimal
+    currency: str
+    method: str
+    confidence: Decimal
+    details: dict[str, Any]
+    item_name: str | None
+    enstru_code: str | None
+    supplier_name: str | None
+    evidence_id: UUID | None

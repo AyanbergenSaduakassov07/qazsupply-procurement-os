@@ -87,3 +87,17 @@ begin
   raise exception '% is append-only', tg_table_name using errcode = '42501';
 end;
 $$;
+
+-- ---------------------------------------------------------------- analysis writes (staff, under RLS)
+-- The analysis run executes as the reviewer who starts it, so tenant isolation applies to the
+-- pipeline itself (no RLS-bypassing service connection). Clients still cannot write findings.
+create policy findings_insert_staff on public.findings for insert to authenticated
+  with check ((select private.is_staff(org_id)));
+create policy evidence_insert_staff on public.evidence for insert to authenticated
+  with check ((select private.is_staff(org_id)));
+create policy evidence_sources_insert_staff on public.evidence_sources for insert to authenticated
+  with check ((select private.is_staff(org_id)));
+create policy finding_evidence_insert_staff on public.finding_evidence for insert to authenticated
+  with check ((select private.is_staff(org_id)));
+grant insert on public.findings, public.evidence, public.evidence_sources, public.finding_evidence
+  to authenticated;

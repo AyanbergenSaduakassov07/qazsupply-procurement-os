@@ -22,3 +22,9 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Results:** 142 pgTAP, advisors clean, 23 integration + unit suites green.
 - **Env note:** OrbStack (Docker) had stopped between sessions; restarted with `orb start`.
 - **Next:** slice 4 analysis engine (detectors + second SQL implementation + property tests + precision eval).
+
+## 2026-10-11 | M2 | slice 4: analysis engine
+- **Done:** `services/analyze` (config with documented per-org overrides; detectors price_variance, outlier, repeat_purchase, split_purchase, concentration; second independent SQL implementation of the money (exact numeric quantiles, no percentile_cont) used as a fail-closed guard on every run; run writes a draft report + findings + evidence as the reviewer under RLS). Staff insert policies for findings/evidence (no RLS-bypassing service connection). Routes `POST /analysis` (staff), `GET /reports/{id}/findings`. Synthetic planted-findings eval (`evals/findings`), gate test in pytest.
+- **Bugs found by the eval and fixed:** double-counted savings (outlier lines inside a price_variance finding), one spike making a supplier "overpriced" (now supplier median), outliers on tight price bands (now also >= 30% above median). Generator artifacts fixed (split prices, balanced background).
+- **Results:** synthetic precision 1.00 / 1.00, recall 0.95 / 1.00 (concentration verified by definition, reported separately); detector property tests (non-negative, exact scaling, reconciles to its evidence lines); end-to-end integration upload -> normalise -> analysis -> evidence with Python == SQL money.
+- **Next:** slice 5 UX (upload wizard, review queue, findings) + Playwright, then phase-end checks and PR.

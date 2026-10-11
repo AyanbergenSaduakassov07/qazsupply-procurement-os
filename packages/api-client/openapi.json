@@ -1,6 +1,53 @@
 {
   "components": {
     "schemas": {
+      "AnalysisSummary": {
+        "properties": {
+          "computation_id": {
+            "title": "Computation Id",
+            "type": "string"
+          },
+          "findings": {
+            "title": "Findings",
+            "type": "integer"
+          },
+          "lines_excluded": {
+            "title": "Lines Excluded",
+            "type": "integer"
+          },
+          "lines_used": {
+            "title": "Lines Used",
+            "type": "integer"
+          },
+          "report_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Id"
+          },
+          "total_saving_kzt": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Saving Kzt",
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_id",
+          "computation_id",
+          "findings",
+          "total_saving_kzt",
+          "lines_used",
+          "lines_excluded"
+        ],
+        "title": "AnalysisSummary",
+        "type": "object"
+      },
       "AuditEntry": {
         "properties": {
           "action": {
@@ -462,6 +509,102 @@
           "purchased_on"
         ],
         "title": "EvidenceSource",
+        "type": "object"
+      },
+      "Finding": {
+        "properties": {
+          "confidence": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Confidence",
+            "type": "string"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "details": {
+            "additionalProperties": true,
+            "title": "Details",
+            "type": "object"
+          },
+          "enstru_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enstru Code"
+          },
+          "evidence_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Id"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "item_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Name"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "saving_estimate": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Saving Estimate",
+            "type": "string"
+          },
+          "supplier_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supplier Name"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "saving_estimate",
+          "currency",
+          "method",
+          "confidence",
+          "details",
+          "item_name",
+          "enstru_code",
+          "supplier_name",
+          "evidence_id"
+        ],
+        "title": "Finding",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -1172,6 +1315,54 @@
         "summary": "Me"
       }
     },
+    "/orgs/{org_id}/analysis": {
+      "post": {
+        "operationId": "analysis_run_orgs__org_id__analysis_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Analysis Run",
+        "tags": [
+          "spend"
+        ]
+      }
+    },
     "/orgs/{org_id}/audit-log": {
       "get": {
         "operationId": "audit_log_orgs__org_id__audit_log_get",
@@ -1577,6 +1768,68 @@
           }
         ],
         "summary": "Reports"
+      }
+    },
+    "/orgs/{org_id}/reports/{report_id}/findings": {
+      "get": {
+        "operationId": "report_findings_orgs__org_id__reports__report_id__findings_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Report Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Finding"
+                  },
+                  "title": "Response Report Findings Orgs  Org Id  Reports  Report Id  Findings Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Report Findings",
+        "tags": [
+          "spend"
+        ]
       }
     },
     "/orgs/{org_id}/review-queue": {

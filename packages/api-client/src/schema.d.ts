@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/analysis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Analysis Run */
+        post: operations["analysis_run_orgs__org_id__analysis_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/audit-log": {
         parameters: {
             query?: never;
@@ -157,6 +174,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/reports/{report_id}/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Report Findings */
+        get: operations["report_findings_orgs__org_id__reports__report_id__findings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/review-queue": {
         parameters: {
             query?: never;
@@ -213,6 +247,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AnalysisSummary */
+        AnalysisSummary: {
+            /** Computation Id */
+            computation_id: string;
+            /** Findings */
+            findings: number;
+            /** Lines Excluded */
+            lines_excluded: number;
+            /** Lines Used */
+            lines_used: number;
+            /** Report Id */
+            report_id: string | null;
+            /** Total Saving Kzt */
+            total_saving_kzt: string;
+        };
         /** AuditEntry */
         AuditEntry: {
             /** Action */
@@ -367,6 +416,36 @@ export interface components {
             unit: string | null;
             /** Unit Price */
             unit_price: number | null;
+        };
+        /** Finding */
+        Finding: {
+            /** Confidence */
+            confidence: string;
+            /** Currency */
+            currency: string;
+            /** Details */
+            details: {
+                [key: string]: unknown;
+            };
+            /** Enstru Code */
+            enstru_code: string | null;
+            /** Evidence Id */
+            evidence_id: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Item Name */
+            item_name: string | null;
+            /** Method */
+            method: string;
+            /** Saving Estimate */
+            saving_estimate: string;
+            /** Supplier Name */
+            supplier_name: string | null;
+            /** Type */
+            type: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -655,6 +734,37 @@ export interface operations {
             };
         };
     };
+    analysis_run_orgs__org_id__analysis_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     audit_log_orgs__org_id__audit_log_get: {
         parameters: {
             query?: {
@@ -876,6 +986,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Report"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_findings_orgs__org_id__reports__report_id__findings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Finding"][];
                 };
             };
             /** @description Validation Error */

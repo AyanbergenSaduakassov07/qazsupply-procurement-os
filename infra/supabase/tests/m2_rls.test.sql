@@ -1,7 +1,7 @@
 -- M2 role rules on top of the data-driven tenancy suite (m1_rls.test.sql covers cross-tenant access).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(10);
+select plan(12);
 
 create temp table ids as select
   '10000000-0000-4000-a000-00000000000a'::uuid as org_a,
@@ -43,6 +43,18 @@ select throws_ok(
   format($$insert into public.match_feedback (org_id, purchase_line_id, action) values (%L, %L, 'accept')$$,
          (select org_a from ids), (select line_a from ids)),
   '42501', null, 'supplier role cannot write review feedback');
+
+-- Analysis writes: staff only, and only into their own tenant (cross-tenant covered by m1 suite).
+select set_config('request.jwt.claims', json_build_object('sub', (select user_a from ids), 'role', 'authenticated')::text, true);
+select throws_ok(
+  format($$insert into public.evidence (org_id, computation_id, method, code_version) values (%L, 'x', 'm', 'v')$$,
+         (select org_a from ids)),
+  '42501', null, 'client_user cannot write evidence');
+select set_config('request.jwt.claims', json_build_object('sub', '00000000-0000-4000-a000-0000000000c1', 'role', 'authenticated')::text, true);
+select lives_ok(
+  format($$insert into public.evidence (org_id, computation_id, method, code_version) values (%L, 'x', 'm', 'v')$$,
+         (select org_a from ids)),
+  'reviewer can write evidence in their org');
 
 -- Controlled purge (runbooks/offboarding.md): DELETE only, never UPDATE, privileged roles only.
 reset role;
