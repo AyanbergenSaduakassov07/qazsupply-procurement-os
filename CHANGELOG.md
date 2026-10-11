@@ -1,0 +1,39 @@
+# Changelog
+
+Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](ROADMAP.md)); live status is in [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md).
+
+## Unreleased
+
+### Changed
+- Gateway: `app.py` is only the composition root (lifespan, middleware, `/health`). Auth and tenancy dependencies moved to `deps.py`, M1 routes to `routes_core.py`. OpenAPI output unchanged.
+- Integration tests share `services/gateway/testing.py` (seeded users, tokens, purge helper) and one `TestClient` fixture.
+- `make help`; `CHANGELOG.md`; READMEs updated for M2.
+
+## M2: Spend X-ray engine (2026-10-09 to 2026-10-11): built, gate blocked
+
+Built on synthetic data. The gate needs real ЕНС ТРУ access, 300 owner-labelled lines and two hand-audited datasets.
+
+### Added
+- **Ingest:** csv/xlsx preview and ingest with row-level error codes, sha256 idempotency per Organization, audit entries.
+- **Normalize:** item matcher (RapidFuzz, Kazakh look-alike folding, Latin-to-Cyrillic transliteration, model-number variants, evidence floor, calibrated confidence, bundled-line flag); NBK FX to KZT with the rate date stored; supplier resolution by BIN, then normalised name; review queue with append-only match feedback.
+- **Analyze:** five detectors (`price_variance`, `repeat_purchase`, `split_purchase`, `concentration`, `outlier`). Savings are recomputed by an exact-numeric SQL cross-check, and the run writes nothing if the two disagree. Findings carry Evidence.
+- **Connectors:** mock ЕНС ТРУ adapter with a synthetic `SYN-*` classifier; NBK FX adapter.
+- **Web:** upload wizard, keyboard-driven review queue, findings view with the Evidence drawer, in kk / ru / en.
+- **Evals:** matcher golden set and realistic holdout, planted-findings set; report in `evals/REPORT-M2.md`.
+- **DB:** M2 migration with RLS on every new table, pgTAP suite, controlled `qs.purge` for privileged cleanup of append-only rows.
+- Docs: ADR 0007 (matching stack), OSS verification for M2, agent-thread and offboarding runbooks, STRIDE T26-T38, tech debt D15-D20.
+
+## M1: data platform, design system, app shell (2026-10-08 to 2026-10-09)
+
+### Added
+- Multi-tenant Postgres schema with RLS on every table, composite tenant FKs, append-only hash-chained audit log; pgTAP suites and local advisor lints. ADR 0006 (reference tables).
+- FastAPI gateway: JWKS-verified Supabase JWTs; every query runs as the signed-in user so RLS applies to the API.
+- Next.js app shell: sign-in, settings, audit log, component gallery; nonce CSP and security headers.
+- Design tokens (light/dark, contrast-tested), i18n catalogs with key parity and Kazakh orthography tests, anime.js motion presets.
+- Playwright e2e on three viewports, visual baselines, Lighthouse accessibility gate; CI with gitleaks, OSV, SBOM and licence scan.
+- Repo hygiene: CONTRIBUTING, SECURITY, CODEOWNERS, Dependabot, PR and issue templates, docs map.
+
+## M0: harness and blueprint (2026-10-08)
+
+### Added
+- Agent harness rules, whole-product blueprint, domain vocabulary (`CONTEXT.md`), ADRs 0001-0005, specs, tickets, threat model and the M0-M9 prompt pack.

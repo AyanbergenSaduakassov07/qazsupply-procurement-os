@@ -4,7 +4,7 @@
 
 AI procurement, supplier-vetting and shipment-control platform for Kazakhstan and Central Asia.
 
-> **Status:** M0 (harness + blueprint) and M1 (multi-tenant data platform, design system, app shell) are built. No product features yet. Next: owner answers Q1-Q6 ([`ROADMAP.md`](ROADMAP.md)), then **M2 Spend X-ray engine**.
+> **Status:** M0 (harness + blueprint), M1 (multi-tenant data platform, design system, app shell) and the M2 Spend X-ray engine (ingest, matching, FX, review queue, detectors with Evidence) are built on synthetic data. The M2 gate is **blocked** until real ЕНС ТРУ access, 300 owner-labelled lines and two hand-audited datasets exist; see [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md) and [`evals/REPORT-M2.md`](evals/REPORT-M2.md). History: [`CHANGELOG.md`](CHANGELOG.md).
 
 ## What it is
 
@@ -55,6 +55,7 @@ Open http://localhost:3000 and sign in with a seeded test user from `e2e/fixture
 
 | Command | What it runs |
 |---|---|
+| `make help` | List the targets below |
 | `make check` | Biome lint, TS + mypy typecheck, unit + contract tests |
 | `make rls` | pgTAP suites (RLS, roles, append-only, tamper detection), Supabase advisor lints, API isolation tests |
 | `make e2e` | Playwright on desktop, tablet and phone (auth, tenant isolation through the UI, a11y, CSP) |
@@ -65,7 +66,7 @@ Open http://localhost:3000 and sign in with a seeded test user from `e2e/fixture
 
 ```text
 QazSupply/
-├─ apps/web/             Next.js client app (shell, sign-in, settings, audit, gallery)
+├─ apps/web/             Next.js client app (shell, sign-in, settings, audit, spend upload/review/findings)
 ├─ apps/{review,supplier-portal,marketing}/   planned (M3, M8)
 ├─ packages/
 │  ├─ api-client/        typed client generated from the API's OpenAPI (CI checks drift)
@@ -73,11 +74,11 @@ QazSupply/
 │  ├─ i18n/              kk / ru / en catalogs (key parity + Kazakh orthography tested)
 │  ├─ motion/            anime.js v4 presets, reduced-motion safe
 │  └─ ui/                components (Evidence drawer, data table, charts, ...)
-├─ services/             Python deep modules; gateway = composition root
+├─ services/             Python deep modules (ingest, normalize, analyze, evidence, ...); gateway = HTTP edge
 ├─ connectors/           one adapter per external source (contract in _contract/)
 ├─ infra/supabase/       migrations, seed (local only), pgTAP tests
 ├─ e2e/                  Playwright suites and visual baselines
-├─ evals/                golden sets and scorers (from M2)
+├─ evals/                synthetic golden sets, scorers and phase eval reports
 ├─ scripts/              advisors, licence gate, visual + Lighthouse runners, vendoring
 ├─ vendor/               pinned third-party source (licence-tracked)
 ├─ docs/                 ADRs, architecture, specs, tickets, design, security, compliance
