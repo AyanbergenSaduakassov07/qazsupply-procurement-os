@@ -1031,6 +1031,18 @@
             "title": "Status",
             "type": "string"
           },
+          "submitted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submitted At"
+          },
           "title": {
             "title": "Title",
             "type": "string"
@@ -1047,6 +1059,7 @@
           "period_end",
           "status",
           "version",
+          "submitted_at",
           "released_at"
         ],
         "title": "Report",

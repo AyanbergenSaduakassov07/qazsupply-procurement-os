@@ -9,6 +9,26 @@ import { getSession } from "../../../../../lib/session";
 import { analysisErrors } from "../../../../../lib/spend-labels";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
+const SLA_HOURS = 48;
+
+function SlaBadge({
+  submittedAt,
+  template,
+  overdue,
+}: {
+  submittedAt: string;
+  template: string;
+  overdue: string;
+}) {
+  const hours = Math.floor((Date.now() - new Date(submittedAt).getTime()) / 3_600_000);
+  const late = hours >= SLA_HOURS;
+  const text = template.replace("{hours}", String(hours)).replace("{target}", String(SLA_HOURS));
+  return (
+    <Badge variant={late ? "risk" : "neutral"} data-testid="list-sla">
+      {late ? `${text} · ${overdue}` : text}
+    </Badge>
+  );
+}
 type ReportStatus = "draft" | "in_review" | "approved" | "released" | "rejected" | "superseded";
 
 export default async function ReportsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -46,6 +66,13 @@ export default async function ReportsPage({ params }: { params: Promise<{ locale
                 className="flex items-center gap-3 rounded-[var(--qs-card-radius)] border border-line bg-surface p-4 text-sm text-ink hover:bg-surface-raised"
               >
                 <span className="flex-1">{r.title}</span>
+                {staff && r.status === "in_review" && r.submitted_at && (
+                  <SlaBadge
+                    submittedAt={r.submitted_at}
+                    template={t(locale, "gate.sla")}
+                    overdue={t(locale, "gate.overdue")}
+                  />
+                )}
                 <Badge variant="neutral">
                   {t(locale, `report.status.${r.status as ReportStatus}`)}
                 </Badge>

@@ -16,7 +16,7 @@ const ru = load("ru");
 // Product/brand tokens, file formats, currency codes and single-letter keyboard shortcuts that
 // legitimately appear in kk text. Whole tokens only, so look-alike letters inside words still fail.
 const APPROVED_LATIN =
-  /\b(QazSupply|API|RFQ|X-ray|KPI|ETA|SAP|Excel|CSV|csv|UTF-8|xlsx|xlsm|xls|KZT|USD|RUB|EUR|CNY|[JKARU])\b/g;
+  /\b(QazSupply|API|RFQ|X-ray|KPI|ETA|SAP|Excel|CSV|csv|UTF-8|xlsx|xlsm|xls|KZT|USD|RUB|EUR|CNY|Esc|[JKAERU])\b/g;
 const LATIN = /[A-Za-z]/;
 const CYRILLIC = /[\u0400-\u04ff]/;
 

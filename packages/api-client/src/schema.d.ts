@@ -741,6 +741,8 @@ export interface components {
             released_at: string | null;
             /** Status */
             status: string;
+            /** Submitted At */
+            submitted_at: string | null;
             /** Title */
             title: string;
             /** Version */

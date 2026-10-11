@@ -40,8 +40,10 @@ def gate_code(exc: pg_errors.CheckViolation) -> str | None:
 
 def list_reports(conn: UserConn, org_id: UUID) -> list[dict[str, Any]]:
     return conn.execute(
-        """select id, title, period_start, period_end, status::text as status, version, released_at
-           from public.reports where org_id = %s order by period_end desc""",
+        """select id, title, period_start, period_end, status::text as status, version,
+             submitted_at, released_at
+           from public.reports where org_id = %s
+           order by (status = 'in_review') desc, submitted_at nulls last, period_end desc""",
         (org_id,),
     ).fetchall()
 

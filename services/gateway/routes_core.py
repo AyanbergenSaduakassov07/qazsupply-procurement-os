@@ -34,6 +34,7 @@ class Report(BaseModel):
     period_end: date
     status: str
     version: int
+    submitted_at: datetime | None
     released_at: datetime | None
 
 
