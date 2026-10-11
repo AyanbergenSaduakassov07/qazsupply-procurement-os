@@ -15,6 +15,9 @@ from openpyxl import load_workbook
 MAX_BYTES = 25 * 1024 * 1024
 MAX_ROWS = 200_000
 MAX_COLS = 60
+# Zip-bomb guard: declared uncompressed size of all members (zipfile never inflates past it).
+# Honest 25 MB workbooks unpack to ~10x; ponytail: one total cap, per-member caps if needed.
+MAX_UNZIPPED = 256 * 1024 * 1024
 
 
 class FileRejected(Exception):
@@ -50,11 +53,14 @@ def _read_xlsx(data: bytes) -> list[Sheet]:
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as z:
             names = z.namelist()
+            unzipped = sum(i.file_size for i in z.infolist())
     except zipfile.BadZipFile as e:
         # Password-protected .xlsx files are OLE containers, not zips.
         raise FileRejected("unreadable") from e
     if any(n.lower().endswith("vbaproject.bin") for n in names):
         raise FileRejected("macros")
+    if unzipped > MAX_UNZIPPED:
+        raise FileRejected("too_large")
     try:
         wb = load_workbook(io.BytesIO(data), read_only=True, data_only=True)
     except Exception as e:  # noqa: BLE001 - openpyxl raises many types on corrupt input

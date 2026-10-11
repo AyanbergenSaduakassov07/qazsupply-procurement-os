@@ -6,6 +6,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
+from services.ingest import parse
 from services.ingest.api import preview, validate
 from services.ingest.mapping import suggest
 from services.ingest.parse import FileRejected, read_file
@@ -116,6 +117,17 @@ def test_macro_workbook_renamed_to_xlsx_is_still_rejected() -> None:
     with pytest.raises(FileRejected) as e:
         read_file(load("11_macros.xlsm"), "innocent.xlsx")
     assert e.value.code == "macros"
+
+
+def test_xlsx_that_inflates_past_the_cap_is_rejected_before_parsing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    data = load("03_title_rows.xlsx")
+    assert read_file(data, "x.xlsx")  # honest workbook passes the default cap
+    monkeypatch.setattr(parse, "MAX_UNZIPPED", 1024)
+    with pytest.raises(FileRejected) as e:
+        read_file(data, "x.xlsx")
+    assert e.value.code == "too_large"
 
 
 def test_garbage_xlsx_is_unreadable_not_a_crash() -> None:
