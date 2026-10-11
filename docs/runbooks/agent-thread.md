@@ -47,3 +47,10 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Found:** `scripts/license_check.py` ran `pnpm licenses list --prod` at the workspace root, which returns `{}`: no JS licence was ever checked. Fixed with `-r` + fail-closed + CI notices check on `harness/license-gate-workspace` (locked surface, separate PR). All 119 shipped JS packages pass the existing allowlist.
 - **Not done (needs owner):** D8 remote Supabase project, D12 native kk review, D14 paid plan, D17/D18 real data, CONTEXT.md review, merges.
 - **Next:** M3 cannot start: RUN-NEXT 2a needs M2 built with a passing machine gate; M2's gate is not evaluable without the owner's data.
+
+## 2026-10-12 | M3 | slice 1: review gate (DB + API)
+- **Goal:** an unreviewed report is unreachable; one reviewer may approve + release (owner); four-eyes switch.
+- **Done:** migration `20261012000000_m3_review_gate.sql` (transition trigger, finding freeze, review rules, audit by trigger, `finding_visible`, org `ask_enabled` / `four_eyes`); pgTAP `m3_review_gate.test.sql` (41 checks); `services.report.api` workflow + `routes_report.py` (403 staff_only, 409 reason codes); findings carry latest decision; API client regenerated; ADR 0008.
+- **Fixed on the way:** findings select policy must use row columns (INSERT ... RETURNING cannot see the new row by id).
+- **Results:** `make check` green; `make rls` PASS (4 pgTAP suites, advisors clean, 25 integration incl. the new end-to-end gate test).
+- **Next:** slice 2: review console UI (`/[locale]/review`), then report narrative + PDF, then Ask.
