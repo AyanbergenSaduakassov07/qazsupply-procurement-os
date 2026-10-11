@@ -9,6 +9,13 @@ Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](
 - Integration tests share `services/gateway/testing.py` (seeded users, tokens, purge helper) and one `TestClient` fixture.
 - `make help`; `CHANGELOG.md`; READMEs updated for M2.
 
+### Added
+- `THIRD_PARTY_NOTICES.md` generated from shipped dependencies (`scripts/notices.py`, `--check` for staleness).
+- `docs/runbooks/m2-gate-data.md`: the inputs only the owner can provide for the M2 gate, with formats and how they are run.
+
+### Fixed
+- Ingest rejects `.xlsx` files whose declared uncompressed size exceeds 256 MB (zip-bomb guard; closes D19).
+
 ### Removed
 - 36 README-only placeholder folders for unbuilt modules (apps, connectors, infra, services). Planned modules stay mapped in `docs/architecture/domain-model.md`; each phase creates its folders when it builds them.
 
