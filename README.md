@@ -4,7 +4,7 @@
 
 AI procurement, supplier-vetting and shipment-control platform for Kazakhstan and Central Asia.
 
-> **Status:** M0 (harness + blueprint), M1 (multi-tenant data platform, design system, app shell) and the M2 Spend X-ray engine (ingest, matching, FX, review queue, detectors with Evidence) are built on synthetic data. The M2 gate is **blocked** until real ЕНС ТРУ access, 300 owner-labelled lines and two hand-audited datasets exist; see [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md) and [`evals/REPORT-M2.md`](evals/REPORT-M2.md). History: [`CHANGELOG.md`](CHANGELOG.md).
+> **Status (2026-10-12):** M0-M3 are built and run end to end on synthetic data: upload -> matching -> findings -> human review -> released report + PDF -> cited Ask. Nothing is deployed and only M0 is merged to `main` (M1-M3 wait in PRs #1-#5). The next phase (M4) waits for Gate A, which needs real data and paid audits from the owner. See [Project status](#project-status) below, the live tracker [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md), and [`CHANGELOG.md`](CHANGELOG.md).
 
 ## What it is
 
@@ -42,6 +42,62 @@ flowchart LR
 - **Tenant isolation in the database** (ADR 0002): RLS on every table; the API runs every query as the signed-in user, so a bug in the API cannot read another tenant's rows.
 - **LLM behind a gateway** (ADR 0004): redaction, budgets, kill switch, ledger. Models never produce figures.
 - Deeper: [`docs/architecture/`](docs/architecture/) and [`docs/adr/`](docs/adr/README.md).
+
+## Project status
+
+### Phases
+| Phase | State |
+|---|---|
+| M0 Foundation and blueprint | Done, merged. Gate: owner review of `CONTEXT.md` pending |
+| M1 Data platform, design system, app shell | Built (PR #1) |
+| M2 Spend X-ray engine | Built; gate **blocked**: needs real ЕНС ТРУ data, 300 owner-labelled lines, 2 hand-audited datasets |
+| M3 Review gate, client report + PDF, Ask | Built (PR #5); open: live Ask citation coverage re-run (free-tier quota) |
+| M4-M9 | Not started; M4 starts after **Gate A** |
+
+### What it can do today (local, synthetic data)
+- **Upload** purchase exports (CSV/XLSX in ru/kk/en formats) with plain-language row errors. Macro files, zip bombs and duplicate uploads are refused.
+- **Normalise:** match items to the classifier (synthetic sample until real ЕНС ТРУ access), convert to KZT at National Bank rates, and resolve suppliers by BIN. A keyboard review queue handles unsure matches.
+- **Find savings** with five deterministic detectors (overpaying, repeat purchases, split purchases, supplier concentration, outliers). Every amount is recomputed by an independent SQL check, and every finding links to its source rows.
+- **Human review gate:** a reviewer decides on every finding, then approves and releases. Clients never see anything before release. The database enforces this and logs every step, with an optional two-person rule.
+- **Client report:** every figure opens its evidence and shows who reviewed it. The PDF has identical figures in kk/ru/en.
+- **Ask:** questions about a released report. Every number is checked against what it cites before display, and the designed refusal is "I can't answer that from your data". Off until the client opts in.
+- Tenant isolation in the database, a tamper-evident audit log, three languages, light/dark themes, phone to desktop, accessibility 96-100.
+
+### What it cannot do yet
+Real data sources (ЕНС ТРУ, goszakup, sanctions), Supplier 360, RFQs, logistics and finance (M4-M8); a production AI model (the dev demo uses a free model or a local stand-in); deployment (no remote Supabase project yet); Kazakh copy is not yet reviewed by a native speaker.
+
+### Needed from the owner
+1. Merge PRs #1 -> #2 -> #3 -> #4 -> #5 (squash; the agent rebases the next one after each merge). In PR #4, confirm or refuse the OFL licence exception for the PDF font (IBM Plex).
+2. Add about $10 of OpenRouter credit (1,000 free-model requests per day) so the live Ask eval can close M3; later, a production model key and a DPA with that provider.
+3. Send the ЕНС ТРУ / goszakup access request (draft in [`docs/runbooks/m2-gate-data.md`](docs/runbooks/m2-gate-data.md)).
+4. **Gate A evidence:** 300 hand-labelled purchase lines; 2 real spend exports with every finding marked correct or wrong (precision >= 80%); 3 paid audits run through the product.
+5. Before the first real client: a remote Supabase project, a native Kazakh review of the UI copy, and a GitHub plan for branch protection.
+
+### Next prompts and what each needs from you
+| Prompt | Starts after | You provide |
+|---|---|---|
+| M4 Supplier 360 + compliance | Gate A | goszakup OWS token + terms, data.egov.kz access, an OpenSanctions licence quote, counsel's view on beneficial-owner data |
+| M5 Procurement OS (RFQ, ТЗ checker, catalogue) | M4 | Suppliers who answer RFQs. **Gate B:** 5+ real decisions, 20+ RFQs, a measured cycle-time drop |
+| M6 Logistics core | Gate B | Two real tracking sources with terms; 50 shipments |
+| M7 Predict and Protect (ETA, borders, risk radar) | M6 | 50+ live shipments; your feedback on alerts (**Gate C**) |
+| M8 Network and Finance | Gate C | **Written legal advice before any code**; partner banks/insurers for a sandbox |
+| M9 Region, scale, hardening | M8 | A second country and pilot client; a restore-drill window; an external security test budget |
+
+The full checklist, marked **[you]** / **[agent]** / **[both]**, is in [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md#action-list-what-is-left-who-does-it-updated-2026-10-12). To continue the build in a new session: `Read docs/prompts/RUN-NEXT.md and continue.`
+
+### See the demo yourself
+```bash
+pnpm demo            # everything with demo data; opens http://localhost:3000
+pnpm demo --fresh    # from a clean database
+pnpm demo --ai       # Ask uses the real free model (OPENROUTER_API_KEY in .env.local)
+```
+| Who | Login | Try |
+|---|---|---|
+| Client admin (Org B) | `b.admin@qazsupply.test` | Findings -> the released report: evidence drawer, Download PDF, Ask; Uploads; Settings -> Ask switch |
+| Reviewer | `reviewer@qazsupply.test` | Findings -> the draft: Submit, then decide each finding with J/K/A/E/R, Approve, Release |
+| Others | `a.admin@`, `a.user@`, `qs.admin@qazsupply.test` | Org A view, client user, QazSupply admin (two-person rule switch) |
+
+The shared local password is printed by `pnpm demo` (and is in `e2e/fixtures/users.json`; local test users only). Ctrl+C stops the app; the database keeps running: `supabase --workdir infra stop` stops it.
 
 ## Quickstart
 
