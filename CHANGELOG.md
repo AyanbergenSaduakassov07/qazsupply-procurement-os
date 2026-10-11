@@ -22,6 +22,22 @@ Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](
 ### Process
 - Trunk-based branching adopted (owner decision 2026-10-11): `main` always green, short-lived squash-merged branches. See `CONTRIBUTING.md`.
 
+## M3: X-ray product surface (2026-10-12): built, one acceptance check open
+
+Started before the M2 gate by owner override (Gate A's paid audits need this surface). Open: live Ask citation coverage (>= 95%) re-run after a ref-format fix.
+
+### Added
+- **Review gate in the database:** reports move only draft -> in_review -> approved -> released; approval needs a decision on every finding and a signed approval; findings freeze after draft; every step audited by the DB; per-org two-person rule (QazSupply admins only). 44 pgTAP checks.
+- **Review console:** keyboard-first (J K A E R), keep / keep with note / reject, SLA timer in text, decision history with before -> after, two-step release.
+- **Client report:** narrative layout (prototype + rationale), every figure and sum opens the Evidence drawer with "reviewed by"; savings-by-type chart with a table; next steps.
+- **PDF export:** same model and formatter as the screen; Evidence id on every figure; footer with report id, reviewer, date and page; IBM Plex with full Kazakh Cyrillic.
+- **Ask:** opt-in per organization, released reports only, no tools, findings-only context; every sentence's numbers checked against what it cites before display; designed "I can't answer that from your data".
+- **Evals:** `evals/ask` with 64 injections over four channels; obedient-model gate (0/56 structural hijacks) and live mode.
+
+### Fixed
+- Kazakh money and dates rendered differently across browsers and the PDF (runtime locale data); now one deterministic format.
+- Ask held two database connections during the model call.
+
 ## M2: Spend X-ray engine (2026-10-09 to 2026-10-11): built, gate blocked
 
 Built on synthetic data. The gate needs real ЕНС ТРУ access, 300 owner-labelled lines and two hand-audited datasets.
