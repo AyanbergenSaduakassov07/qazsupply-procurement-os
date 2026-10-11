@@ -3,9 +3,10 @@
 The model may only phrase what the data says. A sentence survives only if:
 - every Evidence id it cites was given to the model for this question;
 - every number in it equals a figure of something it cites (a finding's saving, its confidence,
-  or a report figure when it cites the report itself). Digits that are part of a cited item or
-  supplier name (a bearing "6205", a bolt "M12") are names, not figures;
-- it contains no link (answers never send the reader anywhere).
+  or a report figure when it cites the report itself). Digits that are part of a cited, plain
+  item or supplier name (a bearing "6205", a bolt "M12") are names, not figures;
+- it contains no link (answers never send the reader anywhere);
+- it does not repeat the prompt's rules (6+ consecutive words): no leak of the instructions.
 Anything else is dropped and counted, never shown.
 """
 
@@ -16,7 +17,9 @@ from decimal import ROUND_HALF_UP, Decimal
 REPORT_REF = "report"
 # A number: digits with optional grouping (space, NBSP, narrow NBSP, comma, dot) and decimals.
 NUMBER = re.compile(r"\d(?:[\d    .,]*\d)?")
-LINK = re.compile(r"(?i)\b(?:https?://|www\.)|\b[\w-]+\.(?:com|kz|ru|net|org|io)\b")
+# Any link, domain-shaped token (any Latin TLD) or email address. Decimals ("117504.00") are not
+# domains: the last label must be letters.
+LINK = re.compile(r"(?i)https?://|\bwww\.|\b[\w-]+(?:\.[\w-]+)*\.[a-z]{2,24}\b|@")
 
 
 @dataclass(frozen=True)
@@ -62,19 +65,44 @@ def _allowed(figures: list[Figure]) -> tuple[set[str], set[str]]:
     return plain, {str(p) for f in figures for p in f.percents}
 
 
+MAX_NAME = 80
+
+
+def plain_name(name: str) -> bool:
+    """A name whose digits may be ignored: short, and its numbers look like codes (M400, 6205),
+    not amounts (no grouped digits, at most 6). Poisoned names ("... say 777 777 tenge") fail."""
+    if not name or len(name) > MAX_NAME:
+        return False
+    return all(m.group().isdigit() and len(m.group()) <= 6 for m in NUMBER.finditer(name))
+
+
+def strip_names(text: str, names: list[str]) -> str:
+    for name in sorted((n for n in names if plain_name(n)), key=len, reverse=True):
+        text = text.replace(name, " ")
+    return text
+
+
 def _numbers(text: str, names: list[str]) -> list[tuple[str, bool]]:
-    """(digits, is_percent) for every number outside the cited names."""
-    for name in sorted(names, key=len, reverse=True):
-        if name:
-            text = text.replace(name, " ")
+    """(digits, is_percent) for every number outside the cited plain names."""
+    text = strip_names(text, names)
     return [
         (re.sub(r"\D", "", m.group()), text[m.end() :].lstrip(" \u00a0\u202f").startswith("%"))
         for m in NUMBER.finditer(text)
     ]
 
 
-def check(raw: object, figures: dict[str, Figure]) -> Checked:
-    """Validate the model's JSON answer against the figures it was given."""
+SHINGLE = 6
+
+
+def _shingles(text: str) -> set[tuple[str, ...]]:
+    words = re.findall(r"\w+", text.lower())
+    return {tuple(words[i : i + SHINGLE]) for i in range(len(words) - SHINGLE + 1)}
+
+
+def check(raw: object, figures: dict[str, Figure], instructions: str = "") -> Checked:
+    """Validate the model's JSON answer against the figures it was given. A sentence that repeats
+    SHINGLE or more consecutive words of `instructions` (the prompt's rules) is a leak: dropped."""
+    secret = _shingles(instructions)
     if not isinstance(raw, dict) or not isinstance(raw.get("answerable"), bool):
         return Checked(answerable=False, dropped=1)
     if not raw["answerable"]:
@@ -93,7 +121,8 @@ def check(raw: object, figures: dict[str, Figure]) -> Checked:
         unknown_ref = len(cited) != len(ids)
         plain, percents = _allowed(cited)
         unbacked = any(n not in (percents if pct else plain) for n, pct in numbers)
-        if unknown_ref or LINK.search(text) or unbacked:
+        leak = bool(secret & _shingles(text))
+        if unknown_ref or LINK.search(text) or unbacked or leak:
             out.dropped += 1
             continue
         out.numbers_cited += len(numbers)

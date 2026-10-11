@@ -3,6 +3,7 @@
 from services.llm.gateway import Completion, Gateway, LlmBlocked, Provider, Result
 from services.llm.ledger import PostgresLedger
 from services.llm.openrouter import OpenRouterProvider, ProviderError
+from services.llm.prompts import load as load_prompt
 from services.llm.scripted import ScriptedProvider
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     "ProviderError",
     "Result",
     "ScriptedProvider",
+    "load_prompt",
 ]

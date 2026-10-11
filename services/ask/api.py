@@ -20,6 +20,7 @@ from uuid import UUID
 from services.analyze import api as analyze
 from services.ask.validate import REPORT_REF, Figure, check
 from services.gateway.db import UserConn
+from services.llm import api as llm
 from services.report import api as report
 
 logger = logging.getLogger("ask")
@@ -93,8 +94,25 @@ def ask(
     if head["status"] not in ("released", "superseded"):
         raise NotReleased
     kept = [f for f in analyze.findings(conn, org_id, report_id) if f["decision"] != "reject"]
-    kept = sorted(kept, key=lambda f: Decimal(f["saving_estimate"]), reverse=True)[:MAX_FINDINGS]
+    return answer_from(
+        head, kept, question, history, runner=runner, model=model, locale=locale, org_id=org_id
+    )
 
+
+def answer_from(
+    head: dict[str, Any],
+    findings: list[dict[str, Any]],
+    question: str,
+    history: list[Turn],
+    *,
+    runner: Runner,
+    model: str,
+    locale: str,
+    org_id: UUID,
+) -> Answer:
+    """The DB-free core: build the context, ask the model, validate. Used by `ask` and evals."""
+    kept = sorted(findings, key=lambda f: Decimal(f["saving_estimate"]), reverse=True)
+    kept = kept[:MAX_FINDINGS]
     refs: dict[str, str] = {}  # F1 -> evidence id
     figures: dict[str, Figure] = {
         REPORT_REF: Figure(
@@ -143,7 +161,7 @@ def ask(
         raw: object = json.loads(result.text)
     except (TypeError, ValueError):
         raw = None
-    checked = check(raw, figures)
+    checked = check(raw, figures, instructions=llm.load_prompt("ask", PROMPT_VERSION).template)
     if checked.dropped:
         # Counts only: the dropped text may hold tenant data.
         logger.info("ask sentences dropped", extra={"dropped": checked.dropped})
