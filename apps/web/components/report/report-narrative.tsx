@@ -236,7 +236,8 @@ export function ReportNarrative({
         <p className="text-sm text-muted">
           {fill(labels.period, { start: date(report.period_start), end: date(report.period_end) })}
         </p>
-        <p className="text-sm text-muted" data-testid="reviewed-by">
+        {/* data-volatile: the release date changes on every seed (masked in visual baselines). */}
+        <p className="text-sm text-muted" data-testid="reviewed-by" data-volatile>
           {report.status === "released" && report.released_at
             ? reviewer
               ? fill(labels.reviewedBy, { name: reviewer, date: date(report.released_at) })

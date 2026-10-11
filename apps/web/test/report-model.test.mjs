@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { buildReportModel, moneyFormatter, toTiyn } from "../lib/report-model.ts";
+import { buildReportModel, dateFormatter, moneyFormatter, toTiyn } from "../lib/report-model.ts";
 
 const finding = (id, type, saving, confidence, decision = "approve") => ({
   id,
@@ -57,9 +57,13 @@ test("top N and the rest split the ranking without overlap", () => {
   assert.equal(new Set([...model.top, ...model.rest].map((f) => f.id)).size, 7);
 });
 
-test("one money formatter per locale, whole tenge", () => {
-  for (const locale of ["kk", "ru", "en"]) {
-    const text = moneyFormatter(locale)(123_456_819);
-    assert.match(text, /1.?234.?568/u, `${locale}: ${text}`);
-  }
+test("money and dates look the same in every runtime (no Intl locale data)", () => {
+  const nb = "\u00a0";
+  assert.equal(moneyFormatter("kk")(123_456_819), `1${nb}234${nb}568${nb}₸`);
+  assert.equal(moneyFormatter("ru")(29_750_000), `297${nb}500${nb}₸`);
+  assert.equal(moneyFormatter("en")(29_750_000), "₸297,500");
+  assert.equal(moneyFormatter("en")(49), "₸0");
+  assert.equal(dateFormatter("kk")("2026-01-05"), "2026 ж. 5 қаңтар");
+  assert.equal(dateFormatter("ru")("2026-03-11"), "11 марта 2026 г.");
+  assert.equal(dateFormatter("en")("2026-10-11T22:30:00Z"), "12 October 2026"); // Almaty day
 });

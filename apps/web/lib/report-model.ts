@@ -78,21 +78,82 @@ export function localeTag(locale: string): string {
   return locale === "kk" ? "kk-KZ" : locale === "ru" ? "ru-RU" : "en-GB";
 }
 
-/** One formatter for screen and PDF: whole tenge, locale grouping, currency sign. */
+const NBSP = "\u00a0";
+
+/**
+ * One money format for screen and PDF, independent of the runtime's locale data (browsers ship
+ * partial Kazakh ICU data: Intl renders "KZT 297,500" in some and "297 500 ₸" in others).
+ * kk/ru: "297 500 ₸" (no-break spaces); en: "₸297,500". Whole tenge, half away from zero.
+ */
 export function moneyFormatter(locale: string): (tiyn: number) => string {
-  const fmt = new Intl.NumberFormat(localeTag(locale), {
-    style: "currency",
-    currency: "KZT",
-    maximumFractionDigits: 0,
-  });
-  return (tiyn) => fmt.format(tiyn / 100);
+  return (tiyn) => {
+    const tenge = Math.round(Math.abs(tiyn) / 100);
+    const sign = tiyn < 0 && tenge > 0 ? "-" : "";
+    const digits = String(tenge).replace(/\B(?=(\d{3})+(?!\d))/g, locale === "en" ? "," : NBSP);
+    return locale === "en" ? `${sign}₸${digits}` : `${sign}${digits}${NBSP}₸`;
+  };
 }
 
 export function percent(confidence: string): string {
   return `${Math.round(Number(confidence) * 100)}%`;
 }
 
+const MONTHS: Record<string, string[]> = {
+  kk: [
+    "қаңтар",
+    "ақпан",
+    "наурыз",
+    "сәуір",
+    "мамыр",
+    "маусым",
+    "шілде",
+    "тамыз",
+    "қыркүйек",
+    "қазан",
+    "қараша",
+    "желтоқсан",
+  ],
+  ru: [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ],
+  en: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+};
+
+/** Dates in the same words everywhere (see moneyFormatter). Calendar day in Asia/Almaty. */
 export function dateFormatter(locale: string): (iso: string) => string {
-  const fmt = new Intl.DateTimeFormat(localeTag(locale), { dateStyle: "long" });
-  return (iso) => fmt.format(new Date(iso));
+  const months = MONTHS[locale] ?? MONTHS.ru ?? [];
+  return (iso) => {
+    // Date-only values are calendar days; timestamps are shown as the day in Almaty (UTC+5).
+    const date = /^\d{4}-\d{2}-\d{2}$/.test(iso)
+      ? new Date(`${iso}T00:00:00Z`)
+      : new Date(new Date(iso).getTime() + 5 * 3_600_000);
+    const [d, m, y] = [date.getUTCDate(), months[date.getUTCMonth()] ?? "", date.getUTCFullYear()];
+    if (locale === "kk") return `${y} ж. ${d} ${m}`;
+    if (locale === "en") return `${d} ${m} ${y}`;
+    return `${d} ${m} ${y} г.`;
+  };
 }

@@ -14,6 +14,8 @@ const SCREENS = [
   { name: "overview", path: "", signedIn: true },
   { name: "audit", path: "/audit", signedIn: true },
   { name: "upload", path: "/spend", signedIn: true },
+  // Seed: Org A's released report, seen by its client admin (narrative, chart, Ask switched off).
+  { name: "report", path: "/spend/reports/40000000-0000-4000-a000-00000000000a", signedIn: true },
 ] as const;
 
 for (const screen of SCREENS) {
