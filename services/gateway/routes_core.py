@@ -87,6 +87,16 @@ class AuditLog(BaseModel):
     entries: list[AuditEntry]
 
 
+class OrgSettings(BaseModel):
+    ask_enabled: bool
+    four_eyes: bool
+
+
+class OrgSettingsPatch(BaseModel):
+    ask_enabled: bool | None = None
+    four_eyes: bool | None = None
+
+
 # ---------------------------------------------------------------- routes
 @router.get("/me")
 def me(who: Who, conn: Conn) -> Me:
@@ -120,3 +130,19 @@ def audit_log(
         raise HTTPException(403, "forbidden")
     entries = [AuditEntry(**r) for r in tenancy.audit_log(conn, org_id, limit)]
     return AuditLog(chain_intact=tenancy.audit_chain_intact(conn, org_id), entries=entries)
+
+
+@router.get("/orgs/{org_id}/settings")
+def org_settings(org_id: UUID, conn: OrgConn) -> OrgSettings:
+    found = tenancy.org_settings(conn, org_id)
+    if found is None:
+        raise HTTPException(404, "not found")
+    return OrgSettings(**found)
+
+
+@router.patch("/orgs/{org_id}/settings")
+def update_org_settings(org_id: UUID, body: OrgSettingsPatch, conn: OrgConn) -> OrgSettings:
+    # Admins only (RLS); four_eyes is QazSupply-admin only (DB trigger -> 403).
+    if not tenancy.update_org_settings(conn, org_id, body.model_dump(exclude_none=True)):
+        raise HTTPException(403, {"code": "admin_only"})
+    return org_settings(org_id, conn)

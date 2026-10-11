@@ -50,6 +50,8 @@ export default defineConfig({
         {
           command: "uv run uvicorn services.gateway.app:app --port 8000",
           cwd: "..",
+          // Deterministic local stand-in for the model (services/llm/scripted.py; local DB only).
+          env: { LLM_PROVIDER: "scripted" },
           url: "http://localhost:8000/health",
           reuseExistingServer: !process.env.CI,
         },

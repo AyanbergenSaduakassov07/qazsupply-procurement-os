@@ -1,5 +1,5 @@
 import { type Locale, type MessageKey, t } from "@qazsupply/i18n";
-
+import type { AskLabels } from "../components/report/ask-panel";
 import type { NarrativeLabels } from "../components/report/report-narrative";
 import type { PdfLabels } from "../components/report/report-pdf";
 import { findingsLabels } from "./spend-labels";
@@ -58,5 +58,36 @@ export function pdfLabels(locale: Locale): PdfLabels {
     footer: t(locale, "report.pdf.footer"),
     evidence: t(locale, "report.pdf.evidence"),
     howToCheck: t(locale, "report.pdf.howToCheck"),
+  };
+}
+
+const ASK_ERRORS = [
+  "ask_disabled",
+  "ask_unavailable",
+  "blocked_budget",
+  "blocked_kill_switch",
+  "model_error",
+  "not_released",
+  "unexpected",
+] as const;
+
+export function askLabels(locale: Locale): AskLabels {
+  const a = (k: string) => t(locale, `ask.${k}` as MessageKey);
+  return {
+    title: a("title"),
+    label: a("label"),
+    placeholder: a("placeholder"),
+    submit: a("submit"),
+    reading: a("reading"),
+    aiLabel: a("aiLabel"),
+    cannot: a("cannot"),
+    cannotHint: a("cannotHint"),
+    suggestions: [a("suggestion1"), a("suggestion2"), a("suggestion3")],
+    dropped: a("dropped"),
+    cite: a("cite"),
+    citeReport: a("citeReport"),
+    you: a("you"),
+    answer: a("answer"),
+    errors: Object.fromEntries(ASK_ERRORS.map((e) => [e, a(`error.${e}`)])),
   };
 }

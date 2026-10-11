@@ -179,6 +179,38 @@ test("a report reaches the client only after review and release", async ({ brows
     await expect(client.getByTestId("report-finding")).toHaveCount(total - 1);
     await axe(client);
   }
+  // Ask: off until the client admin opts in; then answers carry citations, unchecked figures
+  // never appear, and an out-of-scope question gets the designed "cannot answer".
+  const askSwitch = client.getByTestId("org-ask_enabled");
+  await client.goto("/en/settings");
+  if (await askSwitch.isChecked()) {
+    // Start from "off" whatever an earlier run left; wait for the save before leaving.
+    await askSwitch.uncheck();
+    await expect(client.getByTestId("org-settings-status")).toHaveText("Saved");
+  }
+  await client.goto(reportUrl);
+  await expect(client.getByTestId("ask-off")).toBeVisible();
+  await client.goto("/en/settings");
+  await askSwitch.check();
+  await expect(client.getByTestId("org-settings-status")).toHaveText("Saved");
+  await axe(client);
+  await client.goto(reportUrl);
+  const ask = client.getByTestId("ask-panel");
+  await ask.getByRole("button", { name: "Where did we overpay the most?" }).click();
+  await expect(ask.getByTestId("ask-sentence")).toHaveCount(1);
+  await expect(ask).not.toContainText("999 999");
+  await expect(ask).toContainText("Some sentences were removed");
+  await ask.getByTestId("ask-cite").first().click();
+  await expect(client.getByRole("dialog").getByRole("table")).toBeVisible();
+  await client.keyboard.press("Escape");
+  await ask.getByLabel("Your question").fill("What will the weather be tomorrow?");
+  await ask.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(ask.getByTestId("ask-cannot")).toContainText("I can't answer that from your data");
+  await axe(client);
+  await client.goto("/en/settings");
+  await askSwitch.uncheck();
+  await expect(client.getByTestId("org-settings-status")).toHaveText("Saved");
+
   // The Kazakh PDF carries Kazakh text (embedded font with a Unicode map), not just glyph shapes.
   const kkPdf = await client.request.get(`${reportUrl.replace("/en/", "/kk/")}/pdf`);
   const kkBody = await kkPdf.body();

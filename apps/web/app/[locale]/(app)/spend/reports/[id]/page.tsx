@@ -11,7 +11,7 @@ import {
   type ConsoleReport,
   ReviewConsole,
 } from "../../../../../../components/review/review-console";
-import { narrativeLabels } from "../../../../../../lib/report-labels";
+import { askLabels, narrativeLabels } from "../../../../../../lib/report-labels";
 import type { ModelFinding } from "../../../../../../lib/report-model";
 import { consoleLabels } from "../../../../../../lib/review-labels";
 import { getSession } from "../../../../../../lib/session";
@@ -31,12 +31,13 @@ export default async function ReportPage({
   const staff = org.role === "reviewer" || org.role === "qazsupply_admin";
   const api = apiClient(API_URL, session.token);
   const path = { org_id: org.org_id, report_id: id };
-  const [report, findings, history] = await Promise.all([
+  const [report, findings, history, settings] = await Promise.all([
     api.GET("/orgs/{org_id}/reports/{report_id}", { params: { path } }),
     api.GET("/orgs/{org_id}/reports/{report_id}/findings", { params: { path } }),
     staff
       ? api.GET("/orgs/{org_id}/reports/{report_id}/reviews", { params: { path } })
       : Promise.resolve({ data: [] }),
+    api.GET("/orgs/{org_id}/settings", { params: { path: { org_id: org.org_id } } }),
   ]);
   // 404 for anyone who may not see it (a client and an unreleased report, another tenant).
   if (!report.data) notFound();
@@ -65,6 +66,11 @@ export default async function ReportPage({
           labels={narrativeLabels(locale)}
           locale={locale}
           pdfHref={`/${locale}/spend/reports/${id}/pdf`}
+          ask={
+            report.data.status === "released"
+              ? { labels: askLabels(locale), enabled: !!settings.data?.ask_enabled }
+              : undefined
+          }
         />
       )}
     </div>

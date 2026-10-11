@@ -54,5 +54,6 @@ def load() -> Settings:
         cors_origins=tuple(os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")),
         llm_provider=env_local("LLM_PROVIDER") or "none",
         openrouter_api_key=env_local("OPENROUTER_API_KEY"),
-        ask_model=env_local("ASK_MODEL") or DEV_ASK_MODEL,
+        ask_model=env_local("ASK_MODEL")
+        or ("scripted-local" if env_local("LLM_PROVIDER") == "scripted" else DEV_ASK_MODEL),
     )

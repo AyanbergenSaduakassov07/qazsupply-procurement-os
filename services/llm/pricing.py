@@ -12,6 +12,7 @@ PRICES: dict[str, tuple[Decimal, Decimal]] = {
     # Development only (ADR 0008): OpenRouter free endpoints, synthetic data only.
     "google/gemma-4-31b-it:free": (Decimal(0), Decimal(0)),
     "nvidia/nemotron-3-super-120b-a12b:free": (Decimal(0), Decimal(0)),
+    "scripted-local": (Decimal(0), Decimal(0)),  # services/llm/scripted.py, tests only
 }
 MILLION = Decimal(1_000_000)
 

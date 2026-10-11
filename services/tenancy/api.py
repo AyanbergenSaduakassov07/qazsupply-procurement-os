@@ -31,6 +31,28 @@ def is_staff(conn: UserConn, org_id: UUID) -> bool:
     return bool(row and row["ok"])
 
 
+def org_settings(conn: UserConn, org_id: UUID) -> dict[str, Any] | None:
+    return conn.execute(
+        "select ask_enabled, four_eyes from public.organizations where id = %s", (org_id,)
+    ).fetchone()
+
+
+def update_org_settings(conn: UserConn, org_id: UUID, changes: dict[str, bool]) -> bool:
+    """Apply the given switches (only `ask_enabled`, `four_eyes`); False when RLS let no row
+    change (caller is not an admin). A client admin changing four_eyes raises 42501."""
+    if not changes:
+        return True
+    cur = conn.execute(
+        """update public.organizations
+           set ask_enabled = coalesce(%s, ask_enabled), four_eyes = coalesce(%s, four_eyes)
+           where id = %s""",
+        (changes.get("ask_enabled"), changes.get("four_eyes"), org_id),
+    )
+    if cur.rowcount:
+        append_audit(conn, org_id, "org.settings_changed", "organizations", org_id, changes)
+    return cur.rowcount > 0
+
+
 def audit_log(conn: UserConn, org_id: UUID, limit: int) -> list[dict[str, Any]]:
     return conn.execute(
         """select id, actor_id, action, entity, entity_id, details, created_at, hash

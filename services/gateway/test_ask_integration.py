@@ -137,3 +137,19 @@ def test_without_a_provider_ask_is_unavailable(client: TestClient) -> None:
         assert ask(client, "x").json()["detail"] == {"code": "ask_unavailable"}
     finally:
         client.app.state.llm_provider = saved  # type: ignore[attr-defined]
+
+
+def test_only_admins_switch_ask_and_only_staff_admins_switch_four_eyes(
+    client: TestClient,
+) -> None:
+    url = f"/orgs/{ORG_A}/settings"
+    try:
+        on = client.patch(url, headers=h("clientAdminA"), json={"ask_enabled": True})
+        assert on.status_code == 200 and on.json() == {"ask_enabled": True, "four_eyes": False}
+        assert client.get(url, headers=h("clientUserA")).json()["ask_enabled"] is True
+        denied = client.patch(url, headers=h("clientUserA"), json={"ask_enabled": False})
+        assert denied.status_code == 403
+        four = client.patch(url, headers=h("clientAdminA"), json={"four_eyes": True})
+        assert four.status_code == 403  # QazSupply's control, not the client's
+    finally:
+        set_ask(False)

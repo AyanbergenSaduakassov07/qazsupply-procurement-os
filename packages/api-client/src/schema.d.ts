@@ -378,6 +378,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Org Settings */
+        get: operations["org_settings_orgs__org_id__settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Org Settings */
+        patch: operations["update_org_settings_orgs__org_id__settings_patch"];
+        trace?: never;
+    };
     "/orgs/{org_id}/uploads": {
         parameters: {
             query?: never;
@@ -744,6 +762,20 @@ export interface components {
             sample_classifier: boolean;
             /** Suppliers Created */
             suppliers_created: number;
+        };
+        /** OrgSettings */
+        OrgSettings: {
+            /** Ask Enabled */
+            ask_enabled: boolean;
+            /** Four Eyes */
+            four_eyes: boolean;
+        };
+        /** OrgSettingsPatch */
+        OrgSettingsPatch: {
+            /** Ask Enabled */
+            ask_enabled?: boolean | null;
+            /** Four Eyes */
+            four_eyes?: boolean | null;
         };
         /** QueueLine */
         QueueLine: {
@@ -1710,6 +1742,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReviewQueue"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    org_settings_orgs__org_id__settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrgSettings"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_org_settings_orgs__org_id__settings_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrgSettingsPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrgSettings"];
                 };
             };
             /** @description Validation Error */

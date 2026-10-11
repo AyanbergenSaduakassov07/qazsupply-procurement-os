@@ -21,7 +21,7 @@ from services.gateway import log, routes_ask, routes_core, routes_report, routes
 from services.gateway.auth import Verifier
 from services.gateway.db import Database
 from services.gateway.settings import Settings, load
-from services.llm.api import OpenRouterProvider, Provider
+from services.llm.api import OpenRouterProvider, Provider, ScriptedProvider
 
 logger = logging.getLogger("gateway")
 settings = load()
@@ -45,12 +45,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 def llm_provider(s: Settings) -> Provider | None:
     """Ask's model provider, or None (Ask answers 503 ask_unavailable)."""
-    if s.llm_provider != "openrouter":
+    if s.llm_provider not in ("openrouter", "scripted"):
         return None
     if not s.database_is_local:
-        # Free development endpoints only ever see the local synthetic seed (ADR 0008).
-        logger.warning("openrouter refused: database is not local")
+        # Development providers only ever see the local synthetic seed (ADR 0008).
+        logger.warning("development LLM provider refused: database is not local")
         return None
+    if s.llm_provider == "scripted":
+        return ScriptedProvider()
     if not s.openrouter_api_key:
         logger.warning("openrouter selected but OPENROUTER_API_KEY is not set")
         return None

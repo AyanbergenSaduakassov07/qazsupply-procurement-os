@@ -975,6 +975,52 @@
         "title": "NormalizeSummary",
         "type": "object"
       },
+      "OrgSettings": {
+        "properties": {
+          "ask_enabled": {
+            "title": "Ask Enabled",
+            "type": "boolean"
+          },
+          "four_eyes": {
+            "title": "Four Eyes",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ask_enabled",
+          "four_eyes"
+        ],
+        "title": "OrgSettings",
+        "type": "object"
+      },
+      "OrgSettingsPatch": {
+        "properties": {
+          "ask_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ask Enabled"
+          },
+          "four_eyes": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Four Eyes"
+          }
+        },
+        "title": "OrgSettingsPatch",
+        "type": "object"
+      },
       "QueueLine": {
         "properties": {
           "currency": {
@@ -3009,6 +3055,104 @@
         "tags": [
           "spend"
         ]
+      }
+    },
+    "/orgs/{org_id}/settings": {
+      "get": {
+        "operationId": "org_settings_orgs__org_id__settings_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgSettings"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Org Settings"
+      },
+      "patch": {
+        "operationId": "update_org_settings_orgs__org_id__settings_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrgSettingsPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrgSettings"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Update Org Settings"
       }
     },
     "/orgs/{org_id}/uploads": {

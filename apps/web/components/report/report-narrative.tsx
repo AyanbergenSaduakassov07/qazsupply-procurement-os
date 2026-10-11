@@ -18,6 +18,7 @@ import {
   percent,
   toTiyn,
 } from "../../lib/report-model";
+import { type AskLabels, AskPanel } from "./ask-panel";
 
 export interface NarrativeReport {
   id: string;
@@ -71,12 +72,15 @@ export function ReportNarrative({
   labels,
   locale,
   pdfHref,
+  ask,
 }: {
   report: NarrativeReport;
   findings: ModelFinding[];
   labels: NarrativeLabels;
   locale: string;
   pdfHref: string;
+  /** Released reports only; `enabled` is the organization's opt-in. */
+  ask?: { labels: AskLabels; enabled: boolean };
 }) {
   const model = buildReportModel(findings);
   const money = moneyFormatter(locale);
@@ -336,6 +340,24 @@ export function ReportNarrative({
           ))}
         </ul>
       </section>
+
+      {ask &&
+        (ask.enabled ? (
+          <AskPanel
+            reportId={report.id}
+            locale={locale}
+            labels={ask.labels}
+            onCite={(ev) => {
+              const f = model.ranked.find((x) => x.evidence_id === ev);
+              if (f) void showFinding(f);
+            }}
+            onCiteReport={() => showParts(labels.headline, model.ranked)}
+          />
+        ) : (
+          <p className="text-sm text-muted" data-testid="ask-off">
+            {ask.labels.errors.ask_disabled}
+          </p>
+        ))}
 
       <EvidenceDrawer
         open={open}
