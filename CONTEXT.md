@@ -1,6 +1,6 @@
 # CONTEXT: QazSupply domain language
 
-Use these terms exactly in code, docs, UI copy and prompts. Update via the `domain-modeling` skill. Status: **sharpened in M0 (2026-10-08), pending owner review.** Bounded contexts: `docs/architecture/domain-model.md`.
+Use these terms exactly in code, docs, UI copy and prompts. Update via the `domain-modeling` skill. Status: **sharpened in M0 (2026-10-08), extended in M2/M3, pending owner review.** Bounded contexts: `docs/architecture/domain-model.md`.
 
 Conventions: every client-data entity carries `org_id` (its Organization). "Invariant" = must hold in every committed state; each one gets a test (DB constraint, RLS test, or property test).
 
@@ -21,8 +21,9 @@ Conventions: every client-data entity carries `org_id` (its Organization). "Inva
 - **Finding:** a detected issue with a money impact: `price_variance`, `repeat_purchase`, `split_purchase`, `concentration`, `outlier`. *Invariants:* has detector + version, saving estimate + method, confidence, and >= 1 Evidence id; computed by SQL/Python only.
 - **Evidence:** the link from a displayed figure to its source rows and the computation that produced it (computation id + inputs + code version). *Invariant:* no figure reaches a client (screen, PDF, chat) without one; recomputing from Evidence reproduces the figure exactly.
 - **Report:** a versioned set of Findings for one Organization and period. States: `draft -> in_review -> approved -> released` (or `rejected`). *Invariant:* invisible to client roles until `released`; release requires an approving Review; enforced at DB, API and UI.
-- **Review:** a named human's decision (`approve`, `edit`, `reject`) on a Finding or Report, with a note. Append-only; logged in the audit log.
-- **Ask:** the read-only, tenant-scoped chat over Findings and Evidence. *Invariant:* every numeric claim cites Evidence ids; uncited numbers are blocked before display.
+- **Review:** a named human's decision (`approve`, `edit`, `reject`) on a Finding or Report, with a note. Append-only; logged in the audit log. *Invariants (M3, enforced in the database):* a Report is approved only when every Finding has a decision and the approver signed a report-level approval; approval and release are two steps; a rejected Finding, its Evidence and its note never reach a client; `edit` and `reject` need a note.
+- **Two-person rule (`four_eyes`):** per-Organization switch, set only by a QazSupply admin. When on, whoever ran the analysis cannot approve it and the approver cannot release it.
+- **Ask:** the read-only, tenant-scoped chat over Findings and Evidence. *Invariants:* off until the Organization opts in (`ask_enabled`, admins only); answers only about released Reports; every numeric claim cites Evidence ids and equals a figure of what it cites; any sentence that fails the check is dropped before display, never shown (ADR 0008).
 
 ## Supplier 360 and compliance
 - **Party:** any person or entity in a chain (supplier, owner, carrier, consignee, bank). A Supplier is a Party.

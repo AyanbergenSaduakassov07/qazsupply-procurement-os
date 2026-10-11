@@ -88,3 +88,19 @@ Reviewed: `services/ingest`, `services/normalize`, `services/analyze`, `connecto
 | T36 | Supply chain | New deps (rapidfuzz, openpyxl, hypothesis, python-multipart) | Exact pins >= 14 days old; licence gate; OSV in CI | license_check, security-scan | Low |
 | T37 | Tampering | Hostile XML from the FX source (XXE / entity expansion) | DOCTYPE/ENTITY refused, 256 KB cap, no network in tests | `test_hostile_xml_is_refused` | Low |
 | T38 | Integrity | Controlled purge abused to erase audit history | DELETE-only, privileged roles only, inside a `qs.purge` transaction; UPDATE never allowed; runbook + owner approval | pgTAP m2 purge tests | Medium (privileged access is trusted by design) |
+
+## M3 update (2026-10-12): review gate, client report + PDF, Ask
+
+New boundaries: the reviewer console writes the release decision; a model provider (development: OpenRouter free endpoints, synthetic data only; production: Claude, D11) receives finding-level data from Ask.
+
+| # | STRIDE | Threat | Mitigation | Test | Residual |
+|---|---|---|---|---|---|
+| T39 | Elevation | Staff (or a bug) releases a report without review, or edits findings after review | DB trigger state machine: release only from `approved`; approval needs a decision on every finding + a signed approval; findings frozen after draft; API 403/409; UI shows only allowed steps | pgTAP `m3_review_gate` (44), integration `test_review_integration`, e2e review journey | Low (privileged DB roles bypass by design) |
+| T40 | Repudiation | A reviewer denies approving or releasing | Audit entries written by the DB trigger itself (hash-chained); `released_by` stamped from `auth.uid()`; reviews append-only, `clock_timestamp()` ordered | pgTAP audit counts; "released_by is the caller" | Low |
+| T41 | Info disclosure | Client sees a rejected finding, its evidence or the reviewer's internal note | `finding_visible` (latest decision not `reject`) on findings, evidence and reviews policies | pgTAP client checks; e2e "One-off emergency order" absent | Low |
+| T42 | Info disclosure | `staff_name` used to enumerate users' names | Answers only for staff of an org the caller belongs to; never emails | pgTAP reviewer-name checks | Low |
+| T43 | Info disclosure | Unreleased report leaked via the PDF URL | PDF built from the same API calls: client gets 404 until release | e2e PDF 404 before release | Low |
+| T44 | Tampering (prompt injection) | Supplier names, file cells, chat or history steer Ask to show false figures, links or the rules | No tools (untrusted text never gets tool access); data escaped in `<data>`; server validator drops unbacked numbers, unknown citations, links/emails, rule leaks, poisoned names | `evals/ask` obedient gate: 0/56 structural hijacks; validator unit + property tests | **Medium: text-only hijacks (no digits, no link) depend on the model; measured live** |
+| T45 | Info disclosure (third party) | Tenant data sent to a model provider | Opt-in per org (`ask_enabled`, admins only); findings-level fields only; no ids/BINs (F-refs), redaction; dev providers refused unless the DB is local | integration "no UUID in prompt", `test_llm_provider_choice` | Medium until a DPA with the production provider exists |
+| T46 | DoS / cost | Ask used to burn the AI budget | Monthly per-org budget + kill switch before every call; ledger on a service connection that commits even when blocked | integration kill-switch test | Low |
+| T47 | Spoofing | Client admin disables QazSupply's two-person rule | `four_eyes` changeable only by a QazSupply admin (DB trigger, 403) | pgTAP + integration settings test | Low |

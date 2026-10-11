@@ -15,11 +15,15 @@ M3 must make an unreviewed report unreachable for clients "at DB, API and UI, ea
 5. **Ask data boundary (owner):** Ask is off per organization until a client admin turns on `ask_enabled`. Only structured, finding-level tool results go to the model: type, item name, supplier name, amounts, Evidence ids. Raw uploaded rows never go, and BIN/IIN, emails and phones are redacted by the LLM gateway.
 6. **Development model provider (owner):** an OpenRouter free model (`google/gemma-4-31b-it:free`, fallback `nvidia/nemotron-3-super-120b-a12b:free`; chosen 2026-10-12 as the free models with both tool calling and structured output) runs on synthetic data only, because free endpoints may log or train on prompts (UNVERIFIED). The key lives in the owner's `.env.local` only. Production stays on Claude via the Anthropic adapter (D11), behind the same `services/llm` gateway.
 
+7. **Ask has no tools and validates before display.** The server loads the released report's kept findings (at most 60) into the prompt as escaped data, referenced as `F1..Fn`, so no UUID, BIN or raw row leaves. The model returns JSON sentences with citations. `services/ask/validate.py` drops any sentence whose numbers are not backed by what it cites, that cites an unknown ref, that contains a link or email, or that repeats the prompt's rules. Answers arrive whole and are revealed sentence by sentence. Tokens are not streamed, because an unchecked figure must never be on screen, even briefly.
+
 ## Alternatives considered
 - Enforce the flow only in the API: one missed code path, or a direct database client, could release an unreviewed report. Rejected; the database is the last line.
 - Separate `apps/review` Next.js app: a second auth, CSP and i18n surface to secure and test for no user-facing gain at this size. Revisit if reviewers need a different deployment or domain.
 - Four-eyes always on: safest, but it blocks every release while the owner is the only reviewer.
 - Send source purchase lines to the model: better drill-down answers, but more commercial data leaves the boundary. Revisit per client with consent.
+- Ask as a tool-using agent (spec C05 sketched `get_findings` / `get_evidence` tools): the tools would only fetch the findings we already load, and tool access for a model reading untrusted supplier text breaks CLAUDE.md rule 5. Pre-loading is simpler and safer.
+- Token streaming (Vercel AI SDK): faster first paint, but it shows numbers before the validator has checked them.
 
 ## Consequences
 - Seeds, migrations and test fixtures run as privileged roles and bypass the guards (as with RLS). Application code must always run as `authenticated`.
