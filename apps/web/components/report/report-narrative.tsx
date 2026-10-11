@@ -115,7 +115,7 @@ export function ReportNarrative({
       id: report.id,
       computationId: report.id,
       method: title,
-      codeVersion: "report",
+      codeVersion: "—", // a sum of findings has no code version of its own
       confidence: "—",
       formula: labels.headlineEvidence,
       result: money(tiyn),
