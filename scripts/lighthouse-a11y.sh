@@ -25,7 +25,9 @@ HEADERS="$OUT/headers.json"
 printf '{"Cookie":"qs_access_token=%s"}' "$TOKEN" > "$HEADERS"
 fail=0
 for path in /en/sign-in /ru/sign-in /kk/sign-in /en /ru /kk /en/audit /en/settings /en/gallery \
-  /en/spend /kk/spend /en/spend/review /en/spend/reports; do
+  /en/spend /kk/spend /en/spend/review /en/spend/reports \
+  /en/spend/reports/40000000-0000-4000-a000-00000000000a \
+  /kk/spend/reports/40000000-0000-4000-a000-00000000000a; do
   extra=()
   [[ "$path" == */sign-in ]] || extra=(--extra-headers="$HEADERS")
   npx --yes "$LIGHTHOUSE" "$BASE$path" --only-categories=accessibility --output=json \
