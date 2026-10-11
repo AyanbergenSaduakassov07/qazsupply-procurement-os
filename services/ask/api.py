@@ -72,17 +72,17 @@ class Answer:
     numbers_cited: int
 
 
-def ask(
-    conn: UserConn,
-    org_id: UUID,
-    report_id: UUID,
-    question: str,
-    history: list[Turn],
-    *,
-    runner: Runner,
-    model: str,
-    locale: str,
-) -> Answer:
+@dataclass(frozen=True)
+class Context:
+    """What one question is answered from, loaded under the caller's RLS."""
+
+    head: dict[str, Any]
+    findings: list[dict[str, Any]]
+
+
+def load(conn: UserConn, org_id: UUID, report_id: UUID) -> Context:
+    """Check opt-in and release, and load the kept findings. Short: call it in its own
+    transaction and release the connection before the (slow) model call."""
     enabled = conn.execute(
         "select ask_enabled from public.organizations where id = %s", (org_id,)
     ).fetchone()
@@ -94,9 +94,7 @@ def ask(
     if head["status"] not in ("released", "superseded"):
         raise NotReleased
     kept = [f for f in analyze.findings(conn, org_id, report_id) if f["decision"] != "reject"]
-    return answer_from(
-        head, kept, question, history, runner=runner, model=model, locale=locale, org_id=org_id
-    )
+    return Context(head, kept)
 
 
 def answer_from(
@@ -110,7 +108,7 @@ def answer_from(
     locale: str,
     org_id: UUID,
 ) -> Answer:
-    """The DB-free core: build the context, ask the model, validate. Used by `ask` and evals."""
+    """The DB-free core: build the prompt, ask the model, validate. Used by the route and evals."""
     kept = sorted(findings, key=lambda f: Decimal(f["saving_estimate"]), reverse=True)
     kept = kept[:MAX_FINDINGS]
     refs: dict[str, str] = {}  # F1 -> evidence id

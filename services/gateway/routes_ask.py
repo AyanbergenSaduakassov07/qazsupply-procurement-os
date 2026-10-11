@@ -9,8 +9,15 @@ from pydantic import BaseModel, Field, StringConstraints
 
 from services.ask import api as ask
 from services.gateway.db import Database
-from services.gateway.deps import OrgConn
-from services.llm.api import Gateway, LlmBlocked, PostgresLedger, ProviderError
+from services.gateway.deps import Who
+from services.llm.api import (
+    Gateway,
+    LlmBlocked,
+    PooledLedger,
+    ProviderError,
+    TransientProviderError,
+)
+from services.tenancy import api as tenancy
 
 router = APIRouter(tags=["ask"])
 logger = logging.getLogger("gateway")
@@ -42,44 +49,44 @@ class AskAnswer(BaseModel):
 
 @router.post("/orgs/{org_id}/reports/{report_id}/ask")
 def ask_report(
-    org_id: UUID, report_id: UUID, body: AskRequest, conn: OrgConn, request: Request
+    org_id: UUID, report_id: UUID, body: AskRequest, who: Who, request: Request
 ) -> AskAnswer:
     provider = request.app.state.llm_provider
     if provider is None:
         raise HTTPException(503, {"code": "ask_unavailable"})
     db: Database = request.app.state.db
-    error: Exception | None = None
-    answer: ask.Answer | None = None
-    # The ledger commits on its own connection even when the call fails (budget, kill switch).
-    with db.service() as svc:
-        try:
-            answer = ask.ask(
-                conn,
-                org_id,
-                report_id,
-                body.question,
-                [ask.Turn(t.role, t.text) for t in body.history],
-                runner=Gateway(provider, PostgresLedger(svc)),
-                model=request.app.state.ask_model,
-                locale=body.locale,
-            )
-        except Exception as e:  # noqa: BLE001 - re-raised as an HTTP error below
-            error = e
-    if isinstance(error, ask.AskDisabled):
-        raise HTTPException(409, {"code": "ask_disabled"})
-    if isinstance(error, ask.NotReleased):
-        raise HTTPException(409, {"code": "not_released"})
-    if isinstance(error, LookupError):
-        raise HTTPException(404, "not found")
-    if isinstance(error, LlmBlocked):
-        status = 429 if error.status == "blocked_budget" else 503
-        raise HTTPException(status, {"code": error.status})
-    if isinstance(error, (ProviderError, TimeoutError)):
-        logger.warning("ask provider failure", extra={"error_type": type(error).__name__})
-        raise HTTPException(502, {"code": "model_error"})
-    if error is not None:
-        raise error
-    assert answer is not None
+    # 1. Load under the caller's RLS in a short transaction, then release the connection:
+    #    the model call can take a minute and must not hold a pooled connection.
+    try:
+        with db.as_user(who) as conn:
+            if not tenancy.is_member(conn, org_id):
+                raise LookupError("org")
+            context = ask.load(conn, org_id, report_id)
+    except ask.AskDisabled:
+        raise HTTPException(409, {"code": "ask_disabled"}) from None
+    except ask.NotReleased:
+        raise HTTPException(409, {"code": "not_released"}) from None
+    except LookupError:
+        raise HTTPException(404, "not found") from None
+    # 2. Ask the model (no connection held); the ledger borrows one per short write.
+    try:
+        answer = ask.answer_from(
+            context.head,
+            context.findings,
+            body.question,
+            [ask.Turn(t.role, t.text) for t in body.history],
+            runner=Gateway(provider, PooledLedger(db.service)),
+            model=request.app.state.ask_model,
+            locale=body.locale,
+            org_id=org_id,
+        )
+    except LlmBlocked as e:
+        raise HTTPException(
+            429 if e.status == "blocked_budget" else 503, {"code": e.status}
+        ) from None
+    except (ProviderError, TimeoutError, TransientProviderError) as e:
+        logger.warning("ask provider failure", extra={"error_type": type(e).__name__})
+        raise HTTPException(502, {"code": "model_error"}) from None
     return AskAnswer(
         answerable=answer.answerable,
         sentences=[AskSentence(**s) for s in answer.sentences],

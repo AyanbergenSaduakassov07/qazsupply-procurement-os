@@ -1,5 +1,7 @@
 """Postgres ledger for LLM calls. Uses a service connection: llm_calls has no user write grant."""
 
+from collections.abc import Callable
+from contextlib import AbstractContextManager
 from decimal import Decimal
 from uuid import UUID
 
@@ -45,3 +47,25 @@ class PostgresLedger:
                 call.status,
             ),
         )
+
+
+class PooledLedger:
+    """A ledger that borrows a service connection only for each short read or write, so a slow
+    model call never holds a database connection."""
+
+    def __init__(
+        self, connect: Callable[[], AbstractContextManager[Connection[tuple[object, ...]]]]
+    ) -> None:
+        self._connect = connect
+
+    def month_spend_usd(self, org_id: UUID) -> Decimal:
+        with self._connect() as conn:
+            return PostgresLedger(conn).month_spend_usd(org_id)
+
+    def monthly_budget_usd(self, org_id: UUID) -> Decimal:
+        with self._connect() as conn:
+            return PostgresLedger(conn).monthly_budget_usd(org_id)
+
+    def record(self, call: CallRecord) -> None:
+        with self._connect() as conn:
+            PostgresLedger(conn).record(call)
