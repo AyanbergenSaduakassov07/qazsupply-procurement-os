@@ -34,3 +34,9 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Fixed:** visual gate was too lenient (1% of pixels let a changed menu pass) -> max 100 px; audit table columns depended on content length -> fixed table layout; local auth rate limit made runs flaky -> raised in local config only; parallel viewports shared the review queue -> keyboard journey on desktop only.
 - **Phase end:** STRIDE M2 update (T26-T38), tech debt D15-D20, CONTEXT terms, module READMEs, eval report `evals/REPORT-M2.md`, PROGRESS -> blocked (gate needs real data).
 - **Next:** owner review of the M2 PR (stacked on PR #1); provide real data to evaluate the gate. M3 is after Gate A and must not start before.
+
+## 2026-10-11 | tidy | branch `chore/repo-tidy` (stacked on M2)
+- **Done:** shared gateway test support (`testing.py`, `conftest.py`) replaces helpers duplicated across four integration suites; gateway split into `app.py` (composition root), `deps.py`, `routes_core.py`, `routes_spend.py` (OpenAPI byte-identical); `make help`; `CHANGELOG.md`; README status, docs map, gateway and scripts READMEs updated for M2; Hypothesis cache ignored.
+- **Results:** `make check` green (JS lint/typecheck/tests, ruff, mypy, 76 unit + 15 contract); full pytest incl. 24 integration green on the local stack.
+- **Not run:** e2e, visual and Lighthouse (no UI change in this branch).
+- **Next:** owner approval to push and open a draft PR against `m2-spend-xray-engine`.
