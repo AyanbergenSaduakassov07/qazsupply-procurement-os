@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 
 import { OrgSettings } from "../../../../components/shell/org-settings";
 import { SettingsControls } from "../../../../components/shell/settings-controls";
+import { RiskWeights } from "../../../../components/suppliers/risk-weights";
 import { getSession } from "../../../../lib/session";
+import { supplierLabels } from "../../../../lib/supplier-labels";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 
@@ -29,6 +31,15 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
         ).data
       : undefined;
   const admin = org?.role === "client_admin" || org?.role === "qazsupply_admin";
+  const weights =
+    session.status === "authenticated" && org && org.role !== "supplier"
+      ? (
+          await apiClient(API_URL, session.token).GET("/orgs/{org_id}/risk-weights", {
+            params: { path: { org_id: org.org_id } },
+          })
+        ).data
+      : undefined;
+  const s360 = supplierLabels(locale);
 
   return (
     <div className="max-w-2xl">
@@ -71,6 +82,28 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
                 saved: t(locale, "settings.saved"),
                 adminOnly: t(locale, "settings.adminOnly"),
                 error: t(locale, "common.error"),
+              }}
+            />
+          </CardBody>
+        </Card>
+      )}
+      {weights && (
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle>{s360["weights.title"]}</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <RiskWeights
+              defaults={weights.defaults}
+              weights={weights.weights}
+              canEdit={admin}
+              labels={{
+                factor: s360.factor,
+                hint: s360["weights.hint"],
+                save: s360["weights.save"],
+                saved: s360["weights.saved"],
+                defaultN: s360["weights.default"],
+                error: s360.error,
               }}
             />
           </CardBody>

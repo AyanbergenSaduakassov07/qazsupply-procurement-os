@@ -91,6 +91,25 @@ test.describe("client admin of Org A", () => {
   });
 });
 
+test.describe("risk weights (Settings)", () => {
+  test.use({ storageState: ".auth/clientAdminA.json" });
+
+  test("an admin changes a factor weight and restores it", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop", "one project mutates org settings");
+    await page.goto("/en/settings");
+    const input = page.getByLabel("Registered less than 2 years ago");
+    await input.fill("0");
+    await page.getByRole("button", { name: "Save weights" }).click();
+    await expect(page.getByText("Weights saved")).toBeVisible();
+    await page.reload();
+    await expect(page.getByLabel("Registered less than 2 years ago")).toHaveValue("0");
+    await page.getByLabel("Registered less than 2 years ago").fill("10");
+    await page.getByRole("button", { name: "Save weights" }).click();
+    await expect(page.getByText("Weights saved")).toBeVisible();
+    await axe(page);
+  });
+});
+
 test.describe("client user of Org A", () => {
   test.use({ storageState: ".auth/clientUserA.json" });
 
@@ -99,5 +118,11 @@ test.describe("client user of Org A", () => {
     await page.getByRole("tab", { name: "Screening" }).click();
     await expect(page.getByTestId("hit").first()).toBeVisible();
     await expect(page.getByRole("button", { name: "Confirm match" })).toHaveCount(0);
+  });
+
+  test("sees risk weights read-only", async ({ page }) => {
+    await page.goto("/en/settings");
+    await expect(page.getByLabel("Registered less than 2 years ago")).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Save weights" })).toHaveCount(0);
   });
 });
