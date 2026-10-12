@@ -93,6 +93,12 @@ def _supplier_id(
     if key in cache_:
         return cache_[key], False
     kind, value = key
+    # Lookup-or-insert must not race a concurrent upload in the same org (it created duplicate
+    # suppliers). Held to the end of the run's transaction; re-taking it is a no-op.
+    # ponytail: one lock per org serialises concurrent normalisation runs; fine at upload rates.
+    conn.execute(
+        "select pg_advisory_xact_lock(hashtextextended('suppliers:' || %s::text, 0))", (org_id,)
+    )
     if kind == "bin":
         row = conn.execute(
             """select id from public.suppliers

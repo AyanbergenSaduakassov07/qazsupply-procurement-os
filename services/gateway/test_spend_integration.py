@@ -141,3 +141,55 @@ def test_concurrent_uploads_do_not_deadlock(client: TestClient) -> None:
     with ThreadPoolExecutor(4) as pool:
         codes = list(pool.map(one, range(4), timeout=30))
     assert codes == [200, 200, 200, 200]
+
+
+def test_concurrent_normalisation_resolves_one_supplier_per_bin(client: TestClient) -> None:
+    """Supplier lookup-or-insert raced across concurrent normalisation runs and duplicated suppliers
+    (three "ТОО «Альфа»" rows with one BIN in the 2026-10-12 demo database)."""
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+    from secrets import randbelow
+
+    from services.normalize.suppliers import bin_checksum_ok
+
+    bin_ = next(b for b in (f"{randbelow(10**12):012d}" for _ in range(1000)) if bin_checksum_ok(b))
+    head = "Наименование;Кол-во;Ед. изм.;Цена;Дата;Поставщик;БИН\n"
+
+    def one(i: int) -> int:
+        row = f"Цемент М400 партия {i};10;т;31 000,00;14.03.2026;ТОО «Race {bin_}»;{bin_}\n"
+        data = (head + row).encode("cp1251")
+        up = post(
+            client,
+            "clientUserA",
+            f"/orgs/{ORG_A}/uploads",
+            f"it-race-{i}.csv",
+            data,
+            mapping=RU_MAPPING,
+        )
+        assert up.status_code == 200
+        barrier.wait(timeout=20)  # all four normalisation runs start together
+        return client.post(
+            f"/orgs/{ORG_A}/normalize",
+            headers={"Authorization": f"Bearer {token('clientUserA')}"},
+            json={"file_id": up.json()["file_id"]},
+        ).status_code
+
+    barrier = threading.Barrier(4)
+    try:
+        with ThreadPoolExecutor(4) as pool:
+            assert list(pool.map(one, range(4), timeout=60)) == [200] * 4
+        import psycopg
+
+        from services.gateway.testing import DB
+
+        with psycopg.connect(DB) as conn:
+            row = conn.execute(
+                "select count(*) from public.suppliers where org_id = %s and bin = %s",
+                (ORG_A, bin_),
+            ).fetchone()
+        assert row == (1,)
+    finally:
+        purge(
+            ("delete from public.files where name like 'it-race-%%'", ()),
+            ("delete from public.suppliers where bin = %s", (bin_,)),
+        )
