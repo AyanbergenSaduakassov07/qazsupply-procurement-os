@@ -128,3 +128,24 @@ insert into public.audit_log (org_id, actor_id, action, entity, entity_id, detai
 insert into public.match_feedback (org_id, purchase_line_id, action, chosen_code, reviewer_id)
 select org_id, id, 'accept', 'SYN-PPE-001', '00000000-0000-4000-a000-0000000000b1'
 from public.purchase_lines where org_id = '10000000-0000-4000-a000-00000000000b' limit 1;
+
+-- M4: one Org B row in each Supplier 360 table (tenant-isolation suite). Invented sample data.
+insert into public.parties (id, org_id, kind, name, country, bin, source_id, source_ref, fetched_at, licence, sample)
+values
+  ('90000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b', 'company',
+   'ТОО «Б Сэмпл»', 'KZ', '000000000000', 'registries', 'SAMPLE-B-1', now(), 'synthetic sample', true),
+  ('90000000-0000-4000-a000-0000000000b2', '10000000-0000-4000-a000-00000000000b', 'person',
+   'Sample Person B', 'KZ', null, 'registries', 'SAMPLE-B-P1', now(), 'synthetic sample', true);
+insert into public.ownership_links (org_id, owner_id, owned_id, role, share_pct, source_id, fetched_at, licence, sample)
+values ('10000000-0000-4000-a000-00000000000b', '90000000-0000-4000-a000-0000000000b2',
+  '90000000-0000-4000-a000-00000000000b', 'beneficial_owner', 100, 'registries', now(), 'synthetic sample', true);
+insert into public.screenings (id, org_id, party_id, list_source, list_version, trigger, result, sample, checked_by)
+values ('91000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
+  '90000000-0000-4000-a000-0000000000b2', 'opensanctions', 'sample-2026-10-12', 'manual', 'possible_match', true,
+  '00000000-0000-4000-a000-0000000000b1');
+insert into public.screening_hits (id, org_id, screening_id, entry_id, entry_name, score)
+values ('92000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
+  '91000000-0000-4000-a000-00000000000b', 'SAMPLE-SAN-B', 'Sample Persson B', 91);
+insert into public.hit_decisions (org_id, hit_id, decision, reason_code, decided_by)
+values ('10000000-0000-4000-a000-00000000000b', '92000000-0000-4000-a000-00000000000b', 'dismissed',
+  'different_birth_year', '00000000-0000-4000-a000-0000000000b1');
