@@ -113,6 +113,9 @@ export function reviewLabels(locale: Locale): ReviewLabels {
     selected: tt("selected"),
     error: t(locale, "common.error"),
     listLabel: tt("title"),
+    search: tt("search"),
+    searchButton: tt("searchButton"),
+    searchEmpty: tt("searchEmpty"),
   };
 }
 

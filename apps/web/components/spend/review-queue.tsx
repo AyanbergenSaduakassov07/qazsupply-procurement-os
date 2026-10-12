@@ -5,7 +5,7 @@ import { Button } from "@qazsupply/ui/components/button";
 import { EmptyState } from "@qazsupply/ui/components/states";
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 
-import { reviewLine } from "../../app/spend-actions";
+import { type ClassifierEntry, reviewLine, searchClassifier } from "../../app/spend-actions";
 
 export interface QueueCandidate {
   code: string;
@@ -52,6 +52,9 @@ export interface ReviewLabels {
   selected: string;
   error: string;
   listLabel: string;
+  search: string;
+  searchButton: string;
+  searchEmpty: string;
 }
 
 export function ReviewQueue({
@@ -282,10 +285,79 @@ export function ReviewQueue({
                   ))}
                 </ol>
               )}
+              <ClassifierSearch
+                labels={labels}
+                locale={locale}
+                busy={busy}
+                onChoose={(code) => void decide(line, "choose", code)}
+              />
             </article>
           ))}
         </fieldset>
       )}
     </div>
+  );
+}
+
+function ClassifierSearch({
+  labels,
+  locale,
+  busy,
+  onChoose,
+}: {
+  labels: ReviewLabels;
+  locale: string;
+  busy: boolean;
+  onChoose: (code: string) => void;
+}) {
+  const [hits, setHits] = useState<ClassifierEntry[] | null>(null);
+  const [error, setError] = useState(false);
+  const search = async (form: FormData) => {
+    const result = await searchClassifier(String(form.get("q") ?? ""));
+    setError(!result.ok);
+    setHits(result.ok ? result.entries : null);
+  };
+  return (
+    <details className="mt-3 text-sm">
+      <summary className="cursor-pointer text-muted">{labels.search}</summary>
+      <search>
+        <form action={search} className="mt-2 flex flex-wrap gap-2">
+          <input
+            type="search"
+            name="q"
+            aria-label={labels.search}
+            maxLength={100}
+            className="min-w-0 flex-1 rounded border border-line bg-surface px-2 py-1 text-ink"
+          />
+          <Button size="sm" variant="secondary" type="submit">
+            {labels.searchButton}
+          </Button>
+        </form>
+      </search>
+      {error && <p className="mt-2 text-risk">{labels.error}</p>}
+      {hits?.length === 0 && <p className="mt-2 text-muted">{labels.searchEmpty}</p>}
+      {hits && hits.length > 0 && (
+        <ul className="mt-2 space-y-2">
+          {hits.map((h) => {
+            const name = locale === "kk" ? h.name_kk : h.name_ru;
+            return (
+              <li key={h.code} className="flex flex-wrap items-center gap-2">
+                <span className="text-ink">{name}</span>
+                <span className="font-mono text-xs text-muted">{h.code}</span>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onChoose(h.code)}
+                  disabled={busy}
+                  aria-label={`${labels.choose}: ${name}`}
+                >
+                  {labels.choose}
+                </Button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </details>
   );
 }

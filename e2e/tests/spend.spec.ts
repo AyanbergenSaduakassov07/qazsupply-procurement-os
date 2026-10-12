@@ -10,6 +10,8 @@ import { expect, type Page, test } from "@playwright/test";
 // Playwright runs from e2e/ (package root); fixtures are the ingest module's synthetic files.
 const FIX = resolve(process.cwd(), "../services/ingest/fixtures");
 const fixture = (name: string) => readFileSync(resolve(FIX, name));
+// The queue shows the 50 most recent purchases first: date test lines today so they are on page 1.
+const today = () => new Date().toISOString().slice(0, 10);
 const unique = (buf: Buffer) =>
   Buffer.concat([buf, Buffer.from(`\n#${Date.now()}-${Math.random()}\n`)]);
 
@@ -82,6 +84,28 @@ test.describe("client admin of Org B", () => {
     expect(await page.locator("script", { hasText: "alert(1)" }).count()).toBe(0);
   });
 
+  test("a line with no good suggestion is matched by searching the classifier", async ({
+    page,
+  }) => {
+    // Own line per run and viewport, so parallel review journeys never race for it.
+    const item = `Zqx widget ${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const csv = `Description,Qty,UoM,Unit price,Date,Supplier\n${item},2,pcs,1000.00,${today()},Alfa LLP\n`;
+    await page.goto("/en/spend");
+    await choose(page, "search.csv", Buffer.from(csv));
+    await page.getByRole("button", { name: "Import rows" }).click();
+    await expect(page.getByTestId("import-result")).toBeVisible();
+    await page.goto("/en/spend/review");
+    const line = page.getByRole("article", { name: item });
+    await line.getByText("Search the classifier").click();
+    await line.getByRole("searchbox", { name: "Search the classifier" }).fill("перчатки");
+    await line.getByRole("button", { name: "Search", exact: true }).click();
+    await expect(line.getByRole("button", { name: "Use this: Перчатки нитриловые" })).toBeVisible();
+    await axe(page);
+    await line.getByRole("button", { name: "Use this: Перчатки нитриловые" }).click();
+    await expect(page.getByTestId("review-status")).toHaveText("Saved");
+    await expect(page.getByRole("article", { name: item })).toHaveCount(0);
+  });
+
   test("clients cannot run the analysis", async ({ page }) => {
     await page.goto("/en/spend/reports");
     await expect(page.getByRole("button", { name: "Run analysis" })).toHaveCount(0);
@@ -91,25 +115,36 @@ test.describe("client admin of Org B", () => {
 test.describe("reviewer (Org B is the reviewer's default org)", () => {
   test.use({ storageState: ".auth/reviewer.json" });
 
-  test("keyboard-only review: R marks no match, U undoes", async ({ page }, testInfo) => {
-    // Keyboard journey on the keyboard viewport only; viewports run in parallel against the
-    // same queue, so one project must own this mutation to keep the assertion deterministic.
+  test("keyboard-only review: R marks no match, U undoes", async ({ page, browser }, testInfo) => {
     test.skip(testInfo.project.name !== "desktop", "keyboard-only journey runs on desktop");
+    // The queue is shared with parallel journeys (and repeated fixture texts), so the reviewer
+    // works on a line of its own, uploaded by the client admin.
+    const item = `Kbd line ${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const client = await browser.newContext({ storageState: ".auth/clientAdminB.json" });
+    const upload = await client.newPage();
+    await upload.goto("/en/spend");
+    await choose(
+      upload,
+      "kbd.csv",
+      Buffer.from(
+        `Description,Qty,UoM,Unit price,Date,Supplier\n${item},1,pcs,500.00,${today()},Alfa LLP\n`,
+      ),
+    );
+    await upload.getByRole("button", { name: "Import rows" }).click();
+    await expect(upload.getByTestId("import-result")).toBeVisible();
+    await client.close();
+
     await page.goto("/en/spend/review");
-    const first = page.getByTestId("review-line").first();
-    await expect(first).toBeVisible();
+    const mine = page.getByRole("article", { name: item });
+    await expect(mine).toBeVisible();
     await axe(page);
-    const text = await first.getAttribute("aria-label");
-    await first.focus();
+    await mine.focus();
     await page.keyboard.press("r");
     await expect(page.getByTestId("review-status")).toHaveText("Saved");
-    await expect(page.getByTestId("review-line").first()).not.toHaveAttribute(
-      "aria-label",
-      text ?? "",
-    );
+    await expect(mine).toHaveCount(0);
     await page.keyboard.press("u");
     await expect(page.getByTestId("review-status")).toHaveText("Undone");
-    await expect(page.getByTestId("review-line").first()).toHaveAttribute("aria-label", text ?? "");
+    await expect(mine).toHaveCount(1);
   });
 
   test("run the analysis and open the evidence behind a number", async ({ page }) => {

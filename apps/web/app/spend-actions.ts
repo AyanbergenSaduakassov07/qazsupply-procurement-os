@@ -123,6 +123,26 @@ export async function importUpload(form: FormData): Promise<Imported | Fail> {
   };
 }
 
+export interface ClassifierEntry {
+  code: string;
+  name_ru: string;
+  name_kk: string;
+  unit: string;
+}
+
+/** Free search over the classifier, for lines whose suggestions are all wrong (D20). */
+export async function searchClassifier(
+  q: string,
+): Promise<{ ok: true; entries: ClassifierEntry[] } | Fail> {
+  const c = await ctx();
+  if ("ok" in c) return c;
+  const { data, response } = await apiClient(API_URL, c.token).GET("/orgs/{org_id}/classifier", {
+    params: { path: { org_id: c.orgId }, query: { q: q.slice(0, 100), limit: 10 } },
+  });
+  if (!data) return { ok: false, code: await errorCode(response) };
+  return { ok: true, entries: data.entries };
+}
+
 const ACTIONS = new Set(["accept", "choose", "reject", "undo"]);
 
 export async function reviewLine(
