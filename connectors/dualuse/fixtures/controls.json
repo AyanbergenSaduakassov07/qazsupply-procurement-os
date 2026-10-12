@@ -1,0 +1,34 @@
+{
+  "version": "sample-2026-10-12",
+  "licence": "synthetic sample (no third-party data); NOT a legal control list",
+  "controls": [
+    {
+      "id": "SAMPLE-DU-01",
+      "label_en": "Thermal imaging cameras (sample)",
+      "label_ru": "Тепловизоры (образец)",
+      "label_kk": "Жылу бейнелегіштер (үлгі)",
+      "keywords": ["тепловизор", "тепловизионн", "thermal imag", "жылу бейнеле"]
+    },
+    {
+      "id": "SAMPLE-DU-02",
+      "label_en": "Industrial drones (sample)",
+      "label_ru": "Промышленные дроны (образец)",
+      "label_kk": "Өнеркәсіптік дрондар (үлгі)",
+      "keywords": ["дрон", "бпла", "квадрокоптер", "drone", "uav"]
+    },
+    {
+      "id": "SAMPLE-DU-03",
+      "label_en": "Industrial explosives and detonators (sample)",
+      "label_ru": "Промышленные ВВ и детонаторы (образец)",
+      "label_kk": "Өнеркәсіптік жарылғыш заттар (үлгі)",
+      "keywords": ["детонатор", "аммонит", "взрывчат", "detonator", "explosive"]
+    },
+    {
+      "id": "SAMPLE-DU-04",
+      "label_en": "Encryption network equipment (sample)",
+      "label_ru": "Шифровальное сетевое оборудование (образец)",
+      "label_kk": "Шифрлау желілік жабдығы (үлгі)",
+      "keywords": ["шифратор", "криптошлюз", "vpn-шлюз", "encryption gateway"]
+    }
+  ]
+}

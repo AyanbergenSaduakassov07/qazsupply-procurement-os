@@ -1,0 +1,15 @@
+{
+  "version": "sample-2026-10-12",
+  "licence": "synthetic sample (no third-party data)",
+  "entries": [
+    {
+      "bin": "210987654321",
+      "name": "ТОО «Бета»",
+      "included_on": "2025-11-03",
+      "until": "2027-11-03",
+      "reason_ru": "Неисполнение договора о государственных закупках (образец)",
+      "reason_kk": "Мемлекеттік сатып алу шартын орындамау (үлгі)",
+      "reason_en": "Failure to perform a public procurement contract (sample)"
+    }
+  ]
+}

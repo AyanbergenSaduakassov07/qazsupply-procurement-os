@@ -1,0 +1,96 @@
+{
+  "version": "sample-2026-10-12",
+  "licence": "synthetic sample (no third-party data); real data needs an OpenSanctions licence",
+  "entities": [
+    {
+      "id": "SAMPLE-SAN-001",
+      "schema": "Person",
+      "names": ["SAPAROVA, Aigul Nurlanovna", "Сапарова Айгуль Нурлановна"],
+      "birth_year": 1979,
+      "countries": ["kz"],
+      "topics": ["sanction"],
+      "program": "Sample asset freeze list"
+    },
+    {
+      "id": "SAMPLE-SAN-002",
+      "schema": "Person",
+      "names": ["KIM, Viktor"],
+      "birth_year": 1991,
+      "countries": ["ru"],
+      "topics": ["sanction"],
+      "program": "Sample travel ban list"
+    },
+    {
+      "id": "SAMPLE-SAN-003",
+      "schema": "Company",
+      "names": ["Steppe Trade Holding LLP", "ТОО Степь Трейд Холдинг"],
+      "birth_year": null,
+      "countries": ["kz"],
+      "topics": ["sanction"],
+      "program": "Sample sectoral list"
+    },
+    {
+      "id": "SAMPLE-PEP-001",
+      "schema": "Person",
+      "names": ["Abenov Yerlan Maratovich", "Әбенов Ерлан Маратұлы"],
+      "birth_year": 1985,
+      "countries": ["kz"],
+      "topics": ["role.pep"],
+      "program": "Sample PEP list: regional official"
+    },
+    {
+      "id": "SAMPLE-SAN-004",
+      "schema": "Person",
+      "names": ["Ivanov Pyotr Andreevich"],
+      "birth_year": 1960,
+      "countries": ["ru"],
+      "topics": ["sanction"],
+      "program": "Sample asset freeze list"
+    },
+    {
+      "id": "SAMPLE-SAN-005",
+      "schema": "Company",
+      "names": ["Northern Lights Shipping Ltd"],
+      "birth_year": null,
+      "countries": ["ae"],
+      "topics": ["sanction"],
+      "program": "Sample sectoral list"
+    },
+    {
+      "id": "SAMPLE-SAN-006",
+      "schema": "Person",
+      "names": ["Tokhtarov Bolat"],
+      "birth_year": 1977,
+      "countries": ["kz"],
+      "topics": ["crime.fin"],
+      "program": "Sample enforcement list"
+    },
+    {
+      "id": "SAMPLE-SAN-007",
+      "schema": "Company",
+      "names": ["Caspian Bridge Trading FZE"],
+      "birth_year": null,
+      "countries": ["ae"],
+      "topics": ["sanction"],
+      "program": "Sample sectoral list"
+    },
+    {
+      "id": "SAMPLE-SAN-008",
+      "schema": "Person",
+      "names": ["Sergeeva Galina"],
+      "birth_year": 1958,
+      "countries": ["by"],
+      "topics": ["sanction"],
+      "program": "Sample travel ban list"
+    },
+    {
+      "id": "SAMPLE-PEP-002",
+      "schema": "Person",
+      "names": ["Mukanov Daniyar"],
+      "birth_year": 1970,
+      "countries": ["kz"],
+      "topics": ["role.pep"],
+      "program": "Sample PEP list: member of parliament"
+    }
+  ]
+}

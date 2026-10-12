@@ -1,0 +1,652 @@
+{
+  "version": "sample-2026-10-12",
+  "licence": "synthetic sample (no third-party data)",
+  "companies": [
+    {
+      "bin": "123456789012",
+      "name": "ТОО «Альфа»",
+      "status": "active",
+      "registered_on": "2015-03-02",
+      "country": "KZ",
+      "oked": "46.69",
+      "owners": [
+        {
+          "ref": "P-001",
+          "kind": "person",
+          "name": "Сапарова Айгүл Нұрланқызы",
+          "country": "KZ",
+          "birth_year": 1979,
+          "role": "shareholder",
+          "share_pct": 60
+        },
+        {
+          "ref": "200540000001",
+          "kind": "company",
+          "bin": "200540000001",
+          "role": "shareholder",
+          "share_pct": 40
+        },
+        {
+          "ref": "P-001",
+          "kind": "person",
+          "name": "Сапарова Айгүл Нұрланқызы",
+          "country": "KZ",
+          "birth_year": 1979,
+          "role": "beneficial_owner",
+          "share_pct": 60
+        },
+        {
+          "ref": "P-002",
+          "kind": "person",
+          "name": "Ким Виктор Сергеевич",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "beneficial_owner",
+          "share_pct": 40
+        },
+        {
+          "ref": "P-003",
+          "kind": "person",
+          "name": "Әбенов Ерлан Маратұлы",
+          "country": "KZ",
+          "birth_year": 1985,
+          "role": "director",
+          "share_pct": null
+        }
+      ]
+    },
+    {
+      "bin": "200540000001",
+      "name": "ТОО «Степь Трейд Холдинг»",
+      "status": "active",
+      "registered_on": "2005-04-11",
+      "country": "KZ",
+      "oked": "64.20",
+      "owners": [
+        {
+          "ref": "P-002",
+          "kind": "person",
+          "name": "Ким Виктор Сергеевич",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "shareholder",
+          "share_pct": 100
+        },
+        {
+          "ref": "P-002",
+          "kind": "person",
+          "name": "Ким Виктор Сергеевич",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "beneficial_owner",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "210987654321",
+      "name": "ТОО «Бета»",
+      "status": "active",
+      "registered_on": "2021-09-15",
+      "country": "KZ",
+      "oked": "28.15",
+      "owners": [
+        {
+          "ref": "P-004",
+          "kind": "person",
+          "name": "Жанұзақов Нұрлан Серікұлы",
+          "country": "KZ",
+          "birth_year": 1972,
+          "role": "shareholder",
+          "share_pct": 100
+        },
+        {
+          "ref": "P-004",
+          "kind": "person",
+          "name": "Жанұзақов Нұрлан Серікұлы",
+          "country": "KZ",
+          "birth_year": 1972,
+          "role": "beneficial_owner",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "100140011111",
+      "name": "ТОО «Альфа Снаб»",
+      "status": "active",
+      "registered_on": "2010-01-14",
+      "country": "KZ",
+      "oked": "46.90",
+      "owners": [
+        {
+          "ref": "P-005",
+          "kind": "person",
+          "name": "Омарова Дана Тимурқызы",
+          "country": "KZ",
+          "birth_year": 1990,
+          "role": "shareholder",
+          "share_pct": 100
+        },
+        {
+          "ref": "P-005",
+          "kind": "person",
+          "name": "Омарова Дана Тимурқызы",
+          "country": "KZ",
+          "birth_year": 1990,
+          "role": "beneficial_owner",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "100140022222",
+      "name": "ТОО «Бета Логистик»",
+      "status": "liquidated",
+      "registered_on": "2010-01-14",
+      "country": "KZ",
+      "oked": "49.41",
+      "owners": [
+        {
+          "ref": "P-006",
+          "kind": "person",
+          "name": "Петров Тимур Олегович",
+          "country": "KZ",
+          "birth_year": 1981,
+          "role": "shareholder",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "100140033333",
+      "name": "ТОО «Гамма Индастри»",
+      "status": "active",
+      "registered_on": "2010-01-14",
+      "country": "KZ",
+      "oked": "25.62",
+      "owners": [
+        {
+          "ref": "300640000001",
+          "kind": "company",
+          "bin": "300640000001",
+          "role": "shareholder",
+          "share_pct": 55
+        },
+        {
+          "ref": "P-G00",
+          "kind": "person",
+          "name": "Қасымов Ольга",
+          "country": "KZ",
+          "birth_year": 1956,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G01",
+          "kind": "person",
+          "name": "Сергеев Серік",
+          "country": "KZ",
+          "birth_year": 1980,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G02",
+          "kind": "person",
+          "name": "Жанұзақов Нұрлан",
+          "country": "KZ",
+          "birth_year": 1954,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G03",
+          "kind": "person",
+          "name": "Сапаров Серік",
+          "country": "KZ",
+          "birth_year": 1985,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G04",
+          "kind": "person",
+          "name": "Ким Ерлан",
+          "country": "KZ",
+          "birth_year": 1964,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G05",
+          "kind": "person",
+          "name": "Исаев Жанар",
+          "country": "KZ",
+          "birth_year": 1967,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G06",
+          "kind": "person",
+          "name": "Байжанов Сәуле",
+          "country": "KZ",
+          "birth_year": 1956,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G07",
+          "kind": "person",
+          "name": "Ким Бауыржан",
+          "country": "KZ",
+          "birth_year": 1951,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G08",
+          "kind": "person",
+          "name": "Нұрғалиев Виктор",
+          "country": "KZ",
+          "birth_year": 1967,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G09",
+          "kind": "person",
+          "name": "Қасымов Сәуле",
+          "country": "KZ",
+          "birth_year": 1969,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G10",
+          "kind": "person",
+          "name": "Ким Жанар",
+          "country": "KZ",
+          "birth_year": 1955,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G11",
+          "kind": "person",
+          "name": "Нұрғалиев Тимур",
+          "country": "KZ",
+          "birth_year": 1992,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G12",
+          "kind": "person",
+          "name": "Омаров Мадина",
+          "country": "KZ",
+          "birth_year": 1961,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G13",
+          "kind": "person",
+          "name": "Қасымов Әсел",
+          "country": "KZ",
+          "birth_year": 1967,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G14",
+          "kind": "person",
+          "name": "Әбенов Ольга",
+          "country": "KZ",
+          "birth_year": 1950,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G15",
+          "kind": "person",
+          "name": "Ким Ольга",
+          "country": "KZ",
+          "birth_year": 1998,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G16",
+          "kind": "person",
+          "name": "Исаев Бауыржан",
+          "country": "KZ",
+          "birth_year": 1976,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G17",
+          "kind": "person",
+          "name": "Омаров Ольга",
+          "country": "KZ",
+          "birth_year": 1977,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G18",
+          "kind": "person",
+          "name": "Төлеуов Сәуле",
+          "country": "KZ",
+          "birth_year": 1964,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G19",
+          "kind": "person",
+          "name": "Ким Виктор",
+          "country": "KZ",
+          "birth_year": 1952,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G20",
+          "kind": "person",
+          "name": "Әбенов Ерлан",
+          "country": "KZ",
+          "birth_year": 1979,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G21",
+          "kind": "person",
+          "name": "Ли Виктор",
+          "country": "KZ",
+          "birth_year": 1983,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G22",
+          "kind": "person",
+          "name": "Исаев Әсел",
+          "country": "KZ",
+          "birth_year": 1994,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G23",
+          "kind": "person",
+          "name": "Петров Арман",
+          "country": "KZ",
+          "birth_year": 1993,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G24",
+          "kind": "person",
+          "name": "Қасымов Нұрлан",
+          "country": "KZ",
+          "birth_year": 1976,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G25",
+          "kind": "person",
+          "name": "Қасымов Данияр",
+          "country": "KZ",
+          "birth_year": 1967,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G26",
+          "kind": "person",
+          "name": "Жанұзақов Жанар",
+          "country": "KZ",
+          "birth_year": 1977,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G27",
+          "kind": "person",
+          "name": "Сергеев Тимур",
+          "country": "KZ",
+          "birth_year": 1990,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G28",
+          "kind": "person",
+          "name": "Исаев Бауыржан",
+          "country": "KZ",
+          "birth_year": 1970,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G29",
+          "kind": "person",
+          "name": "Әбенов Ерлан",
+          "country": "KZ",
+          "birth_year": 1995,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G30",
+          "kind": "person",
+          "name": "Қасымов Виктор",
+          "country": "KZ",
+          "birth_year": 1998,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G31",
+          "kind": "person",
+          "name": "Мұқанов Мадина",
+          "country": "KZ",
+          "birth_year": 1957,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G32",
+          "kind": "person",
+          "name": "Петров Сәуле",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G33",
+          "kind": "person",
+          "name": "Төлеуов Айгүл",
+          "country": "KZ",
+          "birth_year": 1952,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G34",
+          "kind": "person",
+          "name": "Петров Нұрлан",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G35",
+          "kind": "person",
+          "name": "Сергеев Тимур",
+          "country": "KZ",
+          "birth_year": 1951,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G36",
+          "kind": "person",
+          "name": "Петров Ольга",
+          "country": "KZ",
+          "birth_year": 1970,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G37",
+          "kind": "person",
+          "name": "Жанұзақов Гүлнар",
+          "country": "KZ",
+          "birth_year": 1989,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G38",
+          "kind": "person",
+          "name": "Ли Нұрлан",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G39",
+          "kind": "person",
+          "name": "Мұқанов Бауыржан",
+          "country": "KZ",
+          "birth_year": 1978,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G40",
+          "kind": "person",
+          "name": "Ким Арман",
+          "country": "KZ",
+          "birth_year": 1966,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G41",
+          "kind": "person",
+          "name": "Омаров Сәуле",
+          "country": "KZ",
+          "birth_year": 1971,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G42",
+          "kind": "person",
+          "name": "Мұқанов Айгүл",
+          "country": "KZ",
+          "birth_year": 1973,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G43",
+          "kind": "person",
+          "name": "Сапаров Данияр",
+          "country": "KZ",
+          "birth_year": 1960,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-G44",
+          "kind": "person",
+          "name": "Петров Жанар",
+          "country": "KZ",
+          "birth_year": 1968,
+          "role": "shareholder",
+          "share_pct": 1.0
+        },
+        {
+          "ref": "P-007",
+          "kind": "person",
+          "name": "Қасымов Арман Бауыржанұлы",
+          "country": "KZ",
+          "birth_year": 1975,
+          "role": "beneficial_owner",
+          "share_pct": 55
+        },
+        {
+          "ref": "P-008",
+          "kind": "person",
+          "name": "Ли Ольга Викторовна",
+          "country": "KZ",
+          "birth_year": 1983,
+          "role": "director",
+          "share_pct": null
+        }
+      ]
+    },
+    {
+      "bin": "300640000001",
+      "name": "АО «Гамма Групп»",
+      "status": "active",
+      "registered_on": "2006-06-01",
+      "country": "KZ",
+      "oked": "64.20",
+      "owners": [
+        {
+          "ref": "400740000001",
+          "kind": "company",
+          "bin": "400740000001",
+          "role": "shareholder",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "400740000001",
+      "name": "Gamma Holdings Ltd",
+      "status": "active",
+      "registered_on": "2007-07-01",
+      "country": "CY",
+      "oked": null,
+      "owners": [
+        {
+          "ref": "P-007",
+          "kind": "person",
+          "name": "Қасымов Арман Бауыржанұлы",
+          "country": "KZ",
+          "birth_year": 1975,
+          "role": "shareholder",
+          "share_pct": 100
+        }
+      ]
+    },
+    {
+      "bin": "990000000001",
+      "simulate": "down"
+    },
+    {
+      "bin": "990000000002",
+      "simulate": "rate_limited"
+    },
+    {
+      "bin": "990000000003",
+      "name": "ТОО «Дрейф»",
+      "registered_on": "2020-01-01",
+      "owners": []
+    }
+  ]
+}
