@@ -20,13 +20,13 @@ def build() -> APIRouter:
     router = APIRouter(tags=["spend"])
 
     @router.post("/orgs/{org_id}/uploads/preview")
-    async def upload_preview(
+    def upload_preview(
         org_id: UUID,
         conn: OrgConn,
         file: Annotated[UploadFile, File()],
         sheet: Annotated[str | None, Form()] = None,
     ) -> UploadPreview:
-        data = await _read(file)
+        data = _read(file)
         try:
             p = ingest.preview(data, file.filename or "upload", sheet)
         except ingest.FileRejected as e:
@@ -34,7 +34,7 @@ def build() -> APIRouter:
         return UploadPreview(**p.__dict__)
 
     @router.post("/orgs/{org_id}/uploads")
-    async def upload(
+    def upload(
         org_id: UUID,
         conn: OrgConn,
         file: Annotated[UploadFile, File()],
@@ -42,7 +42,7 @@ def build() -> APIRouter:
         sheet: Annotated[str | None, Form()] = None,
         header_row: Annotated[int | None, Form()] = None,
     ) -> UploadResult:
-        data = await _read(file)
+        data = _read(file)
         try:
             parsed = {str(k): int(v) for k, v in json.loads(mapping).items()}
         except (ValueError, AttributeError, TypeError):
@@ -140,8 +140,11 @@ def build() -> APIRouter:
     return router
 
 
-async def _read(file: UploadFile) -> bytes:
-    data = await file.read(ingest.MAX_BYTES + 1)
+def _read(file: UploadFile) -> bytes:
+    # Sync on purpose: these handlers run in FastAPI's threadpool. Sync DB calls inside an
+    # `async def` block the event loop; two concurrent uploads then deadlock on the audit-chain
+    # advisory lock (the holder can never commit).
+    data = file.file.read(ingest.MAX_BYTES + 1)
     if len(data) > ingest.MAX_BYTES:
         raise HTTPException(413, {"code": "too_large"})
     return data

@@ -118,3 +118,26 @@ def test_50k_rows_ingest_under_60_seconds(client: TestClient) -> None:
     assert r.status_code == 200 and r.json()["inserted"] == 50_000
     print(f"50k rows ingested in {seconds:.1f} s")  # noqa: T201 - reported in the M2 report
     assert seconds < 60
+
+
+def test_concurrent_uploads_do_not_deadlock(client: TestClient) -> None:
+    """Two uploads at once both take the audit-chain advisory lock. When the handlers were
+    `async def` with sync DB calls, the waiter blocked the event loop and the holder could
+    never commit: the API hung until restart (found in the 2026-10-12 demo)."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    base = (FIX / "01_ru_semicolon_cp1251.csv").read_bytes()
+
+    def one(i: int) -> int:
+        return post(
+            client,
+            "clientUserA",
+            f"/orgs/{ORG_A}/uploads",
+            f"it-conc-{i}.csv",
+            unique(base),
+            mapping=RU_MAPPING,
+        ).status_code
+
+    with ThreadPoolExecutor(4) as pool:
+        codes = list(pool.map(one, range(4), timeout=30))
+    assert codes == [200, 200, 200, 200]
