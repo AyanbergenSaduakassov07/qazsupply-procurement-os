@@ -15,6 +15,7 @@ WEIGHTS: dict[str, int] = {
     "sanctions_confirmed": 100,  # human-confirmed hit, supplier or related party
     "sanctions_open": 40,  # a possible sanctions match nobody has decided yet
     "pep_related": 15,  # a related person is a politically exposed person (open or confirmed)
+    "watchlist_match": 30,  # match on an enforcement or crime list (not sanctions)
     "unreliable_supplier": 50,  # listed in the unreliable-supplier registry (РНУ)
     "not_active": 60,  # registry status is not "active" (liquidated, suspended, ...)
     "young_company": 10,  # registered less than 2 years ago

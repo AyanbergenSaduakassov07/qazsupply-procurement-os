@@ -431,6 +431,15 @@ export function OnboardingReview({
           <dt className="text-muted">{labels.contactPhone}</dt>
           <dd className="text-ink">{c.contact_phone ?? "—"}</dd>
         </dl>
+        {c.supplier_bin && c.bin && c.supplier_bin !== c.bin && (
+          <p
+            role="alert"
+            data-testid="bin-mismatch"
+            className="rounded border border-risk/50 p-2 text-sm text-risk"
+          >
+            {fill(labels.binMismatch, { declared: c.bin, record: c.supplier_bin })}
+          </p>
+        )}
         <h3 className="text-sm font-medium text-ink">{labels.docs}</h3>
         <Documents c={c} labels={labels} locale={locale} />
         {c.decision_note && (

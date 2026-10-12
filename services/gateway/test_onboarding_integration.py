@@ -64,9 +64,11 @@ def test_invite_fill_submit_and_human_check(client: TestClient) -> None:
     r = client.post(f"{case}/submit", headers=sup)
     assert r.json()["detail"]["code"] == "document_required"
     r = client.post(
-        f"{case}/documents", headers=sup, files={"file": ("reg.pdf", PDF)},
+        f"{case}/documents",
+        headers=sup,
+        files={"file": ("reg.pdf", PDF)},
         data={"kind": "registration_certificate", "doc_number": "R-42", "fields_confirmed": "true"},
-    )  # fmt: skip
+    )
     assert r.status_code == 201
     doc = r.json()["id"]
     assert client.post(f"{case}/submit", headers=sup).status_code == 204
@@ -89,3 +91,50 @@ def test_invite_fill_submit_and_human_check(client: TestClient) -> None:
     assert r.status_code == 200 and r.json()["screenings"] > 0
     got = client.get(case, headers=auth("clientAdminA")).json()
     assert got["status"] == "approved" and got["decided_by_staff"] == "Demo Reviewer"
+
+
+def test_approval_screens_the_declared_bin_and_fills_an_empty_one(client: TestClient) -> None:
+    import uuid  # noqa: PLC0415
+
+    import psycopg  # noqa: PLC0415
+
+    from services.gateway.testing import DB  # noqa: PLC0415
+
+    sid = str(uuid.uuid4())
+    with psycopg.connect(DB) as conn:
+        conn.execute(
+            "insert into public.suppliers (id, org_id, name) values (%s, %s, 'ИП без БИН (it)')",
+            (sid, ORG_A),
+        )
+    try:
+        base = f"/orgs/{ORG_A}/onboarding"
+        r = client.post(
+            base,
+            headers=auth("clientAdminA"),
+            json={"supplier_id": sid, "email": USERS["users"]["supplier"]},
+        )
+        case = f"{base}/{r.json()['id']}"
+        sup = auth("supplier")
+        client.put(
+            f"{case}/details", headers=sup, json={"legal_name": "ТОО «Бета»", "bin": "210987654321"}
+        )
+        client.post(
+            f"{case}/documents",
+            headers=sup,
+            files={"file": ("r.pdf", PDF)},
+            data={"kind": "registration_certificate", "fields_confirmed": "true"},
+        )
+        assert client.post(f"{case}/submit", headers=sup).status_code == 204
+        assert client.get(case, headers=auth("clientAdminA")).json()["supplier_bin"] is None
+        r = client.post(
+            f"{case}/decision", headers=auth("clientAdminA"), json={"decision": "approve"}
+        )
+        assert r.json()["screenings"] > 0  # screened by the declared BIN
+        with psycopg.connect(DB) as conn:
+            row = conn.execute("select bin from public.suppliers where id = %s", (sid,)).fetchone()
+        assert row == ("210987654321",)
+    finally:
+        purge(
+            ("delete from public.onboarding_cases where supplier_id = %s", (sid,)),
+            ("delete from public.suppliers where id = %s", (sid,)),
+        )

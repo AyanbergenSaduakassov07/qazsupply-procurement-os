@@ -180,6 +180,8 @@ create policy ownership_links_insert on public.ownership_links for insert to aut
   with check ((select private.is_reader(org_id)));
 create policy ownership_links_delete on public.ownership_links for delete to authenticated
   using ((select private.is_reader(org_id)));
+create policy ownership_links_update on public.ownership_links for update to authenticated
+  using ((select private.is_reader(org_id))) with check ((select private.is_reader(org_id)));
 
 create policy screenings_select on public.screenings for select to authenticated
   using ((select private.is_reader(org_id)));
@@ -204,3 +206,4 @@ grant select, insert on public.parties, public.ownership_links, public.screening
 grant update (name, country, bin, birth_year, registry_status, registered_on, supplier_id,
   source_url, fetched_at, licence, sample) on public.parties to authenticated;
 grant delete on public.ownership_links to authenticated;
+grant update (share_pct, fetched_at, licence, sample) on public.ownership_links to authenticated;

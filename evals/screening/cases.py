@@ -121,6 +121,10 @@ QUERIES = [
     # E20
     Query("Петренко Андрей", P, "E20", "ru_form"),
     Query("Petrenko Andrii", P, "E20", "spelling"),
+    # Russian / Kazakh legal forms in front of a company name (code review 2026-10-12).
+    Query("АҚ «Каспиан Бридж Трейдинг»", C, "E08", "kk_legal_form_ak"),
+    Query("ОАО Нозерн Лайтс Шиппинг", C, "E06", "ru_legal_form_oao"),
+    Query("ЖАҚ Altyn Zhol Logistics", C, "E15", "kk_legal_form_zhak"),
     # Negatives: same surname, other first name / same first name, other surname / shared words.
     Query("Сапаров Ермек", P, None, "shared_surname_root"),
     Query("Kim Elena", P, None, "shared_surname"),

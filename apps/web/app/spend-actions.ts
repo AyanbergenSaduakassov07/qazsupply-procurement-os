@@ -2,20 +2,12 @@
 
 import { apiClient } from "@qazsupply/api-client";
 
-import { getSession } from "../lib/session";
+import { actionContext as ctx } from "../lib/server-action";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 const MAX_BYTES = 25 * 1024 * 1024;
 
 export type Fail = { ok: false; code: string };
-
-async function ctx(): Promise<{ token: string; orgId: string } | Fail> {
-  const session = await getSession();
-  if (session.status !== "authenticated" || !session.currentOrg) {
-    return { ok: false, code: "unauthorized" };
-  }
-  return { token: session.token, orgId: session.currentOrg.org_id };
-}
 
 async function errorCode(res: Response): Promise<string> {
   try {

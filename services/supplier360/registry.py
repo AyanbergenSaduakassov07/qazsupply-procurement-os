@@ -80,19 +80,21 @@ def _walk(
 ) -> UUID:
     company_id = _company(conn, org_id, rec)
     seen.add(str(rec.payload["bin"]))
-    conn.execute(
-        "delete from public.ownership_links where org_id = %s and owned_id = %s and source_id = %s",
-        (org_id, company_id, rec.source_id),
-    )
+    kept: set[tuple[str, str]] = set()
+    complete = True
     for o in rec.payload["owners"]:
         owner_id = _owner(conn, org_id, registry, rec, o, out, depth, seen)
         if owner_id is None:
+            complete = False  # an owner could not be fetched: keep what we had for it
             continue
+        kept.add((str(owner_id), o["role"]))
         conn.execute(
             """insert into public.ownership_links (org_id, owner_id, owned_id, role, share_pct,
                  source_id, fetched_at, licence, sample)
                values (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-               on conflict (org_id, owner_id, owned_id, role) do nothing""",
+               on conflict (org_id, owner_id, owned_id, role) do update set
+                 share_pct = excluded.share_pct, fetched_at = excluded.fetched_at,
+                 licence = excluded.licence, sample = excluded.sample""",
             (
                 org_id,
                 owner_id,
@@ -105,6 +107,17 @@ def _walk(
                 rec.licence.startswith(SAMPLE),
             ),
         )
+    # Remove links the registry no longer lists, but only after a complete fetch: an outage
+    # must never erase cached ownership (and the sanctions hits reached through it).
+    if complete:
+        old = conn.execute(
+            """select id, owner_id, role from public.ownership_links
+               where org_id = %s and owned_id = %s and source_id = %s""",
+            (org_id, company_id, rec.source_id),
+        ).fetchall()
+        gone = [r["id"] for r in old if (str(r["owner_id"]), r["role"]) not in kept]
+        if gone:
+            conn.execute("delete from public.ownership_links where id = any(%s)", (gone,))
     return company_id
 
 

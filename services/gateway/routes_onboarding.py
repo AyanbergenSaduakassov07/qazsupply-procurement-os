@@ -51,6 +51,7 @@ class Case(BaseModel):
     id: UUID
     supplier_id: UUID | None
     supplier_name: str | None
+    supplier_bin: str | None
     status: Literal["invited", "in_progress", "submitted", "approved", "rejected"]
     legal_name: str | None
     bin: str | None

@@ -16,7 +16,11 @@ async function axe(page: Page) {
 }
 
 test("invite -> supplier completes on its own link -> buyer approves", async ({ browser }) => {
-  const buyer = await browser.newContext({ storageState: ".auth/clientAdminA.json" });
+  // Reduced motion: axe must not sample a button mid colour transition (flaked once on phone).
+  const buyer = await browser.newContext({
+    storageState: ".auth/clientAdminA.json",
+    reducedMotion: "reduce",
+  });
   const b = await buyer.newPage();
   await b.goto(`/en/suppliers/${BETA}`);
   await b.getByLabel("Supplier user's email").fill("supplier@qazsupply.test");
@@ -26,7 +30,10 @@ test("invite -> supplier completes on its own link -> buyer approves", async ({ 
   const link = (await done.textContent())?.match(/\/en\/onboarding\/[0-9a-f-]{36}/)?.[0];
   expect(link).toBeTruthy();
 
-  const supplier = await browser.newContext({ storageState: ".auth/supplier.json" });
+  const supplier = await browser.newContext({
+    storageState: ".auth/supplier.json",
+    reducedMotion: "reduce",
+  });
   const s = await supplier.newPage();
   await s.goto(link ?? "");
   await expect(s.getByRole("heading", { name: /Step 1 of 3/ })).toBeVisible();

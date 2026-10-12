@@ -29,6 +29,14 @@ def test_top_reasons_are_the_three_heaviest_triggered_factors() -> None:
     assert r.score == 85 and r.verdict == "high_risk"
 
 
+def test_every_factor_has_a_ui_label() -> None:
+    import json  # noqa: PLC0415
+    from pathlib import Path  # noqa: PLC0415
+
+    en = json.loads(Path("packages/i18n/messages/en.json").read_text(encoding="utf-8"))
+    assert all(f"s360.factor.{code}" in en for code in WEIGHTS)
+
+
 def test_org_overrides_are_clamped_and_unknown_keys_ignored() -> None:
     w = weights_for({"young_company": 500, "pep_related": -3, "nope": 9})
     assert (w["young_company"], w["pep_related"], "nope" in w) == (100, 0, False)

@@ -7,6 +7,7 @@ from functools import cache
 from typing import Any
 from uuid import UUID
 
+from psycopg import sql
 from psycopg.types.json import Jsonb
 
 from connectors.dualuse.sample import SampleDualUse
@@ -49,8 +50,10 @@ def _record(
 ) -> None:
     column = "party_id" if subject[0] == "party" else "item_id"
     row = conn.execute(
-        f"""insert into public.screenings (org_id, {column}, list_source, list_version, trigger,
-              result, sample) values (%s, %s, %s, %s, %s, %s, %s) returning id""",  # noqa: S608
+        sql.SQL(
+            """insert into public.screenings (org_id, {col}, list_source, list_version, trigger,
+                 result, sample) values (%s, %s, %s, %s, %s, %s, %s) returning id"""
+        ).format(col=sql.Identifier(column)),
         (
             org_id,
             subject[1],
@@ -131,7 +134,7 @@ def item_hits(text: str, controls: list[dict[str, Any]]) -> list[dict[str, Any]]
 def screen(
     conn: UserConn,
     org_id: UUID,
-    supplier_id: UUID,
+    supplier_ids: list[UUID],
     parties: list[dict[str, Any]],
     root: dict[str, Any],
     trigger: str,
@@ -188,8 +191,8 @@ def screen(
     items = conn.execute(
         """select distinct i.id, i.name from public.purchase_lines pl
            join public.items i on i.id = pl.item_id and i.org_id = pl.org_id
-           where pl.org_id = %s and pl.supplier_id = %s""",
-        (org_id, supplier_id),
+           where pl.org_id = %s and pl.supplier_id = any(%s)""",
+        (org_id, supplier_ids),
     ).fetchall()
     for it in items:
         _record(

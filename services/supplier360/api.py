@@ -34,6 +34,12 @@ REASONS = {
 }
 
 
+# One instance per process: the sample adapters read their fixtures once (code review: a new
+# instance per call defeated the screening cache and grew it without bound).
+_REGISTRY = SampleRegistry()
+_SOURCES = Sources()
+
+
 class Unresolved(Exception):
     """The supplier has no BIN: it is never screened as if resolved (CONTEXT: Supplier)."""
 
@@ -73,18 +79,23 @@ def build(
     trigger: str = "manual",
     registry: SampleRegistry | None = None,
     sources: Sources | None = None,
+    bin_: str | None = None,
 ) -> Built:
+    """bin_ overrides the supplier's BIN (onboarding: the BIN the supplier declared and a
+    human approved)."""
     sup = _supplier(conn, org_id, supplier_id)
-    if not sup["bin"]:
+    bin_ = bin_ or sup["bin"]
+    if not bin_:
         raise Unresolved
-    r = refresh(conn, org_id, sup["bin"], registry or SampleRegistry())
+    r = refresh(conn, org_id, bin_, registry or _REGISTRY)
     out = Built(r.party_id, r.degraded, r.truncated)
-    root_id = r.party_id or _root_id(conn, org_id, sup["bin"])
+    root_id = r.party_id or _root_id(conn, org_id, bin_)
     if root_id is None:
         return out  # registry down/unknown and nothing cached: nothing to screen
     nodes, _ = d.graph(conn, org_id, root_id)
     root = next(n for n in nodes if n["id"] == root_id)
-    s = screen(conn, org_id, supplier_id, nodes, root, trigger, sources or Sources())
+    same = _same_bin(conn, org_id, {**sup, "bin": bin_})
+    s = screen(conn, org_id, same, nodes, root, trigger, sources or _SOURCES)
     out.screenings, out.possible_matches = s.screenings, s.possible_matches
     return out
 
@@ -155,7 +166,11 @@ def dossier(conn: UserConn, org_id: UUID, supplier_id: UUID) -> dict[str, Any]:
 
 
 def suppliers(conn: UserConn, org_id: UUID) -> list[dict[str, Any]]:
-    """Every unmerged supplier with its verdict (None until a dossier was built)."""
+    """Every unmerged supplier with its verdict (None until a dossier was built).
+
+    ponytail: one dossier view per supplier (~8 queries each); fine for tens of suppliers.
+    Upgrade path (D36): persist a verdict snapshot on build/decision and list it set-based.
+    """
     rows = conn.execute(
         """select distinct on (coalesce(bin, id::text)) id, name, bin from public.suppliers
            where org_id = %s and merged_into is null
@@ -174,7 +189,7 @@ def suppliers(conn: UserConn, org_id: UUID) -> list[dict[str, Any]]:
                 "score": risk.get("score"),
                 "top": risk.get("top", []),
                 "spend_kzt": v["spend"]["total_kzt"],
-                "sample": v["built"],
+                "sample": bool(v["company"] and v["company"]["sample"]),
             }
         )
     return sorted(out, key=lambda x: -(x["spend_kzt"] or 0))
@@ -202,12 +217,14 @@ def rescreen_due(conn: UserConn, org_id: UUID, max_age_days: int = d.STALE_DAYS)
     (or missing). Returns how many were re-screened. Scheduling it is deployment work (D27)."""
     cutoff = datetime.now(UTC) - timedelta(days=max_age_days)
     due = conn.execute(
-        """select s.id from public.suppliers s
-           join public.parties p on p.org_id = s.org_id and p.kind = 'company' and p.bin = s.bin
+        """select distinct on (s.bin) s.id from public.suppliers s
+           left join public.parties p
+             on p.org_id = s.org_id and p.kind = 'company' and p.bin = s.bin
            where s.org_id = %s and s.merged_into is null and s.bin is not null
              and coalesce((select max(x.checked_at) from public.screenings x
                            where x.party_id = p.id and x.list_source = 'opensanctions'),
-                          '-infinity') < %s""",
+                          '-infinity') < %s
+           order by s.bin, s.created_at""",
         (org_id, cutoff),
     ).fetchall()
     for row in due:
@@ -258,12 +275,19 @@ submit_onboarding = _ob.submit
 def decide_onboarding(
     conn: UserConn, org_id: UUID, case_id: UUID, decision: str, note: str | None
 ) -> Built | None:
-    """Approve / reject / return. An approval screens the supplier (trigger `onboarding`) when
-    it has a BIN; a supplier without one stays unresolved and is not screened."""
-    supplier_id = _ob.decide(conn, org_id, case_id, decision, note)
-    if supplier_id is None:
+    """Approve / reject / return. An approval screens the company the supplier declared (its
+    BIN, approved by a human), whatever BIN the supplier record had; the review shows a
+    mismatch before anyone approves."""
+    approved = _ob.decide(conn, org_id, case_id, decision, note)
+    if approved is None:
         return None
+    supplier_id, case_bin = approved
+    # Fill an empty supplier BIN with the approved one (RLS: only writers of supplier data can).
+    conn.execute(
+        "update public.suppliers set bin = %s where org_id = %s and id = %s and bin is null",
+        (case_bin, org_id, supplier_id),
+    )
     try:
-        return build(conn, org_id, UUID(supplier_id), trigger="onboarding")
+        return build(conn, org_id, UUID(supplier_id), trigger="onboarding", bin_=case_bin)
     except Unresolved:
         return None

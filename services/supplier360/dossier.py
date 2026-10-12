@@ -6,10 +6,13 @@ from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
+from psycopg import sql
+
 from services.gateway.db import UserConn
 from services.supplier360.risk import Risk, assess, weights_for
 
 STALE_DAYS = 30
+SUBJECTS = ("party_id", "item_id")
 GRAPH_DEPTH = 8
 
 
@@ -42,12 +45,17 @@ def graph(
 
 def screenings(conn: UserConn, org_id: UUID, column: str, ids: list[UUID]) -> list[dict[str, Any]]:
     """Latest screening per (subject, list) with its hits and each hit's latest decision."""
+    if column not in SUBJECTS:
+        raise ValueError("unknown subject column")
+    col = sql.Identifier("s", column)
     runs = conn.execute(
-        f"""select distinct on (s.{column}, s.list_source) s.id, s.{column} as subject_id,
-              s.list_source, s.list_version, s.trigger, s.result, s.sample, s.checked_at,
-              s.checked_by = auth.uid() as checked_by_me
-            from public.screenings s where s.org_id = %s and s.{column} = any(%s)
-            order by s.{column}, s.list_source, s.checked_at desc""",  # noqa: S608 - column is a literal
+        sql.SQL(
+            """select distinct on ({col}, s.list_source) s.id, {col} as subject_id,
+                 s.list_source, s.list_version, s.trigger, s.result, s.sample, s.checked_at,
+                 s.checked_by = auth.uid() as checked_by_me
+               from public.screenings s where s.org_id = %s and {col} = any(%s)
+               order by {col}, s.list_source, s.checked_at desc"""
+        ).format(col=col),
         (org_id, ids),
     ).fetchall()
     hits = conn.execute(
@@ -117,7 +125,15 @@ def signals(
     names = {n["id"]: n["name"] for n in nodes}
     s: dict[str, dict[str, Any] | None] = {}
     watch = [(r, h) for r in party_runs if r["list_source"] == "opensanctions" for h in r["hits"]]
-    sanction = [(r, h) for r, h in watch if set(h["entry_topics"]) - {"role.pep"}]
+    sanction = [(r, h) for r, h in watch if "sanction" in h["entry_topics"]]
+    # Enforcement / crime lists are not sanctions: their own factor, open or confirmed.
+    other = [
+        (r, h)
+        for r, h in watch
+        if "sanction" not in h["entry_topics"]
+        and set(h["entry_topics"]) - {"role.pep"}
+        and h["decision"] != "dismissed"
+    ]
     pep = [
         (r, h) for r, h in watch if "role.pep" in h["entry_topics"] and h["decision"] != "dismissed"
     ]
@@ -137,6 +153,7 @@ def signals(
     s["sanctions_confirmed"] = first([p for p in sanction if p[1]["decision"] == "confirmed"])
     s["sanctions_open"] = first([p for p in sanction if _open(p[1])])
     s["pep_related"] = first(pep)
+    s["watchlist_match"] = first(other)
     rnu = [
         h
         for r in party_runs

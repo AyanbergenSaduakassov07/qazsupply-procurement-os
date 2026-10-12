@@ -829,6 +829,8 @@ export interface components {
             status: "invited" | "in_progress" | "submitted" | "approved" | "rejected";
             /** Submitted At */
             submitted_at: string | null;
+            /** Supplier Bin */
+            supplier_bin: string | null;
             /** Supplier Id */
             supplier_id: string | null;
             /** Supplier Name */
@@ -873,6 +875,8 @@ export interface components {
             status: "invited" | "in_progress" | "submitted" | "approved" | "rejected";
             /** Submitted At */
             submitted_at: string | null;
+            /** Supplier Bin */
+            supplier_bin: string | null;
             /** Supplier Id */
             supplier_id: string | null;
             /** Supplier Name */

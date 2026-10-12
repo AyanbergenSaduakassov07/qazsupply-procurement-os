@@ -4,15 +4,19 @@ Build a dossier -> ownership chain cached with provenance -> screening hits with
 a client user cannot decide -> an admin dismisses a namesake and confirms a match -> verdict.
 """
 
+import json
 import uuid
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import psycopg
 import pytest
 from fastapi.testclient import TestClient
 
+from connectors.registries.sample import FIXTURE, SampleRegistry
 from services.gateway.testing import DB, ORG_A, ORG_B, auth, purge
+from services.supplier360 import api as s360
 
 pytestmark = pytest.mark.integration
 
@@ -128,3 +132,30 @@ def test_risk_weights_admin_only(client: TestClient, suppliers: dict[str, str]) 
     assert r.status_code == 403
     r = client.put(path, headers=auth("clientAdminA"), json={"weights": {"young_company": 0}})
     assert r.status_code == 200 and r.json()["weights"]["young_company"] == 0
+
+
+def test_a_registry_outage_keeps_cached_ownership(
+    client: TestClient, suppliers: dict[str, str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    base = f"/orgs/{ORG_A}/suppliers/{suppliers['alfa']}/dossier"
+    assert client.post(base, headers=auth("clientUserA")).status_code == 200
+    before = {n["name"] for n in _get(client, "clientUserA", base)["nodes"]}
+    data = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    for c in data["companies"]:
+        if c["bin"] == "200540000001":  # the holding that links to its beneficial owner
+            c["simulate"] = "rate_limited"
+    (tmp_path / "companies.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(s360, "_REGISTRY", SampleRegistry(tmp_path / "companies.json"))
+    r = client.post(base, headers=auth("clientUserA")).json()
+    assert r["degraded"][0]["reason"] == "rate_limited"
+    after = {n["name"] for n in _get(client, "clientUserA", base)["nodes"]}
+    assert after == before  # nothing erased by the outage
+
+
+def test_rescreen_covers_resolved_suppliers_never_opened(
+    client: TestClient, suppliers: dict[str, str]
+) -> None:
+    r = client.post(f"/orgs/{ORG_A}/screenings/rescreen-due", headers=auth("clientUserA"))
+    assert r.status_code == 200 and r.json()["rescreened"] >= 2
+    d = _get(client, "clientUserA", f"/orgs/{ORG_A}/suppliers/{suppliers['alfa']}/dossier")
+    assert d["built"] is True and d["screenings"]

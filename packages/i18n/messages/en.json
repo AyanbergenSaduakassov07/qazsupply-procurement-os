@@ -552,5 +552,7 @@
   "ob.note": "Note to the supplier",
   "ob.noteHint": "Required to reject or return.",
   "ob.humanCheck": "A person decides. Approval starts a screening of the supplier.",
-  "ob.decided": "Decision saved"
+  "ob.decided": "Decision saved",
+  "s360.factor.watchlist_match": "Match on an enforcement or crime list",
+  "ob.binMismatch": "The supplier declared BIN {declared}, but your supplier record has {record}. Approving screens the declared company."
 }

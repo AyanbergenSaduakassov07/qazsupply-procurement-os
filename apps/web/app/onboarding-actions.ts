@@ -2,27 +2,13 @@
 
 import { apiClient } from "@qazsupply/api-client";
 
-import { getSession } from "../lib/session";
+import { errorCodeOf as code, actionContext as ctx } from "../lib/server-action";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 const UUID = /^[0-9a-f-]{36}$/;
 const MAX_BYTES = 5 * 1024 * 1024;
 
 export type Result = { ok: true; id?: string } | { ok: false; code: string };
-
-async function ctx(): Promise<{ token: string; orgId: string } | { ok: false; code: string }> {
-  const session = await getSession();
-  if (session.status !== "authenticated" || !session.currentOrg) {
-    return { ok: false, code: "unauthorized" };
-  }
-  return { token: session.token, orgId: session.currentOrg.org_id };
-}
-
-function code(error: unknown, status: number): string {
-  const detail = (error as { detail?: { code?: string } } | undefined)?.detail;
-  if (detail && typeof detail === "object" && detail.code) return detail.code;
-  return status === 403 ? "forbidden" : status === 404 ? "not_found" : "unexpected";
-}
 
 export async function inviteSupplier(supplierId: string, email: string): Promise<Result> {
   const c = await ctx();

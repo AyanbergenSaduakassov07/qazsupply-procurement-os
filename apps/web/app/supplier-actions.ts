@@ -2,30 +2,16 @@
 
 import { apiClient } from "@qazsupply/api-client";
 
-import { getSession } from "../lib/session";
+import { errorCodeOf as code, actionContext as ctx } from "../lib/server-action";
 
 const API_URL = process.env.API_URL ?? "http://localhost:8000";
 const UUID = /^[0-9a-f-]{36}$/;
 
-export type Fail = { ok: false; code: string };
+import type { Fail } from "../lib/server-action";
 export interface Degraded {
   source_id: string;
   reason: string;
   bin?: string;
-}
-
-async function ctx(): Promise<{ token: string; orgId: string } | Fail> {
-  const session = await getSession();
-  if (session.status !== "authenticated" || !session.currentOrg) {
-    return { ok: false, code: "unauthorized" };
-  }
-  return { token: session.token, orgId: session.currentOrg.org_id };
-}
-
-function code(error: unknown, status: number): string {
-  const detail = (error as { detail?: { code?: string } } | undefined)?.detail;
-  if (detail && typeof detail === "object" && detail.code) return detail.code;
-  return status === 403 ? "forbidden" : "unexpected";
 }
 
 /** Refresh registry data and re-screen one supplier. */

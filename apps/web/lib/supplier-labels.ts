@@ -7,6 +7,7 @@ export const FACTORS = [
   "sanctions_confirmed",
   "sanctions_open",
   "pep_related",
+  "watchlist_match",
   "unreliable_supplier",
   "not_active",
   "young_company",

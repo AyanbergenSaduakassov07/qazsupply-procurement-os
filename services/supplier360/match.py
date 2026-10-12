@@ -20,9 +20,13 @@ CYR = {
     "ұ": "u", "ү": "u", "ф": "f", "х": "kh", "һ": "h", "ц": "ts", "ч": "ch", "ш": "sh",
     "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya",
 }  # fmt: skip
+# Legal forms after transliteration: ru (ТОО ОАО ЗАО ПАО АО ИП ГУП ФГУП МУП НАО ООО), kk (ЖШС АҚ
+# ЖАҚ ҚАҚ ЖК), en. "ak" (АҚ) is also the Kazakh word "white": dropping it costs precision on
+# names like «Ақ Жол», never recall, which is the right trade for screening.
 LEGAL = {
-    "too", "ooo", "ao", "pao", "zao", "ip", "zhshs", "llp", "llc", "ltd", "jsc", "inc",
-    "gmbh", "fze", "fzco", "plc", "co", "corp", "company", "limited",
+    "too", "ooo", "oao", "ao", "pao", "zao", "nao", "ip", "gup", "fgup", "mup", "zhshs", "ak",
+    "zhak", "kak", "zhk", "llp", "llc", "ltd", "jsc", "ojsc", "cjsc", "inc", "gmbh", "fze",
+    "fzco", "plc", "co", "corp", "company", "limited",
 }  # fmt: skip
 # Applied in order to the transliterated, lower-case text.
 FOLDS = [

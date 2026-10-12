@@ -556,6 +556,17 @@
             ],
             "title": "Submitted At"
           },
+          "supplier_bin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supplier Bin"
+          },
           "supplier_id": {
             "anyOf": [
               {
@@ -584,6 +595,7 @@
           "id",
           "supplier_id",
           "supplier_name",
+          "supplier_bin",
           "status",
           "legal_name",
           "bin",
@@ -728,6 +740,17 @@
             ],
             "title": "Submitted At"
           },
+          "supplier_bin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supplier Bin"
+          },
           "supplier_id": {
             "anyOf": [
               {
@@ -756,6 +779,7 @@
           "id",
           "supplier_id",
           "supplier_name",
+          "supplier_bin",
           "status",
           "legal_name",
           "bin",

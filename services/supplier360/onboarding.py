@@ -12,6 +12,7 @@ from typing import Any
 from uuid import UUID
 
 from psycopg import errors as pg_errors
+from psycopg import sql
 
 from services.gateway.db import UserConn
 
@@ -22,10 +23,12 @@ MAGIC = {
     b"\xff\xd8\xff": "image/jpeg",
 }
 KINDS = ("registration_certificate", "charter", "bank_letter", "other")
-CASE_COLUMNS = """id, org_id, supplier_id, status, legal_name, bin, contact_name, contact_phone,
+CASE_COLUMNS = sql.SQL("""id, org_id, supplier_id, status, legal_name, bin, contact_name,
+  contact_phone,
   confirmed, created_at, submitted_at, decided_at, decision_note,
   supplier_user_id = auth.uid() as mine, private.staff_name(decided_by) as decided_by_staff,
-  (select s.name from public.suppliers s where s.id = supplier_id) as supplier_name"""
+  (select s.name from public.suppliers s where s.id = supplier_id) as supplier_name,
+  (select s.bin from public.suppliers s where s.id = supplier_id) as supplier_bin""")
 
 
 class Rejected(Exception):
@@ -70,8 +73,9 @@ def invite(conn: UserConn, org_id: UUID, supplier_id: UUID, email: str) -> UUID:
 
 def cases(conn: UserConn, org_id: UUID) -> list[dict[str, Any]]:
     rows = conn.execute(
-        f"""select {CASE_COLUMNS} from public.onboarding_cases
-            where org_id = %s order by created_at desc""",  # noqa: S608 - constant columns
+        sql.SQL(
+            "select {cols} from public.onboarding_cases where org_id = %s order by created_at desc"
+        ).format(cols=CASE_COLUMNS),
         (org_id,),
     ).fetchall()
     return [dict(r) for r in rows]
@@ -79,7 +83,9 @@ def cases(conn: UserConn, org_id: UUID) -> list[dict[str, Any]]:
 
 def case(conn: UserConn, org_id: UUID, case_id: UUID) -> dict[str, Any]:
     row = conn.execute(
-        f"select {CASE_COLUMNS} from public.onboarding_cases where org_id = %s and id = %s",  # noqa: S608 - constant columns
+        sql.SQL("select {cols} from public.onboarding_cases where org_id = %s and id = %s").format(
+            cols=CASE_COLUMNS
+        ),
         (org_id, case_id),
     ).fetchone()
     if row is None:
@@ -95,11 +101,15 @@ def case(conn: UserConn, org_id: UUID, case_id: UUID) -> dict[str, Any]:
 
 
 def _update(conn: UserConn, org_id: UUID, case_id: UUID, sets: dict[str, Any]) -> None:
-    cols = ", ".join(f"{k} = %({k})s" for k in sets)
+    cols = sql.SQL(", ").join(
+        sql.SQL("{} = {}").format(sql.Identifier(k), sql.Placeholder(k)) for k in sets
+    )
     try:
         row = conn.execute(
-            f"""update public.onboarding_cases set {cols}
-                where org_id = %(org)s and id = %(id)s returning id""",  # noqa: S608 - fixed keys
+            sql.SQL(
+                """update public.onboarding_cases set {cols}
+                   where org_id = %(org)s and id = %(id)s returning id"""
+            ).format(cols=cols),
             {**sets, "org": org_id, "id": case_id},
         ).fetchone()
     except pg_errors.CheckViolation as e:
@@ -162,8 +172,8 @@ def submit(conn: UserConn, org_id: UUID, case_id: UUID) -> None:
 
 def decide(
     conn: UserConn, org_id: UUID, case_id: UUID, decision: str, note: str | None
-) -> str | None:
-    """Buyer/staff: approve, reject or return. Returns the supplier id to screen on approval."""
+) -> tuple[str, str] | None:
+    """Buyer/staff: approve, reject or return. On approval returns (supplier id, approved BIN)."""
     status = {"approve": "approved", "reject": "rejected", "return": "in_progress"}.get(decision)
     if status is None:
         raise Rejected("invalid_decision")
@@ -173,6 +183,8 @@ def decide(
     if status != "approved":
         return None
     row = conn.execute(
-        "select supplier_id from public.onboarding_cases where id = %s", (case_id,)
+        "select supplier_id, bin from public.onboarding_cases where id = %s", (case_id,)
     ).fetchone()
-    return None if row is None or row["supplier_id"] is None else str(row["supplier_id"])
+    if row is None or row["supplier_id"] is None or row["bin"] is None:
+        return None
+    return str(row["supplier_id"]), str(row["bin"])
