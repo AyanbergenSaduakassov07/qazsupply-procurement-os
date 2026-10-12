@@ -87,6 +87,7 @@ create table public.screenings (
 create index screenings_party_idx on public.screenings (party_id, org_id, checked_at desc);
 create index screenings_item_idx on public.screenings (item_id, org_id, checked_at desc);
 create index screenings_checked_by_idx on public.screenings (checked_by);
+create index screenings_org_idx on public.screenings (org_id, checked_at);
 
 create table public.screening_hits (
   id uuid primary key default gen_random_uuid(),
@@ -103,6 +104,8 @@ create table public.screening_hits (
   unique (screening_id, entry_id),
   foreign key (screening_id, org_id) references public.screenings (id, org_id) on delete cascade
 );
+create index screening_hits_screening_idx on public.screening_hits (screening_id, org_id);
+create index screening_hits_org_idx on public.screening_hits (org_id);
 
 -- A named human confirms or dismisses a hit. Latest decision wins; history is kept.
 create table public.hit_decisions (
@@ -124,6 +127,7 @@ create table public.hit_decisions (
 );
 create index hit_decisions_hit_idx on public.hit_decisions (hit_id, org_id, created_at desc);
 create index hit_decisions_decided_by_idx on public.hit_decisions (decided_by);
+create index hit_decisions_org_idx on public.hit_decisions (org_id, created_at);
 
 create trigger screenings_append_only before update or delete on public.screenings
   for each row execute function private.reject_mutation();
