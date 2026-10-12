@@ -158,3 +158,11 @@ insert into public.suppliers (id, org_id, name, bin) values
   ('7a000000-0000-4000-a000-0000000000a2', '10000000-0000-4000-a000-00000000000a', 'ТОО «Гамма Индастри»', '100140033333'),
   ('7a000000-0000-4000-a000-0000000000a3', '10000000-0000-4000-a000-00000000000a', 'ТОО «Down»', '990000000001'),
   ('7a000000-0000-4000-a000-0000000000a4', '10000000-0000-4000-a000-00000000000a', 'ТОО «Бета»', '210987654321');
+
+-- M4 onboarding: one Org B case and document (tenant-isolation suite needs a B row per table).
+insert into public.onboarding_cases (id, org_id, supplier_user_id, status, legal_name, created_by)
+values ('93000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
+  '00000000-0000-4000-a000-0000000000b1', 'invited', 'ТОО «Б Сэмпл»', '00000000-0000-4000-a000-0000000000b1');
+insert into public.onboarding_documents (org_id, case_id, kind, file_name, content_type, size_bytes, sha256, content)
+values ('10000000-0000-4000-a000-00000000000b', '93000000-0000-4000-a000-00000000000b', 'other', 'b.pdf',
+  'application/pdf', 8, encode(sha256('%PDF-1.4'::bytea), 'hex'), '%PDF-1.4'::bytea);

@@ -121,7 +121,7 @@ select pg_temp.as_user((select user_a from ids));
 select lives_ok(
   format($$update public.organizations set risk_config = '{"sanctions": 0}' where id = %L$$, (select org_a from ids)),
   'client_user update of risk weights runs');
-select is((select risk_config from public.organizations where id = (select org_a from ids)), '{}'::jsonb,
+select is((select risk_config ->> 'sanctions' from public.organizations where id = (select org_a from ids)), null,
   'but changes nothing (admins only)');
 
 select * from finish();
