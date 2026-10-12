@@ -149,3 +149,12 @@ values ('92000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-0000000
 insert into public.hit_decisions (org_id, hit_id, decision, reason_code, decided_by)
 values ('10000000-0000-4000-a000-00000000000b', '92000000-0000-4000-a000-00000000000b', 'dismissed',
   'different_birth_year', '00000000-0000-4000-a000-0000000000b1');
+
+-- M4: Org A suppliers whose BINs exist in the sample registry (connectors/registries), for the
+-- Supplier 360 demo and e2e: a chain with sanctions/PEP hits, a 50+ party holding, an unreliable
+-- supplier, and a registry outage. Invented data.
+insert into public.suppliers (id, org_id, name, bin) values
+  ('7a000000-0000-4000-a000-0000000000a1', '10000000-0000-4000-a000-00000000000a', 'ТОО «Альфа»', '123456789012'),
+  ('7a000000-0000-4000-a000-0000000000a2', '10000000-0000-4000-a000-00000000000a', 'ТОО «Гамма Индастри»', '100140033333'),
+  ('7a000000-0000-4000-a000-0000000000a3', '10000000-0000-4000-a000-00000000000a', 'ТОО «Down»', '990000000001'),
+  ('7a000000-0000-4000-a000-0000000000a4', '10000000-0000-4000-a000-00000000000a', 'ТОО «Бета»', '210987654321');

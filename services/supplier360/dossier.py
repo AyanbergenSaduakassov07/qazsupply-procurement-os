@@ -73,11 +73,19 @@ def spend(conn: UserConn, org_id: UUID, supplier_ids: list[UUID]) -> dict[str, A
                   coalesce(sum(quantity * unit_price_kzt), 0) as total_kzt,
                   count(*) filter (where quantity is null or unit_price_kzt is null)::int
                     as unpriced,
-                  min(purchased_on) as first_on, max(purchased_on) as last_on,
-                  (array_agg(id order by purchased_on desc))[1:200] as line_ids
+                  min(purchased_on) as first_on, max(purchased_on) as last_on
            from public.purchase_lines where org_id = %s and supplier_id = any(%s)""",
         (org_id, supplier_ids),
     ).fetchone()
+    sources = conn.execute(
+        """select pl.id, f.name as file_name, pl.source_row, pl.item_text, pl.supplier_text,
+                  pl.quantity, pl.unit_price_kzt, pl.purchased_on
+           from public.purchase_lines pl
+           join public.files f on f.id = pl.file_id and f.org_id = pl.org_id
+           where pl.org_id = %s and pl.supplier_id = any(%s)
+           order by pl.purchased_on desc nulls last, pl.source_row limit 200""",
+        (org_id, supplier_ids),
+    ).fetchall()
     findings = conn.execute(
         """select id, type, saving_estimate, currency, report_id from public.findings
            where org_id = %s and supplier_id = any(%s) order by saving_estimate desc""",
@@ -88,7 +96,7 @@ def spend(conn: UserConn, org_id: UUID, supplier_ids: list[UUID]) -> dict[str, A
         **dict(row),
         "evidence": {
             "method": "sum(quantity * unit_price_kzt) over the supplier's purchase lines",
-            "line_ids": row["line_ids"] or [],
+            "sources": [dict(r) for r in sources],
         },
         "findings": [dict(f) for f in findings],
     }

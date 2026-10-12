@@ -20,7 +20,7 @@ export const PRIMARY_NAV: NavItem[] = [
   { key: "uploads", path: "/spend", labelKey: "nav.uploads", roles: READERS },
   { key: "review", path: "/spend/review", labelKey: "nav.review", roles: READERS },
   { key: "findings", path: "/spend/reports", labelKey: "nav.findings", roles: READERS },
-  { key: "suppliers", path: "/suppliers", labelKey: "nav.suppliers", disabled: true },
+  { key: "suppliers", path: "/suppliers", labelKey: "nav.suppliers", roles: READERS },
   { key: "rfq", path: "/rfq", labelKey: "nav.rfq", disabled: true },
   { key: "shipments", path: "/shipments", labelKey: "nav.shipments", disabled: true },
 ];
