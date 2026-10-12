@@ -4,7 +4,7 @@
 
 AI procurement, supplier-vetting and shipment-control platform for Kazakhstan and Central Asia.
 
-> **Status (2026-10-12):** M0-M3 are built and run end to end on synthetic data: upload -> matching -> findings -> human review -> released report + PDF -> cited Ask. Nothing is deployed and only M0 is merged to `main` (M1-M3 wait in PRs #1-#5). The next phase (M4) waits for Gate A, which needs real data and paid audits from the owner. See [Project status](#project-status) below, the live tracker [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md), and [`CHANGELOG.md`](CHANGELOG.md).
+> **Status (2026-10-12):** M0-M3 are built and run end to end on synthetic data: upload -> matching -> findings -> human review -> released report + PDF -> cited Ask. Nothing is deployed and only M0 is merged to `main` (M1-M3 wait in PRs #1-#5). M4 (Supplier 360, screening, onboarding) is built on invented sample sources by owner override; Gate A (real data, paid audits) is still open. See [Project status](#project-status) below, the live tracker [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md), and [`CHANGELOG.md`](CHANGELOG.md).
 
 ## What it is
 
@@ -52,7 +52,8 @@ flowchart LR
 | M1 Data platform, design system, app shell | Built (PR #1) |
 | M2 Spend X-ray engine | Built; gate **blocked**: needs real ЕНС ТРУ data, 300 owner-labelled lines, 2 hand-audited datasets |
 | M3 Review gate, client report + PDF, Ask | Built (PR #5); open: live Ask citation coverage re-run (free-tier quota) |
-| M4-M9 | Not started; M4 starts after **Gate A** |
+| M4 Supplier 360, screening, onboarding | In progress on sample data (owner override before Gate A); real sources and real decisions open |
+| M5-M9 | Not started |
 
 ### What it can do today (local, synthetic data)
 - **Upload** purchase exports (CSV/XLSX in ru/kk/en formats) with plain-language row errors. Macro files, zip bombs and duplicate uploads are refused.
@@ -68,7 +69,7 @@ Real data sources (ЕНС ТРУ, goszakup, sanctions), Supplier 360, RFQs, logi
 
 ### Needed from the owner
 1. Merge PRs #1 -> #2 -> #3 -> #4 -> #5 (squash; the agent rebases the next one after each merge). In PR #4, confirm or refuse the OFL licence exception for the PDF font (IBM Plex).
-2. Add about $10 of OpenRouter credit (1,000 free-model requests per day) so the live Ask eval can close M3; later, a production model key and a DPA with that provider.
+2. Free tier only for now (owner, 2026-10-12): the live Ask eval runs in slices under OpenRouter's 50 free requests/day. Later, a production model key and a DPA with that provider.
 3. Send the ЕНС ТРУ / goszakup access request (draft in [`docs/runbooks/m2-gate-data.md`](docs/runbooks/m2-gate-data.md)).
 4. **Gate A evidence:** 300 hand-labelled purchase lines; 2 real spend exports with every finding marked correct or wrong (precision >= 80%); 3 paid audits run through the product.
 5. Before the first real client: a remote Supabase project, a native Kazakh review of the UI copy, and a GitHub plan for branch protection.

@@ -22,6 +22,19 @@ Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](
 ### Process
 - Trunk-based branching adopted (owner decision 2026-10-11): `main` always green, short-lived squash-merged branches. See `CONTRIBUTING.md`.
 
+## M4: Supplier 360 and compliance (2026-10-12): in progress, on sample data
+
+Started before Gate A by owner override; every source is an invented sample adapter until real access exists. Acceptance items that need real suppliers and decisions stay open.
+
+### Added
+- **Supplier 360 dossier:** verdict strip (icon + words, top reasons), registry facts with source and date, ownership graph (keyboard navigable, 50+ parties) with a table view, screening with explanations, spend with the Evidence drawer, the score's factor table. Supplier list with verdicts. Per-org risk weights in Settings.
+- **Screening:** sanctions/PEP by name across kk/ru/en/Kazakh Latin (explainable matcher, recall 1.0 / 0 false positives on the synthetic set), unreliable-supplier registry by BIN, dual-use on bought goods. A hit never blocks: a client admin or reviewer confirms or dismisses with a reason code; all audited.
+- **Supplier onboarding:** buyer invites a supplier member; supplier completes details, documents (PDF/PNG/JPEG, fields confirmed by the supplier) and sends; a named human approves, returns or rejects. State machine in the database.
+- Sample connectors `registries`, `goszakup` (РНУ), `opensanctions`, `dualuse`, with typed outages shown in the UI.
+
+### Fixed (found while building M4)
+- Concurrent uploads deadlocked the API (async handlers with sync DB calls); the audit hash chain forked under concurrent writes; concurrent normalisation runs duplicated suppliers. Each has a regression test.
+
 ## M3: X-ray product surface (2026-10-12): built, one acceptance check open
 
 Started before the M2 gate by owner override (Gate A's paid audits need this surface). Open: live Ask citation coverage (>= 95%) re-run after a ref-format fix.
