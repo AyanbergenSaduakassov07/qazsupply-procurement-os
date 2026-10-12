@@ -31,6 +31,10 @@ Conventions: every client-data entity carries `org_id` (its Organization). "Inva
 - **Screening:** a sanctions / PEP / dual-use / registry check on a Party or Item at a point in time, against a dated source version. *Invariants:* a hit never auto-blocks; a human confirms or dismisses with a reason code; every result records source, source version and timestamp.
 - **Dossier:** the Supplier 360 page: verdict strip, risk factors, evidence tabs. *Invariant:* every claim has a source link + date; AI summaries are labelled AI-generated.
 - **Risk score:** rules-first, transparent weighted factors, editable per Organization. Not a credit rating.
+- **Verdict:** the Dossier's headline: `ok`, `caution`, `high_risk` or `unknown`, from the Risk score. *Invariants:* a confirmed sanctions hit is always `high_risk`; a supplier that was never built or screened is `unknown`, never `ok`; shown as icon + words.
+- **Hit decision:** a human's `confirmed` / `dismissed` on one screening hit, with a reason code (and a note for `other`). Append-only; the latest decision counts; audited.
+- **Sample source:** a connector serving invented data until real access exists. *Invariant:* every row it produces carries `sample = true` and the UI shows a "Sample data" badge.
+- **Onboarding case:** a buyer's request that one supplier user completes: `invited -> in_progress -> submitted -> approved | rejected` (or returned to `in_progress` with a note). *Invariants:* the supplier sees only its own case and cannot decide; buyers cannot rewrite what the supplier declared; approval is a named human's and starts a screening.
 
 ## Procurement OS
 - **Spec (ТЗ):** a technical specification for a purchase. The ТЗ checker flags ambiguity, brand-locking, missing parameters.
