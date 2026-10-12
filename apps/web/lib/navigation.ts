@@ -23,6 +23,7 @@ export const PRIMARY_NAV: NavItem[] = [
   { key: "suppliers", path: "/suppliers", labelKey: "nav.suppliers", roles: READERS },
   { key: "rfq", path: "/rfq", labelKey: "nav.rfq", disabled: true },
   { key: "shipments", path: "/shipments", labelKey: "nav.shipments", disabled: true },
+  { key: "onboarding", path: "/onboarding", labelKey: "nav.onboarding", roles: ["supplier"] },
 ];
 
 export const ADMIN_NAV: NavItem[] = [

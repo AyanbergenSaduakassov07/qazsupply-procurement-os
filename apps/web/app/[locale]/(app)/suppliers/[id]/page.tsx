@@ -1,10 +1,13 @@
 import { apiClient } from "@qazsupply/api-client";
 import { isLocale } from "@qazsupply/i18n";
+import { Card, CardBody, CardHeader, CardTitle } from "@qazsupply/ui/components/card";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import type { Degraded } from "../../../../../app/supplier-actions";
+import { InviteForm } from "../../../../../components/onboarding/onboarding-views";
 import { DossierView } from "../../../../../components/suppliers/dossier-view";
+import { onboardingLabels } from "../../../../../lib/onboarding-labels";
 import { getSession } from "../../../../../lib/session";
 import { supplierLabels } from "../../../../../lib/supplier-labels";
 
@@ -58,6 +61,16 @@ export default async function DossierPage({
         canDecide={DECIDERS.has(org.role)}
         degraded={degraded}
       />
+      {DECIDERS.has(org.role) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{onboardingLabels(locale).invite}</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <InviteForm supplierId={id} labels={onboardingLabels(locale)} locale={locale} />
+          </CardBody>
+        </Card>
+      )}
     </div>
   );
 }

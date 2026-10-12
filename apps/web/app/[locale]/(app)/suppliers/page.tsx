@@ -33,6 +33,12 @@ export default async function SuppliersPage({ params }: { params: Promise<{ loca
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="gold">{labels.sample}</Badge>
         <span className="text-xs text-muted">{labels.sampleHint}</span>
+        <Link
+          href={`/${locale}/onboarding`}
+          className="ml-auto min-h-11 content-center text-sm text-link underline-offset-2 hover:underline"
+        >
+          {t(locale, "ob.cases")}
+        </Link>
       </div>
       {rows.length === 0 ? (
         <EmptyState title={t(locale, "s360.empty")} message={t(locale, "s360.emptyHint")} />
