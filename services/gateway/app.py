@@ -17,7 +17,14 @@ from fastapi.responses import JSONResponse
 from psycopg import errors as pg_errors
 from pydantic import BaseModel
 
-from services.gateway import log, routes_ask, routes_core, routes_report, routes_spend
+from services.gateway import (
+    log,
+    routes_ask,
+    routes_core,
+    routes_report,
+    routes_spend,
+    routes_supplier360,
+)
 from services.gateway.auth import Verifier
 from services.gateway.db import Database
 from services.gateway.settings import Settings, load
@@ -123,3 +130,4 @@ app.include_router(routes_spend.build())
 app.include_router(routes_core.router)
 app.include_router(routes_report.router)
 app.include_router(routes_ask.router)
+app.include_router(routes_supplier360.router)
