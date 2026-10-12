@@ -1,0 +1,1 @@
+{"at": "2026-10-12T10:05:18+00:00", "git": "fd62596", "threshold": 80.0, "positives": 51, "negatives": 25, "recall": 1.0, "missed": [], "fp_per_query": 0.0, "neg_hit_rate": 0.0}
