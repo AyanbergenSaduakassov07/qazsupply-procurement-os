@@ -311,6 +311,51 @@
         "title": "Body_upload_preview_orgs__org_id__uploads_preview_post",
         "type": "object"
       },
+      "BuildResult": {
+        "properties": {
+          "degraded": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Degraded",
+            "type": "array"
+          },
+          "party_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Party Id"
+          },
+          "possible_matches": {
+            "title": "Possible Matches",
+            "type": "integer"
+          },
+          "screenings": {
+            "title": "Screenings",
+            "type": "integer"
+          },
+          "truncated": {
+            "title": "Truncated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "party_id",
+          "degraded",
+          "truncated",
+          "screenings",
+          "possible_matches"
+        ],
+        "title": "BuildResult",
+        "type": "object"
+      },
       "Candidate": {
         "properties": {
           "code": {
@@ -389,6 +434,122 @@
           "unit"
         ],
         "title": "ClassifierItem",
+        "type": "object"
+      },
+      "Decision": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "confirmed",
+              "dismissed"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "reason_code": {
+            "title": "Reason Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision",
+          "reason_code"
+        ],
+        "title": "Decision",
+        "type": "object"
+      },
+      "Dossier": {
+        "properties": {
+          "built": {
+            "title": "Built",
+            "type": "boolean"
+          },
+          "company": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Party"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Screening"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/Party"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "resolved": {
+            "title": "Resolved",
+            "type": "boolean"
+          },
+          "risk": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Risk"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "screenings": {
+            "items": {
+              "$ref": "#/components/schemas/Screening"
+            },
+            "title": "Screenings",
+            "type": "array"
+          },
+          "spend": {
+            "$ref": "#/components/schemas/Spend"
+          },
+          "supplier": {
+            "additionalProperties": true,
+            "title": "Supplier",
+            "type": "object"
+          }
+        },
+        "required": [
+          "supplier",
+          "resolved",
+          "built",
+          "company",
+          "nodes",
+          "edges",
+          "screenings",
+          "items",
+          "spend",
+          "risk"
+        ],
+        "title": "Dossier",
         "type": "object"
       },
       "Evidence": {
@@ -620,6 +781,40 @@
         "title": "EvidenceSource",
         "type": "object"
       },
+      "Factor": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "title": "Detail",
+            "type": "object"
+          },
+          "points": {
+            "title": "Points",
+            "type": "integer"
+          },
+          "triggered": {
+            "title": "Triggered",
+            "type": "boolean"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "weight",
+          "triggered",
+          "points",
+          "detail"
+        ],
+        "title": "Factor",
+        "type": "object"
+      },
       "Finding": {
         "properties": {
           "confidence": {
@@ -849,6 +1044,186 @@
         "title": "Health",
         "type": "object"
       },
+      "Hit": {
+        "properties": {
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "decided_by_me": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By Me"
+          },
+          "decided_by_staff": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By Staff"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "enum": [
+                  "confirmed",
+                  "dismissed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "entry_id": {
+            "title": "Entry Id",
+            "type": "string"
+          },
+          "entry_name": {
+            "title": "Entry Name",
+            "type": "string"
+          },
+          "entry_topics": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Entry Topics",
+            "type": "array"
+          },
+          "explanation": {
+            "additionalProperties": true,
+            "title": "Explanation",
+            "type": "object"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Code"
+          },
+          "score": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Score",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "entry_id",
+          "entry_name",
+          "entry_topics",
+          "score",
+          "explanation",
+          "decision",
+          "reason_code",
+          "note",
+          "decided_at",
+          "decided_by_me",
+          "decided_by_staff"
+        ],
+        "title": "Hit",
+        "type": "object"
+      },
+      "Link": {
+        "properties": {
+          "fetched_at": {
+            "format": "date-time",
+            "title": "Fetched At",
+            "type": "string"
+          },
+          "owned_id": {
+            "format": "uuid",
+            "title": "Owned Id",
+            "type": "string"
+          },
+          "owner_id": {
+            "format": "uuid",
+            "title": "Owner Id",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "shareholder",
+              "beneficial_owner",
+              "director"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "sample": {
+            "title": "Sample",
+            "type": "boolean"
+          },
+          "share_pct": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Pct"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "owner_id",
+          "owned_id",
+          "role",
+          "share_pct",
+          "source_id",
+          "fetched_at",
+          "sample"
+        ],
+        "title": "Link",
+        "type": "object"
+      },
       "Me": {
         "properties": {
           "email": {
@@ -1019,6 +1394,126 @@
           }
         },
         "title": "OrgSettingsPatch",
+        "type": "object"
+      },
+      "Party": {
+        "properties": {
+          "bin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bin"
+          },
+          "birth_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Year"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "depth": {
+            "title": "Depth",
+            "type": "integer"
+          },
+          "fetched_at": {
+            "format": "date-time",
+            "title": "Fetched At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "company",
+              "person"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "licence": {
+            "title": "Licence",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "registered_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registered On"
+          },
+          "registry_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registry Status"
+          },
+          "sample": {
+            "title": "Sample",
+            "type": "boolean"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          },
+          "source_ref": {
+            "title": "Source Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "country",
+          "bin",
+          "birth_year",
+          "registry_status",
+          "registered_on",
+          "source_id",
+          "source_ref",
+          "fetched_at",
+          "licence",
+          "sample",
+          "depth"
+        ],
+        "title": "Party",
         "type": "object"
       },
       "QueueLine": {
@@ -1550,6 +2045,46 @@
         "title": "ReviewResult",
         "type": "object"
       },
+      "Risk": {
+        "properties": {
+          "factors": {
+            "items": {
+              "$ref": "#/components/schemas/Factor"
+            },
+            "title": "Factors",
+            "type": "array"
+          },
+          "score": {
+            "title": "Score",
+            "type": "integer"
+          },
+          "top": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Top",
+            "type": "array"
+          },
+          "verdict": {
+            "enum": [
+              "ok",
+              "caution",
+              "high_risk",
+              "unknown"
+            ],
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "score",
+          "verdict",
+          "factors",
+          "top"
+        ],
+        "title": "Risk",
+        "type": "object"
+      },
       "RowError": {
         "properties": {
           "code": {
@@ -1578,6 +2113,225 @@
           "column"
         ],
         "title": "RowError",
+        "type": "object"
+      },
+      "Screening": {
+        "properties": {
+          "checked_at": {
+            "format": "date-time",
+            "title": "Checked At",
+            "type": "string"
+          },
+          "checked_by_me": {
+            "title": "Checked By Me",
+            "type": "boolean"
+          },
+          "hits": {
+            "items": {
+              "$ref": "#/components/schemas/Hit"
+            },
+            "title": "Hits",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "list_source": {
+            "title": "List Source",
+            "type": "string"
+          },
+          "list_version": {
+            "title": "List Version",
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "clear",
+              "possible_match",
+              "unavailable"
+            ],
+            "title": "Result",
+            "type": "string"
+          },
+          "sample": {
+            "title": "Sample",
+            "type": "boolean"
+          },
+          "subject_id": {
+            "format": "uuid",
+            "title": "Subject Id",
+            "type": "string"
+          },
+          "trigger": {
+            "title": "Trigger",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "subject_id",
+          "list_source",
+          "list_version",
+          "trigger",
+          "result",
+          "sample",
+          "checked_at",
+          "checked_by_me",
+          "hits"
+        ],
+        "title": "Screening",
+        "type": "object"
+      },
+      "Spend": {
+        "properties": {
+          "evidence": {
+            "additionalProperties": true,
+            "title": "Evidence",
+            "type": "object"
+          },
+          "findings": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Findings",
+            "type": "array"
+          },
+          "first_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First On"
+          },
+          "last_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last On"
+          },
+          "lines": {
+            "title": "Lines",
+            "type": "integer"
+          },
+          "total_kzt": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Kzt",
+            "type": "string"
+          },
+          "unpriced": {
+            "title": "Unpriced",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lines",
+          "total_kzt",
+          "unpriced",
+          "first_on",
+          "last_on",
+          "evidence",
+          "findings"
+        ],
+        "title": "Spend",
+        "type": "object"
+      },
+      "SupplierRow": {
+        "properties": {
+          "bin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bin"
+          },
+          "built": {
+            "title": "Built",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sample": {
+            "title": "Sample",
+            "type": "boolean"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "spend_kzt": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Spend Kzt",
+            "type": "string"
+          },
+          "top": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Top",
+            "type": "array"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ok",
+                  "caution",
+                  "high_risk",
+                  "unknown"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "bin",
+          "built",
+          "verdict",
+          "score",
+          "top",
+          "spend_kzt",
+          "sample"
+        ],
+        "title": "SupplierRow",
         "type": "object"
       },
       "UploadPreview": {
@@ -1774,6 +2528,46 @@
           "type"
         ],
         "title": "ValidationError",
+        "type": "object"
+      },
+      "Weights": {
+        "properties": {
+          "defaults": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Defaults",
+            "type": "object"
+          },
+          "weights": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Weights",
+            "type": "object"
+          }
+        },
+        "required": [
+          "defaults",
+          "weights"
+        ],
+        "title": "Weights",
+        "type": "object"
+      },
+      "WeightsUpdate": {
+        "properties": {
+          "weights": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Weights",
+            "type": "object"
+          }
+        },
+        "required": [
+          "weights"
+        ],
+        "title": "WeightsUpdate",
         "type": "object"
       }
     },
@@ -3057,6 +3851,223 @@
         ]
       }
     },
+    "/orgs/{org_id}/risk-weights": {
+      "get": {
+        "operationId": "get_weights_orgs__org_id__risk_weights_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Weights"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Weights",
+        "tags": [
+          "supplier360"
+        ]
+      },
+      "put": {
+        "operationId": "put_weights_orgs__org_id__risk_weights_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeightsUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Weights"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Put Weights",
+        "tags": [
+          "supplier360"
+        ]
+      }
+    },
+    "/orgs/{org_id}/screening-hits/{hit_id}/decision": {
+      "post": {
+        "operationId": "decide_hit_orgs__org_id__screening_hits__hit_id__decision_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "hit_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Hit Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Decide Hit",
+        "tags": [
+          "supplier360"
+        ]
+      }
+    },
+    "/orgs/{org_id}/screenings/rescreen-due": {
+      "post": {
+        "operationId": "rescreen_orgs__org_id__screenings_rescreen_due_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Rescreen Orgs  Org Id  Screenings Rescreen Due Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Rescreen",
+        "tags": [
+          "supplier360"
+        ]
+      }
+    },
     "/orgs/{org_id}/settings": {
       "get": {
         "operationId": "org_settings_orgs__org_id__settings_get",
@@ -3153,6 +4164,172 @@
           }
         ],
         "summary": "Update Org Settings"
+      }
+    },
+    "/orgs/{org_id}/suppliers": {
+      "get": {
+        "operationId": "list_suppliers_orgs__org_id__suppliers_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierRow"
+                  },
+                  "title": "Response List Suppliers Orgs  Org Id  Suppliers Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Suppliers",
+        "tags": [
+          "supplier360"
+        ]
+      }
+    },
+    "/orgs/{org_id}/suppliers/{supplier_id}/dossier": {
+      "get": {
+        "operationId": "read_dossier_orgs__org_id__suppliers__supplier_id__dossier_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "supplier_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Supplier Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dossier"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Read Dossier",
+        "tags": [
+          "supplier360"
+        ]
+      },
+      "post": {
+        "operationId": "build_dossier_orgs__org_id__suppliers__supplier_id__dossier_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "supplier_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Supplier Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Build Dossier",
+        "tags": [
+          "supplier360"
+        ]
       }
     },
     "/orgs/{org_id}/uploads": {
