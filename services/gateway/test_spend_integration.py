@@ -168,11 +168,12 @@ def test_concurrent_normalisation_resolves_one_supplier_per_bin(client: TestClie
         )
         assert up.status_code == 200
         barrier.wait(timeout=20)  # all four normalisation runs start together
-        return client.post(
+        r = client.post(
             f"/orgs/{ORG_A}/normalize",
             headers={"Authorization": f"Bearer {token('clientUserA')}"},
             json={"file_id": up.json()["file_id"]},
-        ).status_code
+        )
+        return int(r.status_code)
 
     barrier = threading.Barrier(4)
     try:
