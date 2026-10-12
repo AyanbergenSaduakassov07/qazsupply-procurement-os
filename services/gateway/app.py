@@ -21,6 +21,7 @@ from services.gateway import (
     log,
     routes_ask,
     routes_core,
+    routes_onboarding,
     routes_report,
     routes_spend,
     routes_supplier360,
@@ -131,3 +132,4 @@ app.include_router(routes_core.router)
 app.include_router(routes_report.router)
 app.include_router(routes_ask.router)
 app.include_router(routes_supplier360.router)
+app.include_router(routes_onboarding.router)

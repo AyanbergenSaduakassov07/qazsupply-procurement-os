@@ -239,3 +239,31 @@ def tenancy_audit(conn: UserConn, org_id: UUID, weights: dict[str, int]) -> None
         "select private.append_audit(%s, 'risk.weights_changed', 'organizations', %s, %s)",
         (org_id, org_id, Jsonb(weights)),
     )
+
+
+# ---------------------------------------------------------------- onboarding (public surface)
+from services.supplier360 import onboarding as _ob  # noqa: E402
+
+OnboardingRejected = _ob.Rejected
+invite_supplier = _ob.invite
+onboarding_cases = _ob.cases
+onboarding_case = _ob.case
+save_onboarding_details = _ob.save_details
+add_onboarding_document = _ob.add_document
+onboarding_document = _ob.document
+MAX_DOC_BYTES = _ob.MAX_DOC_BYTES
+submit_onboarding = _ob.submit
+
+
+def decide_onboarding(
+    conn: UserConn, org_id: UUID, case_id: UUID, decision: str, note: str | None
+) -> Built | None:
+    """Approve / reject / return. An approval screens the supplier (trigger `onboarding`) when
+    it has a BIN; a supplier without one stays unresolved and is not screened."""
+    supplier_id = _ob.decide(conn, org_id, case_id, decision, note)
+    if supplier_id is None:
+        return None
+    try:
+        return build(conn, org_id, UUID(supplier_id), trigger="onboarding")
+    except Unresolved:
+        return None
