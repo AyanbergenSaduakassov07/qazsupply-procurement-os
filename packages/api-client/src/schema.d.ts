@@ -1772,6 +1772,7 @@ export interface operations {
         parameters: {
             query?: {
                 limit?: number;
+                kind?: string | null;
             };
             header?: never;
             path: {

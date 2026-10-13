@@ -554,5 +554,14 @@
   "ob.humanCheck": "A person decides. Approval starts a screening of the supplier.",
   "ob.decided": "Decision saved",
   "s360.factor.watchlist_match": "Match on an enforcement or crime list",
-  "ob.binMismatch": "The supplier declared BIN {declared}, but your supplier record has {record}. Approving screens the declared company."
+  "ob.binMismatch": "The supplier declared BIN {declared}, but your supplier record has {record}. Approving screens the declared company.",
+  "audit.filter": "Filter by action",
+  "audit.kind.all": "All",
+  "audit.kind.file": "Uploads",
+  "audit.kind.report": "Reports",
+  "audit.kind.review": "Reviews",
+  "audit.kind.screening": "Screening",
+  "audit.kind.onboarding": "Onboarding",
+  "audit.kind.dossier": "Dossier views",
+  "audit.kind.risk": "Risk settings"
 }

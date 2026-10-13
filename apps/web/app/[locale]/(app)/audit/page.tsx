@@ -2,6 +2,7 @@ import { apiClient } from "@qazsupply/api-client";
 import { isLocale, t } from "@qazsupply/i18n";
 import { Badge } from "@qazsupply/ui/components/badge";
 import { Card, CardBody, CardHeader, CardTitle } from "@qazsupply/ui/components/card";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getSession } from "../../../../lib/session";
@@ -21,9 +22,20 @@ function StateBlock({ title, message }: { title: string; message: string }) {
   );
 }
 
-export default async function AuditPage({ params }: { params: Promise<{ locale: string }> }) {
+const KINDS = ["file", "report", "review", "screening", "onboarding", "dossier", "risk"] as const;
+type Kind = (typeof KINDS)[number];
+
+export default async function AuditPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ kind?: string }>;
+}) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const requested = (await searchParams).kind;
+  const kind = KINDS.find((k) => k === requested);
 
   const session = await getSession();
   // Only the ACTIVE org, and only if the user is an admin there; the API re-checks (403/404).
@@ -55,7 +67,10 @@ export default async function AuditPage({ params }: { params: Promise<{ locale: 
 
   const token = session.status === "authenticated" ? session.token : undefined;
   const { data, error } = await apiClient(API_URL, token).GET("/orgs/{org_id}/audit-log", {
-    params: { path: { org_id: membership.org_id }, query: { limit: 50 } },
+    params: {
+      path: { org_id: membership.org_id },
+      query: { limit: 50, ...(kind ? { kind } : {}) },
+    },
   });
 
   if (error || !data) {
@@ -79,6 +94,20 @@ export default async function AuditPage({ params }: { params: Promise<{ locale: 
   return (
     <div className="max-w-3xl">
       {heading}
+      <nav aria-label={t(locale, "audit.filter")} className="mb-3 flex flex-wrap gap-2 text-sm">
+        {([undefined, ...KINDS] as (Kind | undefined)[]).map((k) => (
+          <Link
+            key={k ?? "all"}
+            href={k ? `/${locale}/audit?kind=${k}` : `/${locale}/audit`}
+            aria-current={k === kind ? "page" : undefined}
+            className={`inline-flex min-h-11 items-center rounded-full border px-3 ${
+              k === kind ? "border-[var(--qs-focus)] text-ink" : "border-line text-muted"
+            }`}
+          >
+            {t(locale, `audit.kind.${k ?? "all"}`)}
+          </Link>
+        ))}
+      </nav>
       <div className="mb-3">
         <Badge variant={data.chain_intact ? "ok" : "risk"}>
           {data.chain_intact ? t(locale, "audit.chainIntact") : t(locale, "audit.chainBroken")}

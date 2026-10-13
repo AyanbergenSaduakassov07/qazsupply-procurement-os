@@ -53,11 +53,16 @@ def update_org_settings(conn: UserConn, org_id: UUID, changes: dict[str, bool]) 
     return cur.rowcount > 0
 
 
-def audit_log(conn: UserConn, org_id: UUID, limit: int) -> list[dict[str, Any]]:
+def audit_log(
+    conn: UserConn, org_id: UUID, limit: int, kind: str | None = None
+) -> list[dict[str, Any]]:
+    """Newest first; `kind` keeps one action family (`file` -> `file.*`)."""
     return conn.execute(
         """select id, actor_id, action, entity, entity_id, details, created_at, hash
-           from public.audit_log where org_id = %s order by id desc limit %s""",
-        (org_id, limit),
+           from public.audit_log
+           where org_id = %s and (%s::text is null or action like %s::text || '.%%')
+           order by id desc limit %s""",
+        (org_id, kind, kind, limit),
     ).fetchall()
 
 

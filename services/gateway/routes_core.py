@@ -124,11 +124,14 @@ def evidence_detail(org_id: UUID, evidence_id: UUID, conn: OrgConn) -> Evidence:
 
 @router.get("/orgs/{org_id}/audit-log")
 def audit_log(
-    org_id: UUID, conn: OrgConn, limit: Annotated[int, Query(ge=1, le=200)] = 50
+    org_id: UUID,
+    conn: OrgConn,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+    kind: Annotated[str | None, Query(pattern=r"^[a-z_]{1,32}$")] = None,
 ) -> AuditLog:
     if not tenancy.is_admin(conn, org_id):
         raise HTTPException(403, "forbidden")
-    entries = [AuditEntry(**r) for r in tenancy.audit_log(conn, org_id, limit)]
+    entries = [AuditEntry(**r) for r in tenancy.audit_log(conn, org_id, limit, kind)]
     return AuditLog(chain_intact=tenancy.audit_chain_intact(conn, org_id), entries=entries)
 
 

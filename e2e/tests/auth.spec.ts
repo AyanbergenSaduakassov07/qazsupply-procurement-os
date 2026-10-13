@@ -51,8 +51,9 @@ test.describe("signed out", () => {
     await page.keyboard.type(fixture.password);
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/\/en$/);
-    await page.goto("/en/audit");
-    await expect(page.getByText("file.uploaded")).toBeVisible();
+    // Screening and dossier views add many entries; the filter keeps uploads reachable.
+    await page.goto("/en/audit?kind=file");
+    await expect(page.getByText("file.uploaded").first()).toBeVisible();
   });
 });
 
@@ -81,7 +82,12 @@ test.describe("tenant isolation through the UI (client_admin of Org A)", () => {
 
   test("audit log shows Org A entries with a verified chain", async ({ page }) => {
     await page.goto("/en/audit");
-    await expect(page.getByText("file.uploaded")).toBeVisible();
+    await page
+      .getByRole("navigation", { name: "Filter by action" })
+      .getByRole("link", { name: "Uploads" })
+      .click();
+    await expect(page).toHaveURL(/kind=file/);
+    await expect(page.getByText("file.uploaded").first()).toBeVisible();
     await expect(page.getByText(/chain.*(intact|verified)/i)).toBeVisible();
   });
 
