@@ -110,7 +110,9 @@ export async function importUpload(form: FormData): Promise<Imported | Fail> {
     params: { path: { org_id: c.orgId } },
     body: { file_id: up.file_id },
   });
-  const n = norm.data ?? { auto: 0, review: 0, bundled: 0 };
+  // Never report "imported" when matching failed: the lines would sit unmatched, unseen.
+  if (!norm.data) return { ok: false, code: await errorCode(norm.response) };
+  const n = norm.data;
   return {
     ok: true,
     duplicate: up.duplicate,

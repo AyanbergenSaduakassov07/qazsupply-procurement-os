@@ -35,7 +35,12 @@ def user_conn(
         yield conn
 
 
-def member_conn(org_id: UUID, conn: Annotated[UserConn, Depends(user_conn)]) -> UserConn:
+# scope="function": commit (or roll back) BEFORE the response is sent. FastAPI's default
+# ("request") ends a yield dependency after sending, so a client that wrote and immediately read
+# (upload -> normalise) raced the commit, and a failed commit still answered 200.
+def member_conn(
+    org_id: UUID, conn: Annotated[UserConn, Depends(user_conn, scope="function")]
+) -> UserConn:
     # 404, not 403: never confirm that another tenant's org exists.
     if not tenancy.is_member(conn, org_id):
         raise HTTPException(404, "not found")
@@ -43,5 +48,5 @@ def member_conn(org_id: UUID, conn: Annotated[UserConn, Depends(user_conn)]) -> 
 
 
 Who = Annotated[Principal, Depends(principal)]
-Conn = Annotated[UserConn, Depends(user_conn)]
+Conn = Annotated[UserConn, Depends(user_conn, scope="function")]
 OrgConn = Annotated[UserConn, Depends(member_conn)]
