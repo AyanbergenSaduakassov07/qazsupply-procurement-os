@@ -22,6 +22,21 @@ Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](
 ### Process
 - Trunk-based branching adopted (owner decision 2026-10-11): `main` always green, short-lived squash-merged branches. See `CONTRIBUTING.md`.
 
+## M5: Procurement OS (2026-10-13): in progress, on sample data
+
+Started on the owner's instruction to finish everything; Gate B (real RFQs, measured cycle time) stays open.
+
+### Added
+- **RFQ lifecycle enforced in the database:** per-version approval, edits become new versions, "I sent it" is a person's record (QazSupply sends nothing), append-only offers, confirmation by the supplier or a named buyer, decision records by approvers only after close.
+- **Guided RFQ builder:** templates, live ТЗ check (brand-locking, vague wording, missing parameters, conflicting standards) with a suggested rewrite, items, autosave on the device.
+- **Offer comparison:** KZT at the offer-date National Bank rate, lead time, payment terms, Supplier 360 risk; client weights; sensitivity ("if lead time mattered 2x..."); unranked offers with reasons; phone cards.
+- **Supplier portal:** invited supplier users answer in-app and never see competitors.
+- **Decision record** memo and PDF; **catalogue** with forgiving ru/kk search, analogs with same/differs and reviewer feedback, price history; opt-in **anonymous price sharing** (k >= 5 orgs).
+- Agent API (D24): read-only MCP tools at `/mcp/` and three skill packs.
+
+### Fixed (found while building M5)
+- The request transaction committed after the response (FastAPI default), racing write-then-read; dead pooled DB connections after a restart; silent sign-out when the API was down; sign-out did not revoke the session (D10).
+
 ## M4: Supplier 360 and compliance (2026-10-12): in progress, on sample data
 
 Started before Gate A by owner override; every source is an invented sample adapter until real access exists. Acceptance items that need real suppliers and decisions stay open.

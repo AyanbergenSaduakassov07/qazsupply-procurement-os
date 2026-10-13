@@ -145,7 +145,11 @@ def test_only_admins_switch_ask_and_only_staff_admins_switch_four_eyes(
     url = f"/orgs/{ORG_A}/settings"
     try:
         on = client.patch(url, headers=h("clientAdminA"), json={"ask_enabled": True})
-        assert on.status_code == 200 and on.json() == {"ask_enabled": True, "four_eyes": False}
+        assert on.status_code == 200 and on.json() == {
+            "ask_enabled": True,
+            "four_eyes": False,
+            "share_prices": False,
+        }
         assert client.get(url, headers=h("clientUserA")).json()["ask_enabled"] is True
         denied = client.patch(url, headers=h("clientUserA"), json={"ask_enabled": False})
         assert denied.status_code == 403

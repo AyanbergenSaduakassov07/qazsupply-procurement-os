@@ -201,3 +201,41 @@ insert into public.catalogue_entries (id, org_id, name, created_by) values
 insert into public.analog_feedback (org_id, entry_id, analog_id, accepted, reviewer_id) values
   ('10000000-0000-4000-a000-00000000000b', '98000000-0000-4000-a000-0000000000b1',
    '98000000-0000-4000-a000-0000000000b2', true, '00000000-0000-4000-a000-0000000000b1');
+
+-- M5: one closed Org A RFQ with two confirmed offers (comparison demo and visual baselines),
+-- and two catalogue entries. Invented data; offers entered as 'email' and confirmed by a buyer.
+insert into public.rfqs (id, org_id, title, status, deadline, created_by) values
+  ('a5000000-0000-4000-a000-0000000000d1', '10000000-0000-4000-a000-00000000000a',
+   'Цемент М400, IV квартал', 'closed', '2026-11-30', '00000000-0000-4000-a000-0000000000a2');
+insert into public.rfq_versions (org_id, rfq_id, version, spec_text, items, created_by) values
+  ('10000000-0000-4000-a000-00000000000a', 'a5000000-0000-4000-a000-0000000000d1', 1,
+   'Цемент М400 по ГОСТ 31108-2020, в мешках по 50 кг, доставка до объекта.',
+   '[{"name": "Цемент М400", "quantity": 40, "unit": "т"}]', '00000000-0000-4000-a000-0000000000a2');
+insert into public.rfq_approvals (org_id, rfq_id, version, approved_by) values
+  ('10000000-0000-4000-a000-00000000000a', 'a5000000-0000-4000-a000-0000000000d1', 1,
+   '00000000-0000-4000-a000-0000000000a1');
+insert into public.rfq_invites (id, org_id, rfq_id, supplier_id, channel, sent_at, sent_by, created_by) values
+  ('a6000000-0000-4000-a000-0000000000d1', '10000000-0000-4000-a000-00000000000a',
+   'a5000000-0000-4000-a000-0000000000d1', '7a000000-0000-4000-a000-0000000000a1', 'email',
+   '2026-10-01 09:00+05', '00000000-0000-4000-a000-0000000000a2', '00000000-0000-4000-a000-0000000000a2'),
+  ('a6000000-0000-4000-a000-0000000000d2', '10000000-0000-4000-a000-00000000000a',
+   'a5000000-0000-4000-a000-0000000000d1', '7a000000-0000-4000-a000-0000000000a4', 'email',
+   '2026-10-01 09:00+05', '00000000-0000-4000-a000-0000000000a2', '00000000-0000-4000-a000-0000000000a2');
+insert into public.offers (id, org_id, rfq_id, invite_id, rfq_version, source, currency, payment_days,
+  lead_time_days, lines, entered_by, created_at) values
+  ('a7000000-0000-4000-a000-0000000000d1', '10000000-0000-4000-a000-00000000000a',
+   'a5000000-0000-4000-a000-0000000000d1', 'a6000000-0000-4000-a000-0000000000d1', 1, 'email', 'KZT', 30, 21,
+   '[{"item": 0, "unit_price": 31000}]', '00000000-0000-4000-a000-0000000000a2', '2026-10-05 10:00+05'),
+  ('a7000000-0000-4000-a000-0000000000d2', '10000000-0000-4000-a000-00000000000a',
+   'a5000000-0000-4000-a000-0000000000d1', 'a6000000-0000-4000-a000-0000000000d2', 1, 'email', 'KZT', 45, 35,
+   '[{"item": 0, "unit_price": 30500}]', '00000000-0000-4000-a000-0000000000a2', '2026-10-06 10:00+05');
+insert into public.offer_confirmations (org_id, offer_id, confirmed_by, by_supplier, note) values
+  ('10000000-0000-4000-a000-00000000000a', 'a7000000-0000-4000-a000-0000000000d1',
+   '00000000-0000-4000-a000-0000000000a2', false, 'Signed offer letter'),
+  ('10000000-0000-4000-a000-00000000000a', 'a7000000-0000-4000-a000-0000000000d2',
+   '00000000-0000-4000-a000-0000000000a2', false, 'Signed offer letter');
+insert into public.catalogue_entries (org_id, name, unit, attributes, standards, created_by) values
+  ('10000000-0000-4000-a000-00000000000a', 'Цемент М400 ПЦ 400-Д20', 'т',
+   '{"class": "M400", "packaging": "50 kg"}', '{ГОСТ 31108-2020}', '00000000-0000-4000-a000-0000000000a2'),
+  ('10000000-0000-4000-a000-00000000000a', 'Цемент CEM I 42.5', 'т',
+   '{"class": "CEM I 42.5", "packaging": "50 kg"}', '{EN 197-1}', '00000000-0000-4000-a000-0000000000a2');

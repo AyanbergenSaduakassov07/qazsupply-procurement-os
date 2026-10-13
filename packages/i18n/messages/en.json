@@ -707,5 +707,9 @@
   "p.cat.attributes": "Attributes (one per line, name: value)",
   "p.cat.prices": "Price history",
   "p.share.title": "Share anonymous prices",
-  "p.share.hint": "Off by default. When on, your purchase prices count towards market medians that are shown only when at least 5 organisations contribute; nobody sees your rows."
+  "p.share.hint": "Off by default. When on, your purchase prices count towards market medians that are shown only when at least 5 organisations contribute; nobody sees your rows.",
+  "p.cmp.name.price": "price",
+  "p.cmp.name.lead_time": "lead time",
+  "p.cmp.name.payment": "payment terms",
+  "p.cmp.name.risk": "supplier risk"
 }

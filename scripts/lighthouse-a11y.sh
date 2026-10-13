@@ -29,7 +29,9 @@ for path in /en/sign-in /ru/sign-in /kk/sign-in /en /ru /kk /en/audit /en/settin
   /en/spend/reports/40000000-0000-4000-a000-00000000000a \
   /kk/spend/reports/40000000-0000-4000-a000-00000000000a \
   /en/suppliers /kk/suppliers /en/suppliers/7a000000-0000-4000-a000-0000000000a1 \
-  /kk/suppliers/7a000000-0000-4000-a000-0000000000a2 /en/onboarding /en/audit?kind=file; do
+  /kk/suppliers/7a000000-0000-4000-a000-0000000000a2 /en/onboarding /en/audit?kind=file \
+  /en/rfqs /en/rfqs/new /en/rfqs/a5000000-0000-4000-a000-0000000000d1 \
+  /kk/rfqs/a5000000-0000-4000-a000-0000000000d1/compare /en/catalogue; do
   extra=()
   [[ "$path" == */sign-in ]] || extra=(--extra-headers="$HEADERS")
   npx --yes "$LIGHTHOUSE" "$BASE$path" --only-categories=accessibility --output=json \

@@ -131,3 +131,16 @@ New boundary: ‖ a customer's AI agent ‖ calls read-only tools at `/mcp/` wit
 | T58 | Elevation | An agent reaches another tenant or writes data | Every tool runs inside the caller's RLS transaction; membership check first ("not found"); tools are read-only (annotations + no write calls; the only write is the dossier-view audit row) | `test_another_tenant_is_not_found`, tools listed read-only | Low |
 | T59 | Tampering (prompt injection, indirect) | Supplier names, item text or registry text instruct the customer's agent | Untrusted text returned only under `data` fields with an explicit note; skill packs tell the agent it is data, never instructions; no tool can act on it | `test_findings_carry_evidence_and_untrusted_text_is_data`; skill `evidence-citation` | **Medium: the customer's agent is outside our control** |
 | T60 | Spoofing (DNS rebinding) / DoS | A browser page drives the MCP endpoint via a rebound DNS name; floods it | Host + origin allow-list (`host_guard`), stateless JSON transport, 4 MiB body cap | MCP tests (421 before the allow-list) | Medium: no per-token rate limit yet (D37) |
+
+## M5 update (2026-10-13): Procurement OS
+
+New boundaries: ‖ supplier portal user ‖ answers RFQs sent to them; ‖ offers entered from emails/PDFs ‖ (untrusted numbers); ‖ cross-tenant price aggregate ‖ (consent + k-anonymity).
+
+| # | STRIDE | Threat | Mitigation | Test | Residual |
+|---|---|---|---|---|---|
+| T61 | Elevation | An RFQ is sent or awarded without a person (bug, agent, script) | DB state machine: send needs an approval of the current version, a human records "sent" (QazSupply sends nothing); award only by an approver, only after close, only a confirmed offer; MCP tools are read-only | pgTAP m5 (34); integration full RFQ (403 for client user award, 409 before close) | Low |
+| T62 | Tampering | An approved RFQ is quietly edited after approval | Versions append-only; an edit is a new version that resets to draft and needs a new approval; versions freeze after send | pgTAP "a new version re-opens the draft", "the sent version is frozen" | Low |
+| T63 | Info disclosure | A supplier sees a competitor's offer or invite | Supplier reads only RFQs sent to them (`invited_to`), only their own invite and offers; comparison page 404 for suppliers | pgTAP "a supplier never sees another supplier's offer"; e2e portal journey | Low |
+| T64 | Tampering (data integrity) | Numbers typed from an email/PDF are wrong or altered | Offers append-only; a buyer-entered offer is unranked until confirmed by the supplier (portal) or a named buyer with a note; comparison lists unconfirmed offers as such | pgTAP + integration confirmation note; compare excluded reasons | Medium: a buyer can still confirm wrong numbers (named and audited) |
+| T65 | Info disclosure (cross-tenant) | Shared price medians reveal one organization's prices | Opt-in per org (admins), aggregate only when >= 5 orgs contribute and the caller consented; function in `private` schema (not exposed via PostgREST) | pgTAP "no consent", "fewer than 5" | Medium: k=5 is UNVERIFIED as sufficient for rare items; needs review before enabling |
+| T66 | Tampering (prompt injection) | Spec text or supplier text steers a model | No model reads specs, offers or catalogue text in M5 (rules-only ТЗ checker) | n/a | Low now |

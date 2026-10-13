@@ -153,7 +153,7 @@ export function RfqDetail(props: {
       ) : (
         <Offers {...props} items={items} />
       )}
-      {buyer && <Closing {...props} />}
+      {buyer && !["decided", "cancelled"].includes(rfq.status) && <Closing {...props} />}
       {rfq.decision && <Memo {...props} />}
     </div>
   );
@@ -665,11 +665,12 @@ function Memo({ rfq, l, locale }: { rfq: Rfq; l: Record<string, string>; locale:
       <ul className="space-y-1 text-xs text-muted">
         {alts.map((a) => (
           <li key={String(a.offer_id)}>
-            {a.offer_id === d.offer_id ? "✓ " : ""}
+            {a.offer_id === d.offer_id ? `${l.chosen}: ` : ""}
             {String(a.supplier)} ·{" "}
             {a.total_kzt
               ? money(Math.round(Number(a.total_kzt) * 100))
               : (l[`cmp.excluded.${a.excluded}`] ?? "—")}
+            {a.score ? ` · ${l["cmp.score"]}: ${Math.round(Number(a.score) * 100)}` : ""}
           </li>
         ))}
       </ul>

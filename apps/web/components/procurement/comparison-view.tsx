@@ -219,7 +219,7 @@ export function ComparisonView({
             flips.map((s) => (
               <p key={`${s.criterion}-${s.factor}`} className="text-ink">
                 {fill(l["cmp.flip"] ?? "", {
-                  criterion: (l[`cmp.${s.criterion}`] ?? String(s.criterion)).toLowerCase(),
+                  criterion: l[`cmp.name.${s.criterion}`] ?? String(s.criterion),
                   factor: String(s.factor),
                   winner: name[String(s.winner)] ?? "",
                 })}

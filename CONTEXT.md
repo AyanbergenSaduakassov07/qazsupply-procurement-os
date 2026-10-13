@@ -38,10 +38,11 @@ Conventions: every client-data entity carries `org_id` (its Organization). "Inva
 
 ## Procurement OS
 - **Spec (ТЗ):** a technical specification for a purchase. The ТЗ checker flags ambiguity, brand-locking, missing parameters.
-- **RFQ:** a request for quotes, versioned. States: `draft -> approved -> sent -> collecting -> closed -> decided` (or `cancelled`). *Invariant:* nothing is sent without a human approval recorded on that version.
+- **RFQ:** a request for quotes, versioned. States: `draft -> approved -> sent -> collecting -> closed -> decided` (or `cancelled`). *Invariants (M5, enforced in the database):* nothing is sent without a human approval recorded on that version; an edit after approval is a new version back in draft; "sent" is a person recording that they sent it (QazSupply sends nothing); a sent version is frozen.
 - **Offer:** a Supplier's response to an RFQ. *Invariant:* extracted numbers are confirmed by the Supplier (or a human) before they enter comparison.
-- **Decision record:** who chose which Offer, why, and which alternatives were considered. Append-only.
+- **Decision record:** who chose which Offer, why, and which alternatives were considered. Append-only. *Invariants:* only an approver (client admin) records it, only after the RFQ is closed, only for a confirmed offer; the comparison matrix and weights are frozen into it. No auto-award.
 - **Order:** a confirmed purchase linking Items, Supplier, terms (Incoterms, payment) and zero or more Shipments.
+- **Analog:** another Catalogue entry proposed as acceptable instead, with what is the same and what differs; a reviewer accepts or rejects it (feeds the analog eval).
 - **Catalogue entry:** an Item with attributes, units, standards and price history (source + date). Shared aggregates only with consent and k-anonymity (k >= 5 default; UNVERIFIED as sufficient).
 
 ## Logistics

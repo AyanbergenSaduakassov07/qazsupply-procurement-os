@@ -107,7 +107,9 @@ select lives_ok(
          (select offer_email from ids), (select org_a from ids), (select rfq from ids), (select inv_email from ids)),
   'a buyer enters an emailed offer');
 select is((select status from public.rfqs where id = (select rfq from ids)), 'collecting', 'the first offer starts collecting');
-select is((select count(*)::int from public.offer_confirmations), 1, 'only the portal offer is confirmed so far');
+select is((select count(*)::int from public.offer_confirmations
+            where offer_id in ((select offer_portal from ids), (select offer_email from ids))), 1,
+  'only the portal offer is confirmed so far');
 select throws_ok(
   format($$insert into public.offer_confirmations (org_id, offer_id, by_supplier) values (%L, %L, false)$$,
          (select org_a from ids), (select offer_email from ids)),

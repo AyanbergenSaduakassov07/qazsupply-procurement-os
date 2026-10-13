@@ -5,7 +5,6 @@ export function procLabels(locale: Locale): Record<string, string> {
   return {
     ...group(locale, "p"),
     error: t(locale, "common.error"),
-    close: t(locale, "common.close"),
   };
 }
 
