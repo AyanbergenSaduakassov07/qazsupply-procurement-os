@@ -1747,6 +1747,8 @@ export interface components {
             ask_enabled: boolean;
             /** Four Eyes */
             four_eyes: boolean;
+            /** Share Prices */
+            share_prices: boolean;
         };
         /** OrgSettingsPatch */
         OrgSettingsPatch: {
@@ -1754,6 +1756,8 @@ export interface components {
             ask_enabled?: boolean | null;
             /** Four Eyes */
             four_eyes?: boolean | null;
+            /** Share Prices */
+            share_prices?: boolean | null;
         };
         /** Party */
         Party: {

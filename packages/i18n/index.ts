@@ -13,3 +13,12 @@ export const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
 export const t = (locale: Locale, key: MessageKey): string => catalogs[locale][key];
+
+/** Every message under `prefix.` with the prefix stripped (for one screen's labels). */
+export function group(locale: Locale, prefix: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const key of Object.keys(catalogs[locale]) as MessageKey[]) {
+    if (key.startsWith(`${prefix}.`)) out[key.slice(prefix.length + 1)] = catalogs[locale][key];
+  }
+  return out;
+}

@@ -2504,11 +2504,16 @@
           "four_eyes": {
             "title": "Four Eyes",
             "type": "boolean"
+          },
+          "share_prices": {
+            "title": "Share Prices",
+            "type": "boolean"
           }
         },
         "required": [
           "ask_enabled",
-          "four_eyes"
+          "four_eyes",
+          "share_prices"
         ],
         "title": "OrgSettings",
         "type": "object"
@@ -2536,6 +2541,17 @@
               }
             ],
             "title": "Four Eyes"
+          },
+          "share_prices": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Prices"
           }
         },
         "title": "OrgSettingsPatch",

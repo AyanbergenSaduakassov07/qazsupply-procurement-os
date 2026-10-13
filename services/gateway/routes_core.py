@@ -90,11 +90,13 @@ class AuditLog(BaseModel):
 class OrgSettings(BaseModel):
     ask_enabled: bool
     four_eyes: bool
+    share_prices: bool
 
 
 class OrgSettingsPatch(BaseModel):
     ask_enabled: bool | None = None
     four_eyes: bool | None = None
+    share_prices: bool | None = None
 
 
 # ---------------------------------------------------------------- routes

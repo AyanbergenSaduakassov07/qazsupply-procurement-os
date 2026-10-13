@@ -73,12 +73,18 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
           <CardBody>
             <OrgSettings
               values={settings}
-              canEdit={{ ask_enabled: admin, four_eyes: org?.role === "qazsupply_admin" }}
+              canEdit={{
+                ask_enabled: admin,
+                four_eyes: org?.role === "qazsupply_admin",
+                share_prices: admin,
+              }}
               labels={{
                 ask: t(locale, "settings.ask"),
                 askHint: t(locale, "settings.askHint"),
                 fourEyes: t(locale, "settings.fourEyes"),
                 fourEyesHint: t(locale, "settings.fourEyesHint"),
+                share: t(locale, "p.share.title"),
+                shareHint: t(locale, "p.share.hint"),
                 saved: t(locale, "settings.saved"),
                 adminOnly: t(locale, "settings.adminOnly"),
                 error: t(locale, "common.error"),

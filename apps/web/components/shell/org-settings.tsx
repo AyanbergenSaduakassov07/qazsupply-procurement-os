@@ -5,13 +5,15 @@ import { useId, useState } from "react";
 
 import { updateOrgSettings } from "../../app/ask-actions";
 
-type Key = "ask_enabled" | "four_eyes";
+type Key = "ask_enabled" | "four_eyes" | "share_prices";
 
 export interface OrgSettingsLabels {
   ask: string;
   askHint: string;
   fourEyes: string;
   fourEyesHint: string;
+  share: string;
+  shareHint: string;
   saved: string;
   adminOnly: string;
   error: string;
@@ -73,6 +75,7 @@ export function OrgSettings({
     <div className="space-y-4">
       {row("ask_enabled", labels.ask, labels.askHint)}
       {row("four_eyes", labels.fourEyes, labels.fourEyesHint)}
+      {row("share_prices", labels.share, labels.shareHint)}
       <p role="status" className="text-sm text-muted" data-testid="org-settings-status">
         {status}
       </p>

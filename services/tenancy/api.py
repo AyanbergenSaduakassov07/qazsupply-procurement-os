@@ -33,20 +33,22 @@ def is_staff(conn: UserConn, org_id: UUID) -> bool:
 
 def org_settings(conn: UserConn, org_id: UUID) -> dict[str, Any] | None:
     return conn.execute(
-        "select ask_enabled, four_eyes from public.organizations where id = %s", (org_id,)
+        "select ask_enabled, four_eyes, share_prices from public.organizations where id = %s",
+        (org_id,),
     ).fetchone()
 
 
 def update_org_settings(conn: UserConn, org_id: UUID, changes: dict[str, bool]) -> bool:
-    """Apply the given switches (only `ask_enabled`, `four_eyes`); False when RLS let no row
-    change (caller is not an admin). A client admin changing four_eyes raises 42501."""
+    """Apply the given switches (`ask_enabled`, `four_eyes`, `share_prices`); False when RLS let
+    no row change (caller is not an admin). A client admin changing four_eyes raises 42501."""
     if not changes:
         return True
     cur = conn.execute(
         """update public.organizations
-           set ask_enabled = coalesce(%s, ask_enabled), four_eyes = coalesce(%s, four_eyes)
+           set ask_enabled = coalesce(%s, ask_enabled), four_eyes = coalesce(%s, four_eyes),
+               share_prices = coalesce(%s, share_prices)
            where id = %s""",
-        (changes.get("ask_enabled"), changes.get("four_eyes"), org_id),
+        (changes.get("ask_enabled"), changes.get("four_eyes"), changes.get("share_prices"), org_id),
     )
     if cur.rowcount:
         append_audit(conn, org_id, "org.settings_changed", "organizations", org_id, changes)

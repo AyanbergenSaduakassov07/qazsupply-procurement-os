@@ -63,6 +63,7 @@ export async function askReport(
 export async function updateOrgSettings(changes: {
   ask_enabled?: boolean;
   four_eyes?: boolean;
+  share_prices?: boolean;
 }): Promise<{ ok: true } | { ok: false; code: string }> {
   const res = await call("/settings", { method: "PATCH", body: JSON.stringify(changes) });
   if (!(res instanceof Response)) return { ok: false, code: res.code };
