@@ -132,7 +132,17 @@ def _view(conn: UserConn, org_id: UUID, sup: dict[str, Any]) -> dict[str, Any]:
             (org_id, same),
         ).fetchall()
     ]
-    item_runs = d.screenings(conn, org_id, "item_id", item_ids)
+    line_ids = [
+        r["id"]
+        for r in conn.execute(
+            """select id from public.purchase_lines
+               where org_id = %s and supplier_id = any(%s) and item_id is null""",
+            (org_id, same),
+        ).fetchall()
+    ]
+    item_runs = d.screenings(conn, org_id, "item_id", item_ids) + d.screenings(
+        conn, org_id, "purchase_line_id", line_ids
+    )
     sig, known = d.signals(root, nodes, edges, party_runs, item_runs, datetime.now(UTC).date())
     cfg = conn.execute(
         "select risk_config from public.organizations where id = %s", (org_id,)

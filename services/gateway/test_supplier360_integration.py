@@ -159,3 +159,30 @@ def test_rescreen_covers_resolved_suppliers_never_opened(
     assert r.status_code == 200 and r.json()["rescreened"] >= 2
     d = _get(client, "clientUserA", f"/orgs/{ORG_A}/suppliers/{suppliers['alfa']}/dossier")
     assert d["built"] is True and d["screenings"]
+
+
+def test_unmatched_lines_are_screened_for_dual_use(
+    client: TestClient, suppliers: dict[str, str]
+) -> None:
+    fid, sha = str(uuid.uuid4()), uuid.uuid4().hex * 2
+    with psycopg.connect(DB) as conn:
+        conn.execute(
+            """insert into public.files (id, org_id, name, sha256, size_bytes, content_type,
+                 storage_path, uploaded_by)
+               values (%s, %s, 'it-dualuse.csv', %s, 1, 'text/csv', 'x', %s)""",
+            (fid, ORG_A, sha, "00000000-0000-4000-a000-0000000000a1"),
+        )
+        conn.execute(
+            """insert into public.purchase_lines (org_id, file_id, source_row, raw, item_text,
+                 supplier_id) values (%s, %s, 2, '{}', 'Тепловизор FLIR E8', %s)""",
+            (ORG_A, fid, suppliers["alfa"]),
+        )
+    try:
+        base = f"/orgs/{ORG_A}/suppliers/{suppliers['alfa']}/dossier"
+        assert client.post(base, headers=auth("clientUserA")).status_code == 200
+        d = _get(client, "clientUserA", base)
+        hits = [h["entry_id"] for s in d["items"] for h in s["hits"]]
+        assert "SAMPLE-DU-01" in hits
+        assert "dual_use_goods" in [f["code"] for f in d["risk"]["factors"] if f["triggered"]]
+    finally:
+        purge(("delete from public.files where id = %s", (fid,)))

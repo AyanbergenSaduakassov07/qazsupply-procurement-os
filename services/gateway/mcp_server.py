@@ -153,6 +153,16 @@ def build(
     return mcp
 
 
+class LateApp:
+    """ASGI shim: the MCP app is built in the API lifespan, after routes are mounted."""
+
+    def __init__(self, resolve: Callable[[], Any]) -> None:
+        self._resolve = resolve
+
+    async def __call__(self, scope: Any, receive: Any, send: Any) -> None:
+        await self._resolve()(scope, receive, send)
+
+
 def host_guard(settings: Settings) -> TransportSecuritySettings:
     """DNS-rebinding protection: only our public host (and localhost in development)."""
     public = urlparse(settings.public_api_url).netloc

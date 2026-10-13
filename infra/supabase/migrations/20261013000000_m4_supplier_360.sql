@@ -72,6 +72,7 @@ create table public.screenings (
   org_id uuid not null references public.organizations (id) on delete cascade,
   party_id uuid,
   item_id uuid,
+  purchase_line_id uuid,
   list_source text not null,
   list_version text not null,
   trigger text not null check (trigger in ('manual', 'schedule', 'onboarding', 'order')),
@@ -80,12 +81,15 @@ create table public.screenings (
   checked_by uuid not null default auth.uid() references auth.users (id),
   checked_at timestamptz not null default now(),
   unique (id, org_id),
-  check (num_nonnulls(party_id, item_id) = 1),
+  check (num_nonnulls(party_id, item_id, purchase_line_id) = 1),
   foreign key (party_id, org_id) references public.parties (id, org_id) on delete cascade,
-  foreign key (item_id, org_id) references public.items (id, org_id) on delete cascade
+  foreign key (item_id, org_id) references public.items (id, org_id) on delete cascade,
+  -- Goods on lines never matched to an Item are screened by their own text (D34).
+  foreign key (purchase_line_id, org_id) references public.purchase_lines (id, org_id) on delete cascade
 );
 create index screenings_party_idx on public.screenings (party_id, org_id, checked_at desc);
 create index screenings_item_idx on public.screenings (item_id, org_id, checked_at desc);
+create index screenings_line_idx on public.screenings (purchase_line_id, org_id, checked_at desc);
 create index screenings_checked_by_idx on public.screenings (checked_by);
 create index screenings_org_idx on public.screenings (org_id, checked_at);
 
@@ -144,6 +148,7 @@ begin
     if tg_table_name = 'screenings' then
       perform private.append_audit(new.org_id, 'screening.' || new.result, 'screenings', new.id,
         jsonb_build_object('party_id', new.party_id, 'item_id', new.item_id,
+                           'purchase_line_id', new.purchase_line_id,
                            'list_source', new.list_source, 'list_version', new.list_version,
                            'trigger', new.trigger));
     else

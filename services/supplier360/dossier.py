@@ -12,7 +12,7 @@ from services.gateway.db import UserConn
 from services.supplier360.risk import Risk, assess, weights_for
 
 STALE_DAYS = 30
-SUBJECTS = ("party_id", "item_id")
+SUBJECTS = ("party_id", "item_id", "purchase_line_id")
 GRAPH_DEPTH = 8
 
 

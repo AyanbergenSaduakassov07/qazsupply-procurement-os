@@ -48,7 +48,7 @@ def _record(
     out: ScreenSummary,
     sample: bool,
 ) -> None:
-    column = "party_id" if subject[0] == "party" else "item_id"
+    column = {"party": "party_id", "item": "item_id", "line": "purchase_line_id"}[subject[0]]
     row = conn.execute(
         sql.SQL(
             """insert into public.screenings (org_id, {col}, list_source, list_version, trigger,
@@ -203,6 +203,25 @@ def screen(
             src.dualuse.version,
             trigger,
             item_hits(it["name"], controls),
+            out,
+            src.dualuse.is_sample,
+        )
+    # Lines never matched to an Item: screen their own text (D34).
+    lines = conn.execute(
+        """select id, item_text from public.purchase_lines
+           where org_id = %s and supplier_id = any(%s) and item_id is null
+             and item_text is not null""",
+        (org_id, supplier_ids),
+    ).fetchall()
+    for ln in lines:
+        _record(
+            conn,
+            org_id,
+            ("line", ln["id"]),
+            "dualuse",
+            src.dualuse.version,
+            trigger,
+            item_hits(ln["item_text"], controls),
             out,
             src.dualuse.is_sample,
         )
