@@ -124,3 +124,25 @@ def test_citation_refs_are_read_in_the_forms_models_write_them() -> None:
         "sentences": [{"text": "Bolts: 13 718 ₸.", "evidence_ids": [7]}],
     }
     assert not check(bad_type, figs).answerable
+
+
+def test_an_in_text_citation_counts_and_is_not_read_as_a_number() -> None:
+    figures = {"F1": Figure(ref="F1", amounts=(Decimal("117504.00"),), names=("ТОО Альфа",))}
+    out = check(
+        answer(
+            ("Renegotiate with ТОО Альфа first: a saving of 117504.00 KZT (F1).", []),
+            ("Same saving, cited twice [F1].", ["F1"]),
+        ),
+        figures,
+    )
+    assert [s.text for s in out.sentences] == [
+        "Renegotiate with ТОО Альфа first: a saving of 117504.00 KZT.",
+        "Same saving, cited twice.",
+    ]
+    assert out.sentences[0].evidence_ids == ("F1",) and out.dropped == 0
+
+
+def test_an_unknown_in_text_ref_still_fails_closed() -> None:
+    figures = {"F1": Figure(ref="F1", amounts=(Decimal("10"),))}
+    out = check(answer(("See F9 for 10 KZT.", ["F1"])), figures)
+    assert out.dropped == 1 and not out.answerable

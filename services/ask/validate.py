@@ -19,6 +19,9 @@ REPORT_REF = "report"
 NUMBER = re.compile(r"\d(?:[\d    .,]*\d)?")
 # Any link, domain-shaped token (any Latin TLD) or email address. Decimals ("117504.00") are not
 # domains: the last label must be letters.
+# A citation written inside the sentence: "(F1)", "[F2]", "F3". Only refs the model was given
+# count (and are removed from the text); an unknown "F9" stays and its digit fails the check.
+INLINE_REF = re.compile(r"\s*[\(\[]?\b(F\d{1,3})\b[\)\]]?", re.IGNORECASE)
 LINK = re.compile(r"(?i)https?://|\bwww\.|\b[\w-]+(?:\.[\w-]+)*\.[a-z]{2,24}\b|@")
 
 
@@ -112,6 +115,20 @@ def _refs(ids: list[object], figures: dict[str, Figure]) -> list[str]:
     return out
 
 
+def _inline_refs(text: str, figures: dict[str, Figure]) -> tuple[str, list[str]]:
+    known = {k.upper() for k in figures}
+    found: list[str] = []
+
+    def take(m: re.Match[str]) -> str:
+        if m.group(1).upper() not in known:
+            return m.group(0)
+        found.append(m.group(1))
+        return ""
+
+    cleaned = INLINE_REF.sub(take, text)
+    return re.sub(r"\s+([.,;:!?])", r"\1", cleaned), found
+
+
 def check(raw: object, figures: dict[str, Figure], instructions: str = "") -> Checked:
     """Validate the model's JSON answer against the figures it was given. A sentence that repeats
     SHINGLE or more consecutive words of `instructions` (the prompt's rules) is a leak: dropped."""
@@ -128,7 +145,8 @@ def check(raw: object, figures: dict[str, Figure], instructions: str = "") -> Ch
         if not isinstance(text, str) or not text.strip() or not isinstance(ids, list):
             out.dropped += 1
             continue
-        refs = _refs(ids, figures)
+        text, inline = _inline_refs(text, figures)
+        refs = _refs([*ids, *inline], figures)
         cited = [figures[r] for r in refs if r in figures]
         numbers = _numbers(text, [n for f in cited for n in f.names])
         out.numbers_total += len(numbers)
