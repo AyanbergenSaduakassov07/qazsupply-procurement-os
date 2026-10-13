@@ -192,7 +192,9 @@ def _duplicates(out: Result) -> None:
 def _suggest(text: str, out: Result) -> str:
     """The text with each fixable span replaced, right to left so offsets stay valid."""
     fixes = sorted(
-        (i for i in out.issues if i.span and i.suggestion), key=lambda i: i.span[0], reverse=True
+        (i for i in out.issues if i.span and i.suggestion),
+        key=lambda i: i.span[0] if i.span else 0,
+        reverse=True,
     )
     result, last = text, len(text) + 1
     for i in fixes:
