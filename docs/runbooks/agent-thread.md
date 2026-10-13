@@ -91,3 +91,10 @@ Format per entry: date, prompt, goal, done, failed, next, blockers. Newest at th
 - **Local DB state:** migrations applied with `migration up` (no reset); the `ownership_links` update policy/grant was applied by hand (also in the migration file). Org B untouched since the demo started except the 5 seed rows already disclosed to the other session.
 - **Not run (needs a reset after the owner's demo):** `make rls` (m1 suite shows 2 environment failures + missing Org B onboarding seed rows until reset), full e2e incl. spend.spec (touches the refactored server-action helper), visual (new pages need baselines), Lighthouse, `test_audit_chain_integration`.
 - **Next:** after the demo: reset, `make rls`, `make e2e`, `make visual` (update baselines for the M4 pages and the Settings card), `make lighthouse`; then M4 `built` pending real-data acceptance. Agent-doable debt left: D24 (MCP API), D9, D10, D29 spike.
+
+## 2026-10-13 | M3/M4 phase checks after the demo
+- **Done:** fresh DB: `make rls` PASS (266 pgTAP, advisors clean, 44 integration incl. `test_audit_chain_integration`, new pool test); e2e 151/0 twice without retries; visual 131 (new suppliers + dossier screens; audit baseline filtered to uploads); Lighthouse 100 on M4 pages.
+- **Bugs found by the checks and fixed (M3 branch, rebased into M4):** request transaction committed AFTER the response (FastAPI default `scope="request"`): write-then-read raced, lines stayed `pending` -> `Depends(user_conn, scope="function")`; import action reported success when normalisation failed; pool handed out dead connections after a DB restart -> `check=ConnectionPool.check_connection` (red/green test); web session now distinguishes `unavailable` from signed-out.
+- **Added:** audit log filter by action family (API `kind`, page links).
+- **Local note:** right after `supabase db reset`, the API's pool is now self-healing; the old symptom (first sign-ins failing) was that bug, not auth warm-up.
+- **Next:** harness PR for the Ask scorer split; live Ask eval `--part questions`; agent-doable debt (D24 MCP, D34, D9, D10, D29 spike); then M5 per the owner's "finish everything".
