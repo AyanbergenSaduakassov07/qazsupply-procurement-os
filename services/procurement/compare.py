@@ -16,7 +16,8 @@ from typing import Any
 DEFAULT_WEIGHTS = {"price": Decimal("0.5"), "lead_time": Decimal("0.2"), "payment": Decimal("0.1"),
                    "risk": Decimal("0.2")}  # fmt: skip
 LOWER_IS_BETTER = {"price": True, "lead_time": True, "payment": False, "risk": True}
-Rate = Callable[[str], tuple[Decimal, date] | None]
+# rate(currency, offer_id) -> (KZT per unit, rate date): each offer converts at its own date.
+Rate = Callable[[str, str], tuple[Decimal, date] | None]
 
 
 @dataclass
@@ -74,7 +75,7 @@ def build_rows(items: list[dict[str, Any]], offers: list[dict[str, Any]], rate: 
                 (prices[i] * Decimal(str(it["quantity"])) for i, it in enumerate(items)), Decimal(0)
             )
             r.total = total
-            fx = (Decimal(1), None) if r.currency == "KZT" else rate(r.currency)
+            fx = (Decimal(1), None) if r.currency == "KZT" else rate(r.currency, r.offer_id)
             if fx is None:
                 r.excluded = "no_fx_rate"
             else:

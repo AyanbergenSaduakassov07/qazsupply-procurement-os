@@ -846,6 +846,215 @@
         "title": "ClassifierItem",
         "type": "object"
       },
+      "ComparisonOut": {
+        "properties": {
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ComparisonRow"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "sensitivity": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Sensitivity",
+            "type": "array"
+          },
+          "weights": {
+            "additionalProperties": {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            "title": "Weights",
+            "type": "object"
+          },
+          "winner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Winner"
+          }
+        },
+        "required": [
+          "rows",
+          "weights",
+          "winner",
+          "sensitivity"
+        ],
+        "title": "ComparisonOut",
+        "type": "object"
+      },
+      "ComparisonRow": {
+        "properties": {
+          "confirmed": {
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "deltas": {
+            "additionalProperties": {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            "title": "Deltas",
+            "type": "object"
+          },
+          "excluded": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excluded"
+          },
+          "landed_cost": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landed Cost"
+          },
+          "lead_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time"
+          },
+          "offer_id": {
+            "title": "Offer Id",
+            "type": "string"
+          },
+          "payment": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment"
+          },
+          "rate": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rate"
+          },
+          "rate_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rate Date"
+          },
+          "risk": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Risk"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "supplier": {
+            "title": "Supplier",
+            "type": "string"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "total_kzt": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Kzt"
+          }
+        },
+        "required": [
+          "offer_id",
+          "supplier",
+          "confirmed",
+          "currency",
+          "total",
+          "total_kzt",
+          "rate",
+          "rate_date",
+          "lead_time",
+          "payment",
+          "risk",
+          "landed_cost",
+          "excluded",
+          "score",
+          "deltas"
+        ],
+        "title": "ComparisonRow",
+        "type": "object"
+      },
       "Decision": {
         "properties": {
           "decision": {
@@ -878,6 +1087,27 @@
           "reason_code"
         ],
         "title": "Decision",
+        "type": "object"
+      },
+      "DecisionIn": {
+        "properties": {
+          "offer_id": {
+            "format": "uuid",
+            "title": "Offer Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "offer_id",
+          "reason"
+        ],
+        "title": "DecisionIn",
         "type": "object"
       },
       "Details": {
@@ -1089,6 +1319,71 @@
           "risk"
         ],
         "title": "Dossier",
+        "type": "object"
+      },
+      "EntryIn": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "title": "Attributes",
+            "type": "object"
+          },
+          "enstru_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enstru Code"
+          },
+          "item_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Id"
+          },
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "standards": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Standards",
+            "type": "array"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "EntryIn",
         "type": "object"
       },
       "Evidence": {
@@ -1352,6 +1647,31 @@
           "detail"
         ],
         "title": "Factor",
+        "type": "object"
+      },
+      "FeedbackIn": {
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "boolean"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "required": [
+          "accepted"
+        ],
+        "title": "FeedbackIn",
         "type": "object"
       },
       "Finding": {
@@ -1724,6 +2044,89 @@
         "title": "Invite",
         "type": "object"
       },
+      "InviteIn": {
+        "properties": {
+          "channel": {
+            "enum": [
+              "portal",
+              "email",
+              "phone",
+              "other"
+            ],
+            "title": "Channel",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "supplier_id": {
+            "format": "uuid",
+            "title": "Supplier Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "supplier_id",
+          "channel"
+        ],
+        "title": "InviteIn",
+        "type": "object"
+      },
+      "Item": {
+        "properties": {
+          "enstru_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enstru Code"
+          },
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "unit": {
+            "maxLength": 20,
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "quantity",
+          "unit"
+        ],
+        "title": "Item",
+        "type": "object"
+      },
       "Link": {
         "properties": {
           "fetched_at": {
@@ -1907,6 +2310,159 @@
           "sample_classifier"
         ],
         "title": "NormalizeSummary",
+        "type": "object"
+      },
+      "Note": {
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "title": "Note",
+        "type": "object"
+      },
+      "OfferIn": {
+        "properties": {
+          "currency": {
+            "pattern": "^[A-Z]{3}$",
+            "title": "Currency",
+            "type": "string"
+          },
+          "incoterms": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Z]{3}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incoterms"
+          },
+          "invite_id": {
+            "format": "uuid",
+            "title": "Invite Id",
+            "type": "string"
+          },
+          "lead_time_days": {
+            "anyOf": [
+              {
+                "maximum": 730.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Days"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/OfferLine"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Lines",
+            "type": "array"
+          },
+          "payment_days": {
+            "anyOf": [
+              {
+                "maximum": 365.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Days"
+          },
+          "source": {
+            "enum": [
+              "portal",
+              "email",
+              "pdf",
+              "phone",
+              "manual"
+            ],
+            "title": "Source",
+            "type": "string"
+          },
+          "valid_until": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid Until"
+          }
+        },
+        "required": [
+          "invite_id",
+          "source",
+          "currency",
+          "lines"
+        ],
+        "title": "OfferIn",
+        "type": "object"
+      },
+      "OfferLine": {
+        "properties": {
+          "item": {
+            "maximum": 199.0,
+            "minimum": 0.0,
+            "title": "Item",
+            "type": "integer"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Price"
+          }
+        },
+        "required": [
+          "item"
+        ],
+        "title": "OfferLine",
         "type": "object"
       },
       "OnboardingDecision": {
@@ -2491,6 +3047,49 @@
         "title": "ReportNote",
         "type": "object"
       },
+      "Requirement": {
+        "properties": {
+          "comparator": {
+            "title": "Comparator",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "span": {
+            "maxItems": 2,
+            "minItems": 2,
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Span",
+            "type": "array"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "comparator",
+          "value",
+          "unit",
+          "span"
+        ],
+        "title": "Requirement",
+        "type": "object"
+      },
       "ReviewEntry": {
         "properties": {
           "created_at": {
@@ -2634,6 +3233,226 @@
         "title": "ReviewResult",
         "type": "object"
       },
+      "RfqDetail": {
+        "properties": {
+          "approvals": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Approvals",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_version": {
+            "title": "Current Version",
+            "type": "integer"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "invites": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Invites",
+            "type": "array"
+          },
+          "mine": {
+            "title": "Mine",
+            "type": "boolean"
+          },
+          "offers": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Offers",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "versions": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Versions",
+            "type": "array"
+          },
+          "weights": {
+            "additionalProperties": true,
+            "title": "Weights",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "current_version",
+          "deadline",
+          "weights",
+          "created_at",
+          "mine",
+          "versions",
+          "approvals",
+          "invites",
+          "offers",
+          "decision"
+        ],
+        "title": "RfqDetail",
+        "type": "object"
+      },
+      "RfqIn": {
+        "properties": {
+          "deadline": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
+          },
+          "spec_text": {
+            "default": "",
+            "maxLength": 50000,
+            "title": "Spec Text",
+            "type": "string"
+          },
+          "terms": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Terms",
+            "type": "object"
+          },
+          "title": {
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "items"
+        ],
+        "title": "RfqIn",
+        "type": "object"
+      },
+      "RfqRow": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "current_version": {
+            "title": "Current Version",
+            "type": "integer"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "due_soon": {
+            "title": "Due Soon",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "invites": {
+            "title": "Invites",
+            "type": "integer"
+          },
+          "offers": {
+            "title": "Offers",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "current_version",
+          "deadline",
+          "created_at",
+          "invites",
+          "offers",
+          "due_soon"
+        ],
+        "title": "RfqRow",
+        "type": "object"
+      },
       "Risk": {
         "properties": {
           "factors": {
@@ -2771,6 +3590,121 @@
           "hits"
         ],
         "title": "Screening",
+        "type": "object"
+      },
+      "SpecIn": {
+        "properties": {
+          "text": {
+            "maxLength": 50000,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "SpecIn",
+        "type": "object"
+      },
+      "SpecIssue": {
+        "properties": {
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Span"
+          },
+          "suggestion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suggestion"
+          }
+        },
+        "required": [
+          "kind",
+          "message",
+          "span",
+          "suggestion"
+        ],
+        "title": "SpecIssue",
+        "type": "object"
+      },
+      "SpecOut": {
+        "properties": {
+          "family": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Family"
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/SpecIssue"
+            },
+            "title": "Issues",
+            "type": "array"
+          },
+          "requirements": {
+            "items": {
+              "$ref": "#/components/schemas/Requirement"
+            },
+            "title": "Requirements",
+            "type": "array"
+          },
+          "standards": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Standards",
+            "type": "array"
+          },
+          "suggested": {
+            "title": "Suggested",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requirements",
+          "standards",
+          "family",
+          "issues",
+          "suggested"
+        ],
+        "title": "SpecOut",
         "type": "object"
       },
       "Spend": {
@@ -3119,6 +4053,36 @@
         "title": "ValidationError",
         "type": "object"
       },
+      "VersionIn": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
+          },
+          "spec_text": {
+            "default": "",
+            "maxLength": 50000,
+            "title": "Spec Text",
+            "type": "string"
+          },
+          "terms": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Terms",
+            "type": "object"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "VersionIn",
+        "type": "object"
+      },
       "Weights": {
         "properties": {
           "defaults": {
@@ -3141,6 +4105,30 @@
           "weights"
         ],
         "title": "Weights",
+        "type": "object"
+      },
+      "WeightsIn": {
+        "properties": {
+          "weights": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "propertyNames": {
+              "enum": [
+                "price",
+                "lead_time",
+                "payment",
+                "risk"
+              ]
+            },
+            "title": "Weights",
+            "type": "object"
+          }
+        },
+        "required": [
+          "weights"
+        ],
+        "title": "WeightsIn",
         "type": "object"
       },
       "WeightsUpdate": {
@@ -3334,6 +4322,394 @@
           }
         ],
         "summary": "Audit Log"
+      }
+    },
+    "/orgs/{org_id}/catalogue": {
+      "get": {
+        "operationId": "search_catalogue_orgs__org_id__catalogue_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "attr",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 10,
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Attr"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Search Catalogue Orgs  Org Id  Catalogue Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Search Catalogue",
+        "tags": [
+          "procurement"
+        ]
+      },
+      "post": {
+        "operationId": "add_entry_orgs__org_id__catalogue_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "title": "Response Add Entry Orgs  Org Id  Catalogue Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Add Entry",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/catalogue-acceptance": {
+      "get": {
+        "operationId": "acceptance_orgs__org_id__catalogue_acceptance_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Acceptance Orgs  Org Id  Catalogue Acceptance Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Acceptance",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/catalogue/{entry_id}/analogs": {
+      "get": {
+        "operationId": "analogs_orgs__org_id__catalogue__entry_id__analogs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Analogs Orgs  Org Id  Catalogue  Entry Id  Analogs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Analogs",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/catalogue/{entry_id}/analogs/{analog_id}/feedback": {
+      "post": {
+        "operationId": "analog_feedback_orgs__org_id__catalogue__entry_id__analogs__analog_id__feedback_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Entry Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "analog_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analog Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Analog Feedback",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/catalogue/{entry_id}/prices": {
+      "get": {
+        "operationId": "prices_orgs__org_id__catalogue__entry_id__prices_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "entry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Entry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Prices Orgs  Org Id  Catalogue  Entry Id  Prices Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Prices",
+        "tags": [
+          "procurement"
+        ]
       }
     },
     "/orgs/{org_id}/classifier": {
@@ -3566,6 +4942,67 @@
         "summary": "Normalize Run",
         "tags": [
           "spend"
+        ]
+      }
+    },
+    "/orgs/{org_id}/offers/{offer_id}/confirm": {
+      "post": {
+        "operationId": "confirm_offer_orgs__org_id__offers__offer_id__confirm_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "offer_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Offer Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Confirm Offer",
+        "tags": [
+          "procurement"
         ]
       }
     },
@@ -4951,6 +6388,801 @@
         ]
       }
     },
+    "/orgs/{org_id}/rfq-invites/{invite_id}/sent": {
+      "post": {
+        "operationId": "mark_sent_orgs__org_id__rfq_invites__invite_id__sent_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "invite_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Invite Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Mark Sent",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs": {
+      "get": {
+        "operationId": "list_rfqs_orgs__org_id__rfqs_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RfqRow"
+                  },
+                  "title": "Response List Rfqs Orgs  Org Id  Rfqs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Rfqs",
+        "tags": [
+          "procurement"
+        ]
+      },
+      "post": {
+        "operationId": "create_rfq_orgs__org_id__rfqs_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RfqIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "title": "Response Create Rfq Orgs  Org Id  Rfqs Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Rfq",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}": {
+      "get": {
+        "operationId": "get_rfq_orgs__org_id__rfqs__rfq_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RfqDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Rfq",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/approve": {
+      "post": {
+        "operationId": "approve_orgs__org_id__rfqs__rfq_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Note"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Approve",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/cancel": {
+      "post": {
+        "operationId": "cancel_orgs__org_id__rfqs__rfq_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cancel",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/close": {
+      "post": {
+        "operationId": "close_orgs__org_id__rfqs__rfq_id__close_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Close",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/comparison": {
+      "get": {
+        "operationId": "comparison_orgs__org_id__rfqs__rfq_id__comparison_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Comparison",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/decision": {
+      "post": {
+        "operationId": "decide_orgs__org_id__rfqs__rfq_id__decision_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "title": "Response Decide Orgs  Org Id  Rfqs  Rfq Id  Decision Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Decide",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/invites": {
+      "post": {
+        "operationId": "invite_orgs__org_id__rfqs__rfq_id__invites_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "title": "Response Invite Orgs  Org Id  Rfqs  Rfq Id  Invites Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Invite",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/offers": {
+      "post": {
+        "operationId": "add_offer_orgs__org_id__rfqs__rfq_id__offers_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfferIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "title": "Response Add Offer Orgs  Org Id  Rfqs  Rfq Id  Offers Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Add Offer",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/versions": {
+      "post": {
+        "operationId": "new_version_orgs__org_id__rfqs__rfq_id__versions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response New Version Orgs  Org Id  Rfqs  Rfq Id  Versions Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "New Version",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
+    "/orgs/{org_id}/rfqs/{rfq_id}/weights": {
+      "put": {
+        "operationId": "set_weights_orgs__org_id__rfqs__rfq_id__weights_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "rfq_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Rfq Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeightsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Set Weights",
+        "tags": [
+          "procurement"
+        ]
+      }
+    },
     "/orgs/{org_id}/risk-weights": {
       "get": {
         "operationId": "get_weights_orgs__org_id__risk_weights_get",
@@ -5264,6 +7496,64 @@
           }
         ],
         "summary": "Update Org Settings"
+      }
+    },
+    "/orgs/{org_id}/spec-check": {
+      "post": {
+        "operationId": "spec_check_orgs__org_id__spec_check_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "org_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Org Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Spec Check",
+        "tags": [
+          "procurement"
+        ]
       }
     },
     "/orgs/{org_id}/suppliers": {

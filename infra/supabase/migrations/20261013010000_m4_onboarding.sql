@@ -69,14 +69,15 @@ $$;
 revoke all on function private.is_supplier_member(uuid, uuid) from public;
 grant execute on function private.is_supplier_member(uuid, uuid) to authenticated;
 
--- Buyers invite by email; returns the user only if that email is a supplier member of the org
--- and the caller may invite there (never a general email lookup).
+-- Buyers invite by email (onboarding, RFQs); returns the user only if that email is a supplier
+-- member of the org and the caller is a buyer there (never a general email lookup).
 create function private.supplier_member_by_email(target_org uuid, target_email text) returns uuid
 language sql stable security definer set search_path = '' as $$
   select m.user_id from public.memberships m join auth.users u on u.id = m.user_id
   where m.org_id = target_org and m.role = 'supplier'
     and lower(u.email) = lower(btrim(target_email))
-    and (private.is_admin(target_org) or private.is_staff(target_org));
+    and (private.is_admin(target_org) or private.is_staff(target_org)
+         or private.has_role(target_org, array['client_user']::public.app_role[]));
 $$;
 revoke all on function private.supplier_member_by_email(uuid, text) from public;
 grant execute on function private.supplier_member_by_email(uuid, text) to authenticated;

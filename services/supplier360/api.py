@@ -301,3 +301,17 @@ def decide_onboarding(
         return build(conn, org_id, UUID(supplier_id), trigger="onboarding", bin_=case_bin)
     except Unresolved:
         return None
+
+
+def risk_scores(conn: UserConn, org_id: UUID, supplier_ids: list[UUID]) -> dict[UUID, int | None]:
+    """Latest rules-based risk score per supplier (None until its dossier was built). No audit:
+    no personal data leaves this function, only the score."""
+    out: dict[UUID, int | None] = {}
+    for sid in dict.fromkeys(supplier_ids):
+        try:
+            v = _view(conn, org_id, _supplier(conn, org_id, sid))
+        except LookupError:
+            out[sid] = None
+            continue
+        out[sid] = v["risk"]["score"] if v["risk"] else None
+    return out

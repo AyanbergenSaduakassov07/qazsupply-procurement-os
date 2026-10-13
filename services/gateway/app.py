@@ -23,6 +23,7 @@ from services.gateway import (
     routes_ask,
     routes_core,
     routes_onboarding,
+    routes_procurement,
     routes_report,
     routes_spend,
     routes_supplier360,
@@ -148,4 +149,5 @@ app.include_router(routes_report.router)
 app.include_router(routes_ask.router)
 app.include_router(routes_supplier360.router)
 app.include_router(routes_onboarding.router)
+app.include_router(routes_procurement.router)
 app.mount("/mcp", mcp_server.LateApp(lambda: app.state.mcp_app))

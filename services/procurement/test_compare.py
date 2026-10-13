@@ -18,7 +18,7 @@ def offer(oid: str, price: float | None, lead: int, pay: int, risk: int = 10, cu
             "lead_time_days": lead, "payment_days": pay, "risk_score": risk}  # fmt: skip
 
 
-def rate(cur: str) -> tuple[Decimal, date] | None:
+def rate(cur: str, offer_id: str) -> tuple[Decimal, date] | None:
     return USD if cur == "USD" else None
 
 

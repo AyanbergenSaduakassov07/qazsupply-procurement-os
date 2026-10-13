@@ -72,6 +72,92 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/catalogue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search Catalogue */
+        get: operations["search_catalogue_orgs__org_id__catalogue_get"];
+        put?: never;
+        /** Add Entry */
+        post: operations["add_entry_orgs__org_id__catalogue_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/catalogue-acceptance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Acceptance */
+        get: operations["acceptance_orgs__org_id__catalogue_acceptance_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/catalogue/{entry_id}/analogs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Analogs */
+        get: operations["analogs_orgs__org_id__catalogue__entry_id__analogs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/catalogue/{entry_id}/analogs/{analog_id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Analog Feedback */
+        post: operations["analog_feedback_orgs__org_id__catalogue__entry_id__analogs__analog_id__feedback_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/catalogue/{entry_id}/prices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prices */
+        get: operations["prices_orgs__org_id__catalogue__entry_id__prices_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/classifier": {
         parameters: {
             query?: never;
@@ -134,6 +220,23 @@ export interface paths {
         put?: never;
         /** Normalize Run */
         post: operations["normalize_run_orgs__org_id__normalize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/offers/{offer_id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm Offer */
+        post: operations["confirm_offer_orgs__org_id__offers__offer_id__confirm_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -498,6 +601,211 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/orgs/{org_id}/rfq-invites/{invite_id}/sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark Sent */
+        post: operations["mark_sent_orgs__org_id__rfq_invites__invite_id__sent_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Rfqs */
+        get: operations["list_rfqs_orgs__org_id__rfqs_get"];
+        put?: never;
+        /** Create Rfq */
+        post: operations["create_rfq_orgs__org_id__rfqs_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Rfq */
+        get: operations["get_rfq_orgs__org_id__rfqs__rfq_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve */
+        post: operations["approve_orgs__org_id__rfqs__rfq_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel */
+        post: operations["cancel_orgs__org_id__rfqs__rfq_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Close */
+        post: operations["close_orgs__org_id__rfqs__rfq_id__close_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Comparison */
+        get: operations["comparison_orgs__org_id__rfqs__rfq_id__comparison_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Decide */
+        post: operations["decide_orgs__org_id__rfqs__rfq_id__decision_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/invites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invite */
+        post: operations["invite_orgs__org_id__rfqs__rfq_id__invites_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/offers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Offer */
+        post: operations["add_offer_orgs__org_id__rfqs__rfq_id__offers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** New Version */
+        post: operations["new_version_orgs__org_id__rfqs__rfq_id__versions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orgs/{org_id}/rfqs/{rfq_id}/weights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Set Weights */
+        put: operations["set_weights_orgs__org_id__rfqs__rfq_id__weights_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/orgs/{org_id}/risk-weights": {
         parameters: {
             query?: never;
@@ -566,6 +874,23 @@ export interface paths {
         head?: never;
         /** Update Org Settings */
         patch: operations["update_org_settings_orgs__org_id__settings_patch"];
+        trace?: never;
+    };
+    "/orgs/{org_id}/spec-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Spec Check */
+        post: operations["spec_check_orgs__org_id__spec_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/orgs/{org_id}/suppliers": {
@@ -900,6 +1225,56 @@ export interface components {
             /** Unit */
             unit: string;
         };
+        /** ComparisonOut */
+        ComparisonOut: {
+            /** Rows */
+            rows: components["schemas"]["ComparisonRow"][];
+            /** Sensitivity */
+            sensitivity: {
+                [key: string]: unknown;
+            }[];
+            /** Weights */
+            weights: {
+                [key: string]: string;
+            };
+            /** Winner */
+            winner: string | null;
+        };
+        /** ComparisonRow */
+        ComparisonRow: {
+            /** Confirmed */
+            confirmed: boolean;
+            /** Currency */
+            currency: string;
+            /** Deltas */
+            deltas: {
+                [key: string]: string;
+            };
+            /** Excluded */
+            excluded: string | null;
+            /** Landed Cost */
+            landed_cost: string | null;
+            /** Lead Time */
+            lead_time: number | null;
+            /** Offer Id */
+            offer_id: string;
+            /** Payment */
+            payment: number | null;
+            /** Rate */
+            rate: string | null;
+            /** Rate Date */
+            rate_date: string | null;
+            /** Risk */
+            risk: number | null;
+            /** Score */
+            score: string | null;
+            /** Supplier */
+            supplier: string;
+            /** Total */
+            total: string | null;
+            /** Total Kzt */
+            total_kzt: string | null;
+        };
         /** Decision */
         Decision: {
             /**
@@ -911,6 +1286,16 @@ export interface components {
             note?: string | null;
             /** Reason Code */
             reason_code: string;
+        };
+        /** DecisionIn */
+        DecisionIn: {
+            /**
+             * Offer Id
+             * Format: uuid
+             */
+            offer_id: string;
+            /** Reason */
+            reason: string;
         };
         /** Details */
         Details: {
@@ -973,6 +1358,29 @@ export interface components {
             supplier: {
                 [key: string]: unknown;
             };
+        };
+        /** EntryIn */
+        EntryIn: {
+            /**
+             * Attributes
+             * @default {}
+             */
+            attributes: {
+                [key: string]: string;
+            };
+            /** Enstru Code */
+            enstru_code?: string | null;
+            /** Item Id */
+            item_id?: string | null;
+            /** Name */
+            name: string;
+            /**
+             * Standards
+             * @default []
+             */
+            standards: string[];
+            /** Unit */
+            unit?: string | null;
         };
         /** Evidence */
         Evidence: {
@@ -1062,6 +1470,13 @@ export interface components {
             triggered: boolean;
             /** Weight */
             weight: number;
+        };
+        /** FeedbackIn */
+        FeedbackIn: {
+            /** Accepted */
+            accepted: boolean;
+            /** Note */
+            note?: string | null;
         };
         /** Finding */
         Finding: {
@@ -1173,6 +1588,32 @@ export interface components {
              */
             supplier_id: string;
         };
+        /** InviteIn */
+        InviteIn: {
+            /**
+             * Channel
+             * @enum {string}
+             */
+            channel: "portal" | "email" | "phone" | "other";
+            /** Email */
+            email?: string | null;
+            /**
+             * Supplier Id
+             * Format: uuid
+             */
+            supplier_id: string;
+        };
+        /** Item */
+        Item: {
+            /** Enstru Code */
+            enstru_code?: string | null;
+            /** Name */
+            name: string;
+            /** Quantity */
+            quantity: number | string;
+            /** Unit */
+            unit: string;
+        };
         /** Link */
         Link: {
             /**
@@ -1250,6 +1691,45 @@ export interface components {
             sample_classifier: boolean;
             /** Suppliers Created */
             suppliers_created: number;
+        };
+        /** Note */
+        Note: {
+            /** Note */
+            note?: string | null;
+        };
+        /** OfferIn */
+        OfferIn: {
+            /** Currency */
+            currency: string;
+            /** Incoterms */
+            incoterms?: string | null;
+            /**
+             * Invite Id
+             * Format: uuid
+             */
+            invite_id: string;
+            /** Lead Time Days */
+            lead_time_days?: number | null;
+            /** Lines */
+            lines: components["schemas"]["OfferLine"][];
+            /** Payment Days */
+            payment_days?: number | null;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "portal" | "email" | "pdf" | "phone" | "manual";
+            /** Valid Until */
+            valid_until?: string | null;
+        };
+        /** OfferLine */
+        OfferLine: {
+            /** Item */
+            item: number;
+            /** Note */
+            note?: string | null;
+            /** Unit Price */
+            unit_price?: number | string | null;
         };
         /** OnboardingDecision */
         OnboardingDecision: {
@@ -1434,6 +1914,22 @@ export interface components {
             /** Note */
             note?: string | null;
         };
+        /** Requirement */
+        Requirement: {
+            /** Comparator */
+            comparator: string;
+            /** Name */
+            name: string;
+            /** Span */
+            span: [
+                number,
+                number
+            ];
+            /** Unit */
+            unit: string;
+            /** Value */
+            value: string;
+        };
         /** ReviewEntry */
         ReviewEntry: {
             /**
@@ -1489,6 +1985,101 @@ export interface components {
             id: string;
             /** Match Status */
             match_status: string;
+        };
+        /** RfqDetail */
+        RfqDetail: {
+            /** Approvals */
+            approvals: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Current Version */
+            current_version: number;
+            /** Deadline */
+            deadline: string | null;
+            /** Decision */
+            decision: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Invites */
+            invites: {
+                [key: string]: unknown;
+            }[];
+            /** Mine */
+            mine: boolean;
+            /** Offers */
+            offers: {
+                [key: string]: unknown;
+            }[];
+            /** Status */
+            status: string;
+            /** Title */
+            title: string;
+            /** Versions */
+            versions: {
+                [key: string]: unknown;
+            }[];
+            /** Weights */
+            weights: {
+                [key: string]: unknown;
+            };
+        };
+        /** RfqIn */
+        RfqIn: {
+            /** Deadline */
+            deadline?: string | null;
+            /** Items */
+            items: components["schemas"]["Item"][];
+            /**
+             * Spec Text
+             * @default
+             */
+            spec_text: string;
+            /**
+             * Terms
+             * @default {}
+             */
+            terms: {
+                [key: string]: unknown;
+            };
+            /** Title */
+            title: string;
+        };
+        /** RfqRow */
+        RfqRow: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Current Version */
+            current_version: number;
+            /** Deadline */
+            deadline: string | null;
+            /** Due Soon */
+            due_soon: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Invites */
+            invites: number;
+            /** Offers */
+            offers: number;
+            /** Status */
+            status: string;
+            /** Title */
+            title: string;
         };
         /** Risk */
         Risk: {
@@ -1547,6 +2138,38 @@ export interface components {
             subject_id: string;
             /** Trigger */
             trigger: string;
+        };
+        /** SpecIn */
+        SpecIn: {
+            /** Text */
+            text: string;
+        };
+        /** SpecIssue */
+        SpecIssue: {
+            /** Kind */
+            kind: string;
+            /** Message */
+            message: string;
+            /** Span */
+            span: [
+                number,
+                number
+            ] | null;
+            /** Suggestion */
+            suggestion: string | null;
+        };
+        /** SpecOut */
+        SpecOut: {
+            /** Family */
+            family: string | null;
+            /** Issues */
+            issues: components["schemas"]["SpecIssue"][];
+            /** Requirements */
+            requirements: components["schemas"]["Requirement"][];
+            /** Standards */
+            standards: string[];
+            /** Suggested */
+            suggested: string;
         };
         /** Spend */
         Spend: {
@@ -1670,12 +2293,36 @@ export interface components {
             /** Error Type */
             type: string;
         };
+        /** VersionIn */
+        VersionIn: {
+            /** Items */
+            items: components["schemas"]["Item"][];
+            /**
+             * Spec Text
+             * @default
+             */
+            spec_text: string;
+            /**
+             * Terms
+             * @default {}
+             */
+            terms: {
+                [key: string]: unknown;
+            };
+        };
         /** Weights */
         Weights: {
             /** Defaults */
             defaults: {
                 [key: string]: number;
             };
+            /** Weights */
+            weights: {
+                [key: string]: number;
+            };
+        };
+        /** WeightsIn */
+        WeightsIn: {
             /** Weights */
             weights: {
                 [key: string]: number;
@@ -1789,6 +2436,215 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditLog"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    search_catalogue_orgs__org_id__catalogue_get: {
+        parameters: {
+            query?: {
+                q?: string;
+                attr?: string[] | null;
+            };
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_entry_orgs__org_id__catalogue_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntryIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    acceptance_orgs__org_id__catalogue_acceptance_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    analogs_orgs__org_id__catalogue__entry_id__analogs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    analog_feedback_orgs__org_id__catalogue__entry_id__analogs__analog_id__feedback_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                entry_id: string;
+                analog_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeedbackIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prices_orgs__org_id__catalogue__entry_id__prices_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
                 };
             };
             /** @description Validation Error */
@@ -1924,6 +2780,40 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["NormalizeSummary"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    confirm_offer_orgs__org_id__offers__offer_id__confirm_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                offer_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Note"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {
@@ -2679,6 +3569,448 @@ export interface operations {
             };
         };
     };
+    mark_sent_orgs__org_id__rfq_invites__invite_id__sent_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                invite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_rfqs_orgs__org_id__rfqs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfqRow"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_rfq_orgs__org_id__rfqs_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RfqIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_rfq_orgs__org_id__rfqs__rfq_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RfqDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    approve_orgs__org_id__rfqs__rfq_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Note"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_orgs__org_id__rfqs__rfq_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    close_orgs__org_id__rfqs__rfq_id__close_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    comparison_orgs__org_id__rfqs__rfq_id__comparison_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComparisonOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decide_orgs__org_id__rfqs__rfq_id__decision_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    invite_orgs__org_id__rfqs__rfq_id__invites_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_offer_orgs__org_id__rfqs__rfq_id__offers_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OfferIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: string;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    new_version_orgs__org_id__rfqs__rfq_id__versions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_weights_orgs__org_id__rfqs__rfq_id__weights_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+                rfq_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WeightsIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_weights_orgs__org_id__risk_weights_get: {
         parameters: {
             query?: never;
@@ -2865,6 +4197,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OrgSettings"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    spec_check_orgs__org_id__spec_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SpecIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpecOut"];
                 };
             };
             /** @description Validation Error */
