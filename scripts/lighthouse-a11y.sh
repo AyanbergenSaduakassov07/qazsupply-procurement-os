@@ -27,7 +27,9 @@ fail=0
 for path in /en/sign-in /ru/sign-in /kk/sign-in /en /ru /kk /en/audit /en/settings /en/gallery \
   /en/spend /kk/spend /en/spend/review /en/spend/reports \
   /en/spend/reports/40000000-0000-4000-a000-00000000000a \
-  /kk/spend/reports/40000000-0000-4000-a000-00000000000a; do
+  /kk/spend/reports/40000000-0000-4000-a000-00000000000a \
+  /en/suppliers /kk/suppliers /en/suppliers/7a000000-0000-4000-a000-0000000000a1 \
+  /kk/suppliers/7a000000-0000-4000-a000-0000000000a2 /en/onboarding /en/audit?kind=file; do
   extra=()
   [[ "$path" == */sign-in ]] || extra=(--extra-headers="$HEADERS")
   npx --yes "$LIGHTHOUSE" "$BASE$path" --only-categories=accessibility --output=json \
