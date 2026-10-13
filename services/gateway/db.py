@@ -23,6 +23,9 @@ class Database:
             max_size=10,
             open=False,
             kwargs={"row_factory": dict_row, "autocommit": False},
+            # A DB restart (failover, `db reset`) leaves dead connections in the pool; without a
+            # check on checkout the next requests fail until the pool recycles them.
+            check=ConnectionPool.check_connection,
         )
 
     def open(self) -> None:

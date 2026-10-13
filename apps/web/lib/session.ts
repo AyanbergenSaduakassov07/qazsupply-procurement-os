@@ -8,6 +8,8 @@ const API_URL = process.env.API_URL ?? "http://localhost:8000";
 
 export type Session =
   | { status: "anonymous" }
+  /** The API did not answer (down, DB restarting): say so instead of a silent sign-out. */
+  | { status: "unavailable" }
   | {
       status: "authenticated";
       userId: string;
@@ -30,7 +32,8 @@ export async function getSession(): Promise<Session> {
   if (!token) return { status: "anonymous" };
 
   try {
-    const { data, error } = await apiClient(API_URL, token).GET("/me");
+    const { data, error, response } = await apiClient(API_URL, token).GET("/me");
+    if (response.status >= 500) return { status: "unavailable" };
     if (error || !data) return { status: "anonymous" };
     const wanted = jar.get(ORG_COOKIE)?.value;
     const currentOrg =
@@ -48,7 +51,7 @@ export async function getSession(): Promise<Session> {
       roles,
     };
   } catch {
-    // API down or token rejected: treat as signed out rather than failing the shell.
-    return { status: "anonymous" };
+    // API unreachable: tell the user, rather than failing the shell or signing them out.
+    return { status: "unavailable" };
   }
 }

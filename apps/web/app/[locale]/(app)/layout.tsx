@@ -17,6 +17,7 @@ export default async function AppLayout({
   if (!isLocale(locale)) notFound();
   const session = await getSession();
   if (session.status === "anonymous") redirect(`/${locale}/sign-in`);
+  if (session.status === "unavailable") redirect(`/${locale}/sign-in?error=unavailable`);
   return (
     <AppShell locale={locale} session={session}>
       {children}
