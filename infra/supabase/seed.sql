@@ -163,6 +163,7 @@ insert into public.suppliers (id, org_id, name, bin) values
 insert into public.onboarding_cases (id, org_id, supplier_user_id, status, legal_name, created_by)
 values ('93000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
   '00000000-0000-4000-a000-0000000000b1', 'invited', 'ТОО «Б Сэмпл»', '00000000-0000-4000-a000-0000000000b1');
-insert into public.onboarding_documents (org_id, case_id, kind, file_name, content_type, size_bytes, sha256, content)
+insert into public.onboarding_documents (org_id, case_id, kind, file_name, content_type, size_bytes, sha256, content, uploaded_by)
 values ('10000000-0000-4000-a000-00000000000b', '93000000-0000-4000-a000-00000000000b', 'other', 'b.pdf',
-  'application/pdf', 8, encode(sha256('%PDF-1.4'::bytea), 'hex'), '%PDF-1.4'::bytea);
+  'application/pdf', 8, encode(sha256('%PDF-1.4'::bytea), 'hex'), '%PDF-1.4'::bytea,
+  '00000000-0000-4000-a000-0000000000b1');

@@ -180,7 +180,9 @@ begin
                      where c.id = new.case_id and c.status in ('invited', 'in_progress')) then
     raise exception 'onboarding:locked_for_supplier' using errcode = '23514';
   end if;
-  new.uploaded_by := auth.uid();
+  if current_user = 'authenticated' then
+    new.uploaded_by := auth.uid();
+  end if;
   return new;
 end;
 $$;
