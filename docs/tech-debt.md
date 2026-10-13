@@ -13,7 +13,7 @@ Budget: 20% of each phase (docs/product/prioritization.md). A phase gate cannot 
 | D7 | `/health` without DB check | M0 scope | M1 | **closed** (M1) |
 | D8 | Advisors run locally (splinter), not on a remote project | No remote Supabase project yet (owner decision: region, cost) | When the project exists: run `get_advisors` after each migration | open, **blocker for first client** |
 | D9 | Audit times shown in Asia/Almaty for everyone | No user profile / time-zone preference | M3 (report surface) | open |
-| D10 | Access token refresh only in `proxy.ts`; no session revocation list | Supabase handles revocation on refresh | M3 | open |
+| D10 | Access token refresh only in `proxy.ts`; no session revocation list | Supabase handles revocation on refresh | M3 | **closed** (2026-10-13: sign-out revokes the session at Supabase (`/auth/v1/logout`), so a copied refresh cookie cannot mint tokens; the access token still lives <= 1 h; e2e checks the old refresh token is refused) |
 | D11 | Anthropic provider adapter not built | M1 makes no model calls; M2 stayed deterministic (re-rank disabled, ADR 0007) | The first feature that calls a model (M3 explanations / Ask), with its prompt + eval | open |
 | D12 | Kazakh microcopy not reviewed by a native speaker | No reviewer yet | Before first kk-speaking client | open, **blocker for kk launch** |
 | D13 | `style-src 'unsafe-inline'` in CSP | SSR'd inline style attributes from UI primitives | When primitives move to class-only positioning | open |

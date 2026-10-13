@@ -41,6 +41,25 @@ export const passwordGrant = (email: string, password: string) =>
 export const refreshGrant = (refreshToken: string) =>
   grant("refresh_token", { refresh_token: refreshToken });
 
+/**
+ * Revoke this session's refresh token at Supabase (sign-out), so a copied refresh cookie cannot
+ * mint new access tokens. The current access token stays valid until it expires (<= 1 h).
+ * Best effort: sign-out must still clear cookies when Auth is unreachable.
+ */
+export async function revokeSession(accessToken: string): Promise<void> {
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  if (!key || !accessToken) return;
+  try {
+    await fetch(`${SUPABASE_URL}/auth/v1/logout?scope=local`, {
+      method: "POST",
+      headers: { apikey: key, Authorization: `Bearer ${accessToken}` },
+      cache: "no-store",
+    });
+  } catch {
+    // Unreachable Auth: cookies are still cleared by the caller.
+  }
+}
+
 /** Seconds until the JWT expires (no signature check: the API verifies; this only schedules refresh). */
 export function secondsUntilExpiry(jwt: string): number {
   try {

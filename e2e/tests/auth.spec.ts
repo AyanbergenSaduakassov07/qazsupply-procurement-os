@@ -1,7 +1,18 @@
+import { execSync } from "node:child_process";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page, test } from "@playwright/test";
 
 import fixture from "../fixtures/users.json" with { type: "json" };
+
+/** Local Supabase's publishable key (not a secret), as playwright.config.ts resolves it. */
+function publishableKey(): string {
+  return (
+    process.env.SUPABASE_PUBLISHABLE_KEY ??
+    JSON.parse(
+      execSync("supabase status --workdir infra -o json", { cwd: "..", stdio: "pipe" }).toString(),
+    ).PUBLISHABLE_KEY
+  );
+}
 
 const ORG_B = fixture.orgs.B;
 
@@ -101,13 +112,28 @@ test.describe("tenant isolation through the UI (client_admin of Org A)", () => {
     expect(r.status()).toBe(404);
   });
 
-  test("sign out ends the session", async ({ page }) => {
-    await page.goto("/en");
+  test("sign out ends the session", async ({ browser, request }) => {
+    // Own session: signing out revokes it at Supabase, which must not touch the shared one.
+    const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+    const page = await context.newPage();
+    await page.goto("/en/sign-in");
+    await page.getByLabel("Email").fill(fixture.users.clientAdminA);
+    await page.getByLabel("Password").fill(fixture.password);
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page).toHaveURL(/\/en$/);
+    const refresh = (await page.context().cookies()).find((c) => c.name === "qs_refresh_token");
     await page.getByRole("button", { name: "Account" }).click();
     await page.getByRole("menuitem", { name: "Sign out" }).click();
     await expect(page).toHaveURL(/\/en\/sign-in$/);
     await page.goto("/en");
     await expect(page).toHaveURL(/\/en\/sign-in$/);
+    // The refresh token was revoked at Supabase, not only deleted from the browser (D10).
+    const r = await request.post("http://127.0.0.1:54321/auth/v1/token?grant_type=refresh_token", {
+      headers: { apikey: publishableKey(), "Content-Type": "application/json" },
+      data: { refresh_token: refresh?.value },
+    });
+    expect(r.status()).toBe(400);
+    await context.close();
   });
 });
 

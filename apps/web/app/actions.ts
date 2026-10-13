@@ -4,7 +4,7 @@ import { isLocale } from "@qazsupply/i18n";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { passwordGrant, writeTokens } from "../lib/auth";
+import { passwordGrant, revokeSession, writeTokens } from "../lib/auth";
 import {
   ACCESS_TOKEN_COOKIE,
   ORG_COOKIE,
@@ -34,6 +34,7 @@ export async function signIn(formData: FormData): Promise<void> {
 
 export async function signOut(locale: string): Promise<void> {
   const jar = await cookies();
+  await revokeSession(jar.get(ACCESS_TOKEN_COOKIE)?.value ?? "");
   for (const name of [ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE, ORG_COOKIE]) jar.delete(name);
   redirect(`/${isLocale(locale) ? locale : "ru"}/sign-in`);
 }
