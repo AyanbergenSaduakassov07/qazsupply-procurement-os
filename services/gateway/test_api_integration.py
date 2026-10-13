@@ -3,7 +3,7 @@
 Real sign-ins with the seeded users, real JWKS verification, real RLS.
 """
 
-import httpx
+import httpx2
 import pytest
 from fastapi.testclient import TestClient
 
@@ -15,8 +15,8 @@ DRAFT_EVIDENCE = "60000000-0000-4000-a000-0000000000a2"
 B_EVIDENCE = "60000000-0000-4000-a000-00000000000b"
 
 
-def get(client: TestClient, user: str, path: str) -> httpx.Response:
-    response: httpx.Response = client.get(path, headers={"Authorization": f"Bearer {token(user)}"})
+def get(client: TestClient, user: str, path: str) -> httpx2.Response:
+    response: httpx2.Response = client.get(path, headers={"Authorization": f"Bearer {token(user)}"})
     return response
 
 

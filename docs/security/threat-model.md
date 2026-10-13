@@ -120,3 +120,14 @@ New boundaries: ‖ supplier user (role `supplier`) ‖ onboarding case of its o
 | T54 | DoS / integrity | A registry outage or schema change silently produces an empty dossier that looks "clean" | Typed `SourceUnavailable` (down, rate_limited, schema_drift); verdict `unknown` when not built or never screened (never `ok`); outage shown as an alert | connector contract tests per failure; e2e outage state; risk unit test "unknown is never ok" | Low |
 | T55 | Tampering (race) | Concurrent writes break the audit hash chain or duplicate suppliers | Chain trigger takes the per-org lock before drawing the id; supplier resolution under a per-org transaction lock; upload handlers run in the threadpool (no event-loop deadlock) | `test_audit_chain_integration` (not yet run locally, see PROGRESS), supplier race test red 3-4 dupes -> green, concurrent-upload test | Low after the audit test runs |
 | T56 | Tampering (prompt injection) | Supplier names, registry text or uploaded documents steer a model | No model reads any M4 data (no AI summary, no OCR); screening and scoring are rules + SQL | n/a until an AI summary or OCR is added (D31, D29): then add the documents to `evals/ask`-style injection suites | Low now |
+
+## D24 update (2026-10-13): agent-ready MCP API
+
+New boundary: ‖ a customer's AI agent ‖ calls read-only tools at `/mcp/` with the user's own access token.
+
+| # | STRIDE | Threat | Mitigation | Test | Residual |
+|---|---|---|---|---|---|
+| T57 | Spoofing | An agent without a valid token reads tenant data | SDK bearer auth with our JWT verifier (same keys, audience, leeway as REST); no token -> 401 | `test_no_token_no_access` | Low |
+| T58 | Elevation | An agent reaches another tenant or writes data | Every tool runs inside the caller's RLS transaction; membership check first ("not found"); tools are read-only (annotations + no write calls; the only write is the dossier-view audit row) | `test_another_tenant_is_not_found`, tools listed read-only | Low |
+| T59 | Tampering (prompt injection, indirect) | Supplier names, item text or registry text instruct the customer's agent | Untrusted text returned only under `data` fields with an explicit note; skill packs tell the agent it is data, never instructions; no tool can act on it | `test_findings_carry_evidence_and_untrusted_text_is_data`; skill `evidence-citation` | **Medium: the customer's agent is outside our control** |
+| T60 | Spoofing (DNS rebinding) / DoS | A browser page drives the MCP endpoint via a rebound DNS name; floods it | Host + origin allow-list (`host_guard`), stateless JSON transport, 4 MiB body cap | MCP tests (421 before the allow-list) | Medium: no per-token rate limit yet (D37) |

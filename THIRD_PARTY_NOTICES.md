@@ -12,13 +12,20 @@ Vendored source (`vendor/`) keeps its own LICENSE file next to the code.
 | PyPI | annotated-doc | 0.0.5 | MIT | https://github.com/fastapi/annotated-doc |
 | PyPI | annotated-types | 0.8.0 | MIT | https://github.com/annotated-types/annotated-types |
 | PyPI | anyio | 4.15.1 | MIT | https://anyio.readthedocs.io/en/stable/versionhistory.html |
+| PyPI | attrs | 26.1.0 | MIT | https://www.attrs.org/en/stable/changelog.html |
 | PyPI | cffi | 2.1.1 | MIT-0 | https://cffi.readthedocs.io/en/latest/whatsnew.html |
 | PyPI | click | 8.5.0 | BSD-3-Clause | https://github.com/pallets/click/ |
 | PyPI | cryptography | 50.0.2 | Apache-2.0 OR BSD-3-Clause | https://github.com/pyca/cryptography |
 | PyPI | et_xmlfile | 2.0.0 | MIT License | https://foss.heptapod.net/openpyxl/et_xmlfile |
 | PyPI | fastapi | 0.142.4 | MIT | https://github.com/fastapi/fastapi |
 | PyPI | h11 | 0.16.0 | MIT License | https://github.com/python-hyper/h11 |
+| PyPI | httpcore2 | 2.13.1 | BSD-3-Clause | https://github.com/pydantic/httpx2 |
+| PyPI | httpx2 | 2.13.1 | BSD-3-Clause | https://github.com/pydantic/httpx2 |
 | PyPI | idna | 3.20 | BSD-3-Clause | https://github.com/kjd/idna |
+| PyPI | jsonschema | 4.26.0 | MIT | https://github.com/python-jsonschema/jsonschema |
+| PyPI | jsonschema-specifications | 2025.9.1 | MIT | https://github.com/python-jsonschema/jsonschema-specifications |
+| PyPI | mcp | 2.2.0 | MIT License | https://modelcontextprotocol.io |
+| PyPI | mcp-types | 2.2.0 | MIT License | https://modelcontextprotocol.io |
 | PyPI | openpyxl | 3.1.5 | MIT License | https://openpyxl.readthedocs.io |
 | PyPI | opentelemetry-api | 1.45.1 | Apache-2.0 | https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api |
 | PyPI | psycopg | 3.3.6 | LGPL-3.0-only | https://psycopg.org/ |
@@ -28,7 +35,11 @@ Vendored source (`vendor/`) keeps its own LICENSE file next to the code.
 | PyPI | pydantic | 2.13.5 | MIT | https://github.com/pydantic/pydantic |
 | PyPI | pydantic_core | 2.46.5 | MIT | https://github.com/pydantic |
 | PyPI | python-multipart | 0.0.32 | Apache-2.0 | https://github.com/Kludex/python-multipart |
+| PyPI | referencing | 0.37.0 | MIT | https://github.com/python-jsonschema/referencing |
+| PyPI | rpds-py | 2026.9.1 | MIT | https://github.com/crate-py/rpds |
+| PyPI | sse-starlette | 3.5.0 | BSD-3-Clause | https://github.com/sysid/sse-starlette |
 | PyPI | starlette | 1.7.0 | BSD-3-Clause | https://github.com/Kludex/starlette |
+| PyPI | truststore | 0.10.5 | MIT | https://github.com/sethmlarson/truststore |
 | PyPI | typing-inspection | 0.4.4 | MIT | https://github.com/pydantic/typing-inspection |
 | PyPI | typing_extensions | 4.16.0 | PSF-2.0 | https://github.com/python/typing_extensions |
 | PyPI | uvicorn | 0.54.0 | BSD-3-Clause | https://uvicorn.dev/ |

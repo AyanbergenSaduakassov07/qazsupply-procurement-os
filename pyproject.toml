@@ -12,12 +12,14 @@ dependencies = [
   "python-multipart==0.0.32",
   "rapidfuzz==3.14.6",
   "uvicorn==0.54.0",
+  "mcp==2.2.0",
 ]
 
 [dependency-groups]
 dev = [
   "fonttools==4.66.0",
   "httpx==0.28.1",
+  "httpx2==2.13.1",
   "hypothesis==6.168.1",
   "mypy==2.4.0",
   "pip-audit==2.10.1",

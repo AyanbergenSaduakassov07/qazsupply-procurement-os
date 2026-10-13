@@ -19,6 +19,7 @@ from pydantic import BaseModel
 
 from services.gateway import (
     log,
+    mcp_server,
     routes_ask,
     routes_core,
     routes_onboarding,
@@ -47,7 +48,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.db.open()
     except Exception as e:  # noqa: BLE001 - API must start even when the DB is down; /health reports it
         logger.warning("database unavailable at startup", extra={"error_type": type(e).__name__})
-    yield
+    async with mcp.session_manager.run():  # the mounted MCP app's own lifespan never runs
+        yield
     app.state.db.close()
 
 
@@ -68,6 +70,13 @@ def llm_provider(s: Settings) -> Provider | None:
 
 
 app = FastAPI(title="QazSupply API", version="0.1.0", lifespan=lifespan)
+# Agent-ready API (D24): read-only MCP tools at /mcp/, authenticated like the REST API.
+mcp = mcp_server.build(
+    db=lambda: app.state.db,
+    verifier=lambda: app.state.verifier,
+    issuer=f"{settings.supabase_url.rstrip('/')}/auth/v1",
+    resource=f"{settings.public_api_url.rstrip('/')}/mcp/",
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=list(settings.cors_origins),
@@ -133,3 +142,12 @@ app.include_router(routes_report.router)
 app.include_router(routes_ask.router)
 app.include_router(routes_supplier360.router)
 app.include_router(routes_onboarding.router)
+app.mount(
+    "/mcp",
+    mcp.streamable_http_app(
+        streamable_http_path="/",
+        json_response=True,
+        stateless_http=True,
+        transport_security=mcp_server.host_guard(settings),
+    ),
+)

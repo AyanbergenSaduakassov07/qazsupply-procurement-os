@@ -2,6 +2,11 @@
 
 QazSupply's own agent skills and MCP tools: what customers' (and our) AI agents can do **inside** the product, safely.
 
+## Status (2026-10-13)
+Built: the read-only MCP server (`services/gateway/mcp_server.py`, mounted at `/mcp/` on the API) with tools `list_organizations`, `list_reports`, `get_findings`, `get_evidence`, `list_suppliers`, `get_supplier_dossier`, and three skill packs in `skills/` (`evidence-citation`, `spend-audit`, `supplier-vetting`). Auth: the user's own Supabase access token (Bearer), so RLS scopes every call exactly like the web app. Per-organization agent tokens and rate limits: D37. Tests: `services/gateway/test_mcp_integration.py`.
+
+Connect (local): `http://localhost:8000/mcp/` with `Authorization: Bearer <access token>`.
+
 ## Contents (planned, built in M3 and published in M9)
 ```text
 packages/agent-skills/

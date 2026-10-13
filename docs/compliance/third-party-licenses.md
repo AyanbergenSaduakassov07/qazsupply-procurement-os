@@ -125,7 +125,7 @@ Status: generated 2026-10-08. Not legal advice; a lawyer must review before laun
 | explodinggradients/ragas | Apache-2.0 | PERMISSIVE | D | `298b682742` | M3 |  |
 | guardrails-ai/guardrails | Apache-2.0 | PERMISSIVE | R | `06d0ff2c5f` | M3 |  |
 | jlowin/fastmcp | Apache-2.0 | PERMISSIVE | D | `5baeacfe20` | M3 |  |
-| modelcontextprotocol/python-sdk | MIT | PERMISSIVE | D | `91941ed4d3` | M3 |  |
+| modelcontextprotocol/python-sdk | MIT | PERMISSIVE | D | `9972c21aa4` (v2.2.0, PyPI `mcp==2.2.0`) | M3 | **adopted 2026-10-13** (D24): read-only MCP server at `/mcp/`; pulls `httpx2` (BSD-3-Clause), `mcp-types`, `sse-starlette` (BSD-3-Clause); licence gate green |
 | NVIDIA/garak | Apache-2.0 | PERMISSIVE | D | `aa5262f13d` | M3 |  |
 | NVIDIA/NeMo-Guardrails | Apache-2.0 | PERMISSIVE | R | `9f793de53e` | M3 |  |
 | promptfoo/promptfoo | MIT | PERMISSIVE | D | `bbb583afc8` | M3 |  |

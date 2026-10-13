@@ -3,7 +3,7 @@
 from collections.abc import Iterator
 from decimal import Decimal
 
-import httpx
+import httpx2
 import psycopg
 import pytest
 from fastapi.testclient import TestClient
@@ -34,7 +34,7 @@ def upload(client: TestClient, name: str, mapping: str) -> str:
 
 
 def normalize(client: TestClient, file_id: str) -> dict[str, object]:
-    r: httpx.Response = client.post(
+    r: httpx2.Response = client.post(
         f"/orgs/{ORG_A}/normalize", headers=auth_header("clientUserA"), json={"file_id": file_id}
     )
     assert r.status_code == 200, r.text

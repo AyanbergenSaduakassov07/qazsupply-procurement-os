@@ -19,6 +19,8 @@ class Settings:
     llm_provider: str = "none"
     openrouter_api_key: str = ""
     ask_model: str = DEV_ASK_MODEL
+    # Public base URL of this API (the MCP resource identifier advertised to agents).
+    public_api_url: str = "http://localhost:8000"
 
     @property
     def jwks_url(self) -> str:
@@ -52,6 +54,7 @@ def load() -> Settings:
         ),
         supabase_url=os.environ.get("SUPABASE_URL", "http://127.0.0.1:54321"),
         cors_origins=tuple(os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")),
+        public_api_url=os.environ.get("PUBLIC_API_URL", "http://localhost:8000"),
         llm_provider=env_local("LLM_PROVIDER") or "none",
         openrouter_api_key=env_local("OPENROUTER_API_KEY"),
         ask_model=env_local("ASK_MODEL")

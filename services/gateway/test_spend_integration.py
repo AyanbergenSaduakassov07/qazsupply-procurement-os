@@ -3,7 +3,7 @@
 import time
 from collections.abc import Iterator
 
-import httpx
+import httpx2
 import pytest
 from fastapi.testclient import TestClient
 
@@ -31,8 +31,8 @@ def clean_uploads() -> Iterator[None]:
 
 def post(
     client: TestClient, user: str, path: str, name: str, data: bytes, **form: str
-) -> httpx.Response:
-    response: httpx.Response = client.post(
+) -> httpx2.Response:
+    response: httpx2.Response = client.post(
         path,
         headers={"Authorization": f"Bearer {token(user)}"},
         files={"file": (name, data)},

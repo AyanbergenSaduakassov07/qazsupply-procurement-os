@@ -160,7 +160,7 @@ Two directions: (1) skills and MCP servers we use to build (Playwright MCP, Cont
 | [21st-dev/magic-mcp](https://github.com/21st-dev/magic-mcp) | ISC | 2026-09-09 | `6b5299e8a8` | S | M1 | UI component generation MCP |
 | [anthropics/claude-cookbooks](https://github.com/anthropics/claude-cookbooks) | MIT | 2026-09-28 | `d7265d6ae9` | R | M3 | Patterns: tool use, RAG, citations, evals |
 | [jlowin/fastmcp](https://github.com/jlowin/fastmcp) | Apache-2.0 | 2026-10-04 | `5baeacfe20` | D | M3 | Fast way to publish our services as MCP servers |
-| [modelcontextprotocol/python-sdk](https://github.com/modelcontextprotocol/python-sdk) | MIT | 2026-10-05 | `91941ed4d3` | D | M3 | MCP server SDK (expose Evidence and analysis as tools) |
+| [modelcontextprotocol/python-sdk](https://github.com/modelcontextprotocol/python-sdk) | MIT | 2026-10-05 | `9972c21aa4` | D | M3 | MCP server SDK (expose Evidence and analysis as tools). Adopted v2.2.0 on 2026-10-13 (v2.3.0 is inside the 14-day cooldown) |
 
 ## LLM evaluation, red-team, privacy and observability
 
