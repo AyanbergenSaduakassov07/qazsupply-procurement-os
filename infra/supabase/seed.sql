@@ -167,3 +167,37 @@ insert into public.onboarding_documents (org_id, case_id, kind, file_name, conte
 values ('10000000-0000-4000-a000-00000000000b', '93000000-0000-4000-a000-00000000000b', 'other', 'b.pdf',
   'application/pdf', 8, encode(sha256('%PDF-1.4'::bytea), 'hex'), '%PDF-1.4'::bytea,
   '00000000-0000-4000-a000-0000000000b1');
+
+-- M5: one Org B row in every procurement table (tenant-isolation suite). Invented data.
+insert into public.suppliers (id, org_id, name, bin) values
+  ('7b000000-0000-4000-a000-0000000000b1', '10000000-0000-4000-a000-00000000000b', 'ТОО «Б Поставка»', '000000000001');
+insert into public.rfqs (id, org_id, title, status, created_by) values
+  ('95000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b', 'B RFQ', 'decided',
+   '00000000-0000-4000-a000-0000000000b1');
+insert into public.rfq_versions (org_id, rfq_id, version, spec_text, items, created_by) values
+  ('10000000-0000-4000-a000-00000000000b', '95000000-0000-4000-a000-00000000000b', 1, 'B spec',
+   '[{"name": "B item", "quantity": 1, "unit": "pcs"}]', '00000000-0000-4000-a000-0000000000b1');
+insert into public.rfq_approvals (org_id, rfq_id, version, approved_by) values
+  ('10000000-0000-4000-a000-00000000000b', '95000000-0000-4000-a000-00000000000b', 1,
+   '00000000-0000-4000-a000-0000000000b1');
+insert into public.rfq_invites (id, org_id, rfq_id, supplier_id, channel, sent_at, sent_by, created_by) values
+  ('96000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
+   '95000000-0000-4000-a000-00000000000b', '7b000000-0000-4000-a000-0000000000b1', 'email', now(),
+   '00000000-0000-4000-a000-0000000000b1', '00000000-0000-4000-a000-0000000000b1');
+insert into public.offers (id, org_id, rfq_id, invite_id, rfq_version, source, currency, lines, entered_by) values
+  ('97000000-0000-4000-a000-00000000000b', '10000000-0000-4000-a000-00000000000b',
+   '95000000-0000-4000-a000-00000000000b', '96000000-0000-4000-a000-00000000000b', 1, 'email', 'KZT',
+   '[{"item": 0, "unit_price": 100}]', '00000000-0000-4000-a000-0000000000b1');
+insert into public.offer_confirmations (org_id, offer_id, confirmed_by, by_supplier, note) values
+  ('10000000-0000-4000-a000-00000000000b', '97000000-0000-4000-a000-00000000000b',
+   '00000000-0000-4000-a000-0000000000b1', false, 'Confirmed by phone');
+insert into public.decisions (org_id, rfq_id, offer_id, reason, alternatives, weights, decided_by) values
+  ('10000000-0000-4000-a000-00000000000b', '95000000-0000-4000-a000-00000000000b',
+   '97000000-0000-4000-a000-00000000000b', 'Only confirmed offer.', '[]', '{}',
+   '00000000-0000-4000-a000-0000000000b1');
+insert into public.catalogue_entries (id, org_id, name, created_by) values
+  ('98000000-0000-4000-a000-0000000000b1', '10000000-0000-4000-a000-00000000000b', 'B entry 1', '00000000-0000-4000-a000-0000000000b1'),
+  ('98000000-0000-4000-a000-0000000000b2', '10000000-0000-4000-a000-00000000000b', 'B entry 2', '00000000-0000-4000-a000-0000000000b1');
+insert into public.analog_feedback (org_id, entry_id, analog_id, accepted, reviewer_id) values
+  ('10000000-0000-4000-a000-00000000000b', '98000000-0000-4000-a000-0000000000b1',
+   '98000000-0000-4000-a000-0000000000b2', true, '00000000-0000-4000-a000-0000000000b1');
