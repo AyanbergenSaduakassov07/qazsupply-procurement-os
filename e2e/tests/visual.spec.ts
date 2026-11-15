@@ -20,6 +20,10 @@ const SCREENS = [
   // M4: seeded Org A suppliers (sample sources); the dossier builds itself on first visit.
   { name: "suppliers", path: "/suppliers", signedIn: true },
   { name: "dossier", path: "/suppliers/7a000000-0000-4000-a000-0000000000a1", signedIn: true },
+  // M5: seeded closed RFQ (two confirmed offers) and its comparison; catalogue with seed entries.
+  { name: "rfq", path: "/rfqs/a5000000-0000-4000-a000-0000000000d1", signedIn: true },
+  { name: "compare", path: "/rfqs/a5000000-0000-4000-a000-0000000000d1/compare", signedIn: true },
+  { name: "catalogue", path: "/catalogue?q=цемент", signedIn: true },
 ] as const;
 
 for (const screen of SCREENS) {
