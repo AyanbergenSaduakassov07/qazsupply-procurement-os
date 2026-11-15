@@ -2,7 +2,7 @@
 -- decision records, consented price sharing (cross-tenant access: m1_rls.test.sql).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(34);
+select plan(38);
 
 create temp table ids as select
   '10000000-0000-4000-a000-00000000000a'::uuid as org_a,
@@ -154,6 +154,25 @@ select is((select count(*)::int from private.shared_price_stats((select org_a fr
 update public.organizations set share_prices = true where id = (select org_a from ids);
 select is((select count(*)::int from private.shared_price_stats((select org_a from ids), 'SYN-CEM-001')), 0,
   'consent but fewer than 5 organizations: still nothing');
+
+-- ---------------------------------------------------------------- review fixes (2026-10-13)
+select pg_temp.as_user((select user_a from ids));
+select throws_ok(
+  format($$update public.rfq_invites set supplier_user_id = %L where id = %L$$, (select user_a from ids), (select inv_email from ids)),
+  '42501', null, 'an invite cannot be re-pointed at another user (no column grant)');
+reset role;  -- four_eyes is set by a QazSupply admin; the fixture sets it directly
+update public.organizations set four_eyes = true where id = (select org_a from ids);
+set local role authenticated;
+select pg_temp.as_user((select admin_a from ids));
+select lives_ok(
+  format($$insert into public.rfqs (id, org_id, title) values ('a5000000-0000-4000-a000-0000000000f1', %L, 'four eyes')$$, (select org_a from ids)),
+  'an admin drafts an RFQ');
+select lives_ok(
+  format($$insert into public.rfq_versions (org_id, rfq_id, version, items) values (%L, 'a5000000-0000-4000-a000-0000000000f1', 1, '[{"name":"x","quantity":1,"unit":"т"}]')$$, (select org_a from ids)),
+  'with its first version');
+select throws_ok(
+  format($$insert into public.rfq_approvals (org_id, rfq_id, version) values (%L, 'a5000000-0000-4000-a000-0000000000f1', 1)$$, (select org_a from ids)),
+  '23514', 'rfq:four_eyes_creator_cannot_approve', 'with four_eyes on, the drafter cannot approve');
 
 select * from finish();
 rollback;

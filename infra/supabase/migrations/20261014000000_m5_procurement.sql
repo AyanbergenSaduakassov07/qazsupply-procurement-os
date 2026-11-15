@@ -170,8 +170,9 @@ create table public.catalogue_entries (
 create index catalogue_entries_org_idx on public.catalogue_entries (org_id);
 create index catalogue_entries_item_idx on public.catalogue_entries (item_id, org_id);
 create index catalogue_entries_created_by_idx on public.catalogue_entries (created_by);
+-- Same expression as the search (lower + Kazakh letters folded), so the index is used.
 create index catalogue_entries_name_trgm on public.catalogue_entries
-  using gin (lower(name) extensions.gin_trgm_ops);
+  using gin ((translate(lower(name), 'ёәғқңөұүһі', 'еагкноуухи')) extensions.gin_trgm_ops);
 
 -- Reviewer accept/reject of a suggested analog: feeds the analog eval set. Append-only.
 create table public.analog_feedback (
@@ -335,6 +336,11 @@ begin
     return new;
   end if;
   new.approved_by := auth.uid();
+  -- Two-person rule (organizations.four_eyes, M3): whoever drafted the RFQ cannot approve it.
+  if exists (select 1 from public.organizations o join public.rfqs r on r.org_id = o.id
+             where r.id = new.rfq_id and o.four_eyes and r.created_by = auth.uid()) then
+    raise exception 'rfq:four_eyes_creator_cannot_approve' using errcode = '23514';
+  end if;
   if not exists (select 1 from public.rfqs r where r.id = new.rfq_id
                  and r.status = 'draft' and r.current_version = new.version) then
     raise exception 'rfq:approve_the_current_draft' using errcode = '23514';
@@ -375,7 +381,10 @@ begin
     end if;
     return new;
   end if;
-  if new.rfq_id <> old.rfq_id or new.supplier_id <> old.supplier_id then
+  -- Who an invite reaches is fixed at creation (supplier member checked then): re-pointing it
+  -- would hand the RFQ and the invite's offers to another user (code review 2026-10-13).
+  if new.rfq_id <> old.rfq_id or new.supplier_id <> old.supplier_id
+     or new.supplier_user_id is distinct from old.supplier_user_id or new.channel <> old.channel then
     raise exception 'rfq:immutable' using errcode = '23514';
   end if;
   if new.sent_at is distinct from old.sent_at then
@@ -480,6 +489,13 @@ begin
     return new;
   end if;
   new.decided_by := auth.uid();
+  -- Two-person rule: the approver of the sent version cannot also award it.
+  if exists (select 1 from public.organizations o where o.id = new.org_id and o.four_eyes)
+     and exists (select 1 from public.rfq_approvals a join public.rfqs r on r.id = a.rfq_id
+                 where a.rfq_id = new.rfq_id and a.version = r.current_version
+                   and a.approved_by = auth.uid()) then
+    raise exception 'rfq:four_eyes_approver_cannot_award' using errcode = '23514';
+  end if;
   if not exists (select 1 from public.rfqs r where r.id = new.rfq_id and r.status = 'closed') then
     raise exception 'rfq:close_before_deciding' using errcode = '23514';
   end if;
@@ -598,6 +614,6 @@ grant select, insert on public.rfqs, public.rfq_versions, public.rfq_approvals, 
   public.offers, public.offer_confirmations, public.decisions, public.catalogue_entries,
   public.analog_feedback to authenticated;
 grant update (title, status, deadline, weights, current_version) on public.rfqs to authenticated;
-grant update (sent_at, supplier_user_id, channel) on public.rfq_invites to authenticated;
+grant update (sent_at) on public.rfq_invites to authenticated;
 grant update (name, enstru_code, unit, attributes, standards, item_id) on public.catalogue_entries
   to authenticated;

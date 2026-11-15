@@ -10,6 +10,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from psycopg import errors as pg_errors
 from psycopg.types.json import Jsonb
@@ -17,6 +18,7 @@ from psycopg.types.json import Jsonb
 from services.gateway.db import UserConn
 from services.procurement.compare import Comparison, compare
 
+ALMATY = ZoneInfo("Asia/Almaty")
 RateOn = Callable[[str, date], tuple[Decimal, date] | None]
 
 
@@ -34,10 +36,12 @@ def _rule(e: Exception) -> Rejected:
 def _run(fn: Callable[[], Any]) -> Any:
     try:
         return fn()
-    except pg_errors.CheckViolation as e:
+    except (pg_errors.CheckViolation, pg_errors.RaiseException) as e:
         raise _rule(e) from None
-    except pg_errors.RaiseException as e:
-        raise _rule(e) from None
+    except pg_errors.UniqueViolation:
+        raise Rejected("duplicate") from None  # same supplier twice, offer already confirmed
+    except pg_errors.ForeignKeyViolation:
+        raise LookupError("not found") from None  # another org's supplier, item or offer
 
 
 def create(
@@ -247,7 +251,8 @@ def comparison(
         raise LookupError("rfq not found")
     offers = _latest_offers(conn, org_id, rfq_id)
     scores = risk([o["supplier_id"] for o in offers])
-    day = {str(o["id"]): o["created_at"].date() for o in offers}
+    # The offer's calendar day in Kazakhstan, not in the database's UTC.
+    day = {str(o["id"]): o["created_at"].astimezone(ALMATY).date() for o in offers}
     rows = [
         {
             "id": o["id"],

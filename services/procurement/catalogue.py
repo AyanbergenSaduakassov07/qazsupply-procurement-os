@@ -10,6 +10,7 @@ from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
+from psycopg import sql
 from psycopg.types.json import Jsonb
 
 from services.gateway.db import UserConn
@@ -54,35 +55,51 @@ def add(conn: UserConn, org_id: UUID, e: dict[str, Any]) -> UUID:
     return UUID(str(row["id"]))
 
 
+LIKE_ESCAPES = str.maketrans({"\\": "\\\\", "%": "\\%", "_": "\\_"})
+FOLDED = sql.SQL("translate(lower(name), 'ёәғқңөұүһі', 'еагкноуухи')")
+NAME_MATCH = sql.SQL(
+    """org_id = %(org)s and (%(q)s = ''
+       or extensions.similarity({f}, %(q)s) >= %(t)s
+       or {f} like '%%' || %(like)s || '%%' escape '\\')"""
+).format(f=FOLDED)
+
+
 def search(
     conn: UserConn, org_id: UUID, q: str, attrs: dict[str, str] | None = None, limit: int = 20
 ) -> dict[str, Any]:
+    """Name matches ranked by similarity; attribute filters run in SQL (jsonb containment) so a
+    match past the first page is never lost. Empty results say which part emptied them."""
     needle = fold(q)
+    params = {
+        "org": org_id,
+        "q": needle,
+        "like": needle.translate(LIKE_ESCAPES),
+        "t": SIMILARITY,
+        "attrs": Jsonb(attrs or {}),
+        "limit": max(1, min(limit, 100)),
+    }
     rows = conn.execute(
-        """select id, name, enstru_code, unit, attributes, standards,
-                  extensions.similarity(
-                    translate(lower(name), 'ёәғқңөұүһі', 'еагкноуухи'), %(q)s) as sim
-           from public.catalogue_entries
-           where org_id = %(org)s and (%(q)s = '' or
-             extensions.similarity(
-               translate(lower(name), 'ёәғқңөұүһі', 'еагкноуухи'), %(q)s) >= %(t)s
-             or translate(lower(name), 'ёәғқңөұүһі', 'еагкноуухи') like '%%' || %(q)s || '%%')
-           order by sim desc, name limit %(limit)s""",
-        {"org": org_id, "q": needle, "t": SIMILARITY, "limit": max(1, min(limit, 100))},
+        sql.SQL(
+            """select id, name, enstru_code, unit, attributes, standards,
+                 extensions.similarity({f}, %(q)s) as sim
+               from public.catalogue_entries
+               where {match} and attributes @> %(attrs)s
+               order by sim desc, name limit %(limit)s"""
+        ).format(f=FOLDED, match=NAME_MATCH),
+        params,
     ).fetchall()
     found = [dict(r) for r in rows]
-    filtered = [
-        r
-        for r in found
-        if all(
-            str(r["attributes"].get(k, "")).lower() == str(v).lower()
-            for k, v in (attrs or {}).items()
-        )
-    ]
-    why = None
-    if not filtered:
-        why = "no_name_match" if not found else "filters_removed_all"
-    return {"results": filtered, "empty_reason": why, "name_matches": len(found)}
+    why, names = None, len(found)
+    if not found:
+        row = conn.execute(
+            sql.SQL("select count(*)::int as n from public.catalogue_entries where {m}").format(
+                m=NAME_MATCH
+            ),
+            params,
+        ).fetchone()
+        names = row["n"] if row else 0
+        why = "no_name_match" if not names else "filters_removed_all"
+    return {"results": found, "empty_reason": why, "name_matches": names}
 
 
 def price_history(conn: UserConn, org_id: UUID, entry_id: UUID) -> list[dict[str, Any]]:
