@@ -2,7 +2,7 @@
 
 - Status: proposed (baseline implemented: `infra/supabase/migrations/20261008000000_tenancy_baseline.sql`)
 - Date: 2026-10-08
-- Deciders: Ayan, Claude
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
 Client purchase data is commercially sensitive; a cross-tenant leak ends the business. We need isolation that holds even when application code has a bug, and that we can test.

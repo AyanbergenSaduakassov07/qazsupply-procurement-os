@@ -1,6 +1,6 @@
 # Design system: recommendation and reconciliation
 
-Run: `ui-ux-pro-max --design-system "B2B procurement logistics enterprise dashboard trust-critical data-dense compliance"` on 2026-10-08. Our tokens (CLAUDE.md) win unless they fail accessibility; every deviation is listed with its reason.
+Run: `ui-ux-pro-max --design-system "B2B procurement logistics enterprise dashboard trust-critical data-dense compliance"` on 2026-10-08. Our tokens (docs/design/design-system.md) win unless they fail accessibility; every deviation is listed with its reason.
 
 ## What the tool recommended
 | Area | Recommendation |
@@ -21,7 +21,7 @@ Run: `ui-ux-pro-max --design-system "B2B procurement logistics enterprise dashbo
 | gold as text | #C9A227 on frost: **2.13:1 (fails)** | amber accent adjusted for 3:1 | **Deviation:** gold is never text on light surfaces. Use `gold-800 #7A6114` (5.22:1) for text; gold fill only with ink text (7.65:1) or as a non-text accent (savings highlight bar). |
 | risk text | #C23B32 on frost: 4.67:1 | | Passes; keep. Always paired with icon + label. |
 | ok text | #2E7D5B on frost: **4.41:1 (fails narrowly)** | | **Deviation:** on frost use `ok-700 #276B4E` for text (to verify in M1 contrast test); #2E7D5B fine on white (5.00:1). |
-| Fonts | One family, tabular figures, full Kazakh Cyrillic | Fira Code + Fira Sans | **Reject the mono heading.** CLAUDE.md requires one family; mono headings read as "developer tool", which works against the trust goal. Candidates (all declare `cyrillic-ext` on Google Fonts, checked via google/fonts METADATA.pb): **Inter, IBM Plex Sans, Fira Sans, PT Sans, Golos Text, Noto Sans, Roboto**. Declaring the subset is not proof that all of ә ғ қ ң ө ұ ү һ і are drawn, so QS-006 runs a glyph-coverage and tabular-figure test before adoption. Recommendation to test first: **IBM Plex Sans** (tabular figures, neutral, strong Cyrillic) then **Inter**. |
+| Fonts | One family, tabular figures, full Kazakh Cyrillic | Fira Code + Fira Sans | **Reject the mono heading.** docs/design/design-system.md requires one family; mono headings read as "developer tool", which works against the trust goal. Candidates (all declare `cyrillic-ext` on Google Fonts, checked via google/fonts METADATA.pb): **Inter, IBM Plex Sans, Fira Sans, PT Sans, Golos Text, Noto Sans, Roboto**. Declaring the subset is not proof that all of ә ғ қ ң ө ұ ү һ і are drawn, so QS-006 runs a glyph-coverage and tabular-figure test before adoption. Recommendation to test first: **IBM Plex Sans** (tabular figures, neutral, strong Cyrillic) then **Inter**. |
 | Style | Liquid Glass on nav/control layer only | Trust & Authority | Compatible. Glass never on content; "reduce transparency" fallback = opaque frost. |
 | Effects | Motion via anime.js v4, 150-300 ms | "metric pulse, certificate carousel" | **Reject carousel and pulse loops** (motion without meaning; distracting in a trust product). Keep count-up for KPIs (reduced-motion = instant). |
 | Dark mode | M1 | Full | Agree; design both together, test contrast separately. |

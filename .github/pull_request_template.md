@@ -3,7 +3,7 @@
 ## What and why
 
 ## Spec / ticket
-<!-- docs/specs/... and ticket id -->
+
 
 ## How it was tested
 <!-- Commands run and their result. Paste the summary line, not "tests pass". -->
@@ -20,5 +20,5 @@
 - [ ] No hard-coded user-facing strings (kk / ru / en catalogs updated)
 - [ ] Every new figure has an Evidence id
 - [ ] No secrets, client data or PII in code, fixtures, logs or evals
-- [ ] `CONTEXT.md` / ADR updated if terms or decisions changed
+- [ ] `docs/glossary.md` / ADR updated if terms or decisions changed
 - [ ] New data source recorded in `docs/compliance/data-sources.md` first

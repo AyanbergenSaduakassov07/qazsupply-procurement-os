@@ -1,7 +1,7 @@
 # ruff: noqa: E501 - one spec per line reads best
-"""ТЗ checker golden set (M5). Specs written by the agent in the style of public Kazakh tender
+"""ТЗ checker golden set (M5). Specs written in the style of public Kazakh tender
 specs, with labels set by hand: requirements as (comparator, value, unit), standards (normalised),
-issue kinds expected. Locked once it lands (docs/runbooks/agent-harness.md)."""
+issue kinds expected. Locked once it lands."""
 
 from dataclasses import dataclass, field
 

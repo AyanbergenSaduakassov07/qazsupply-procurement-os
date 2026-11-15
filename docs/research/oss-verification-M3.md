@@ -9,7 +9,7 @@ Checked with the GitHub API: repository exists, archived flag, licence (SPDX as 
 | apache/echarts | Apache-2.0 | Apache-2.0 | false | 2026-10-04 | yes (`34f4d927ea`) | dropped (M3) | Same reason; a second chart library would double bundle size for one chart. |
 | assistant-ui/assistant-ui | MIT | MIT | false | 2026-10-11 | yes (`6ca5ca4080`) | dropped (M3) | Ask answers arrive validated and whole (no token streaming, no tool UI). A ~200-line panel on our design system is enough and keeps the nonce CSP simple. |
 | vercel/ai | Apache-2.0 | NOASSERTION | false | 2026-10-11 | yes (`5028fa46b4`) | dropped (M3) | Token streaming conflicts with validate-before-display (ADR 0008): figures must be checked before anyone sees them. GitHub no longer detects a licence: re-check the LICENSE file before any future use. |
-| anthropics/claude-agent-sdk-python | MIT | MIT | false | 2026-10-09 | yes (`f7b0b62c2a`) | dropped (M3) | Ask has no agent loop and no tools (ADR 0008; CLAUDE.md rule 5). Revisit for the agent-ready API / MCP work. |
+| anthropics/claude-agent-sdk-python | MIT | MIT | false | 2026-10-09 | yes (`f7b0b62c2a`) | dropped (M3) | Ask has no agent loop and no tools (ADR 0008; docs/design/design-system.md rule 5). Revisit for the agent-ready API / MCP work. |
 | pydantic/pydantic-ai | MIT | MIT | false | 2026-10-11 | yes (`f55bb8a6fd`) | dropped (M3) | Same reason as the agent SDK. |
 | jlowin/fastmcp | Apache-2.0 | Apache-2.0 | false | 2026-10-11 | yes (`5baeacfe20`) | deferred | The agent-ready MCP API (M3 tie-in) is not built in this phase: see "Not done" in PROGRESS. Revisit when it starts. |
 | modelcontextprotocol/python-sdk | MIT | MIT | false | 2026-10-11 | yes (`91941ed4d3`) | deferred | Same as fastmcp. |

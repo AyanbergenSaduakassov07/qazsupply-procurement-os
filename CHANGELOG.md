@@ -1,6 +1,6 @@
 # Changelog
 
-Per phase, newest first. Phases are gated by quality, not dates ([`ROADMAP.md`](ROADMAP.md)); live status is in [`docs/prompts/PROGRESS.md`](docs/prompts/PROGRESS.md).
+Per milestone, newest first.
 
 ## Unreleased
 
@@ -78,7 +78,7 @@ Built on synthetic data. The gate needs real ЕНС ТРУ access, 300 owner-lab
 - **Web:** upload wizard, keyboard-driven review queue, findings view with the Evidence drawer, in kk / ru / en.
 - **Evals:** matcher golden set and realistic holdout, planted-findings set; report in `evals/REPORT-M2.md`.
 - **DB:** M2 migration with RLS on every new table, pgTAP suite, controlled `qs.purge` for privileged cleanup of append-only rows.
-- Docs: ADR 0007 (matching stack), OSS verification for M2, agent-thread and offboarding runbooks, STRIDE T26-T38, tech debt D15-D20.
+- Docs: ADR 0007 (matching stack), OSS verification for M2, offboarding runbook, STRIDE T26-T38, tech debt D15-D20.
 
 ## M1: data platform, design system, app shell (2026-10-08 to 2026-10-09)
 
@@ -93,4 +93,4 @@ Built on synthetic data. The gate needs real ЕНС ТРУ access, 300 owner-lab
 ## M0: harness and blueprint (2026-10-08)
 
 ### Added
-- Agent harness rules, whole-product blueprint, domain vocabulary (`CONTEXT.md`), ADRs 0001-0005, specs, tickets, threat model and the M0-M9 prompt pack.
+- Whole-product blueprint, domain vocabulary (`docs/glossary.md`), ADRs 0001-0005, specs, threat model.

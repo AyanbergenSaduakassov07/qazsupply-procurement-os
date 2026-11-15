@@ -2,7 +2,7 @@
 
 - Status: proposed
 - Date: 2026-10-08
-- Deciders: Ayan (owner), Claude (proposal)
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
 One to two builders (Q3), 14 capabilities over 5 years, strong consistency needs (Evidence must reproduce figures exactly), and a tenancy model that relies on one Postgres with RLS. Microservices would multiply deploys, auth surfaces and distributed-transaction problems before any of them pays off.

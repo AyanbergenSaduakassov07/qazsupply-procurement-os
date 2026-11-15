@@ -5,7 +5,7 @@
  *   Layer 2 semantic    meaning, themed light + dark (--qs-bg, --qs-text, ...)
  *   Layer 3 component   one token per component decision (--qs-nav-*, --qs-btn-*, ...)
  *
- * Rules: colors come from CLAUDE.md. Contrast-safe derivations are the M0
+ * Rules: colors come from docs/design/design-system.md. Contrast-safe derivations are the M0
  * deviations reconciled in docs/design/design-system.md. Never read a primitives
  * or semantic-layer token from a component; add a layer-3 token instead.
  * Contrast is enforced by test/contrast.test.mjs (WCAG 2.2 AA, 4.5:1 text / 3:1 non-text).
@@ -13,7 +13,7 @@
 
 /* ------------------------------------------------------------------ Layer 1: primitive */
 :root {
-  /* Brand palette (CLAUDE.md) */
+  /* Brand palette (docs/design/design-system.md) */
   --qs-color-frost: #eef1f3;
   --qs-color-ink: #101418;
   --qs-color-tengri: #0a8fb4;
@@ -155,7 +155,7 @@
   --qs-elevation-3: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Reduce-transparency fallback: opaque control surfaces, no blur (CLAUDE.md). */
+/* Reduce-transparency fallback: opaque control surfaces, no blur (docs/design/design-system.md). */
 @media (prefers-reduced-transparency: reduce) {
   :root,
   [data-theme="light"],

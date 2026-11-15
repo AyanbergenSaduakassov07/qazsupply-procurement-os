@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-12
-- Deciders: Claude (M4), owner override to start M4 before Gate A (2026-10-12)
+- Deciders: Ayanbergen Saduakassov (owner override to start M4 before Gate A, 2026-10-12)
 
 ## Context
 M4 must answer "can I trust this supplier?" with sources and dates, screen parties and goods, and onboard suppliers safely. No real source is reachable yet: no goszakup token, no data.egov.kz key, no registry agreement, no OpenSanctions licence (screening is commercial use; bulk data CC BY-NC). The owner asked for free tools only.

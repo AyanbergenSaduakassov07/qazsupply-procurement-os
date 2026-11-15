@@ -1,6 +1,6 @@
 # Domain model: bounded contexts, events, state machines
 
-Status: M0 proposal (2026-10-08). Terms: `CONTEXT.md`. Miro mirror: see link at the end. Each context is a deep module under `services/` (ADR 0001); contexts talk through their public interface or domain events, never through each other's tables.
+Status: M0 proposal (2026-10-08). Terms: `docs/glossary.md`. Miro mirror: see link at the end. Each context is a deep module under `services/` (ADR 0001); contexts talk through their public interface or domain events, never through each other's tables.
 
 ## Bounded contexts
 

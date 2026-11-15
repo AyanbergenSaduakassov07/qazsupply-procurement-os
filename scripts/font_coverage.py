@@ -1,6 +1,6 @@
 """Report whether a candidate UI font can draw Kazakh Cyrillic and tabular figures.
 
-CLAUDE.md requires one font family with tabular figures and full Kazakh Cyrillic
+docs/design/design-system.md requires one font family with tabular figures and full Kazakh Cyrillic
 (ә ғ қ ң ө ұ ү һ і). Declaring the `cyrillic-ext` subset is not proof the glyphs
 are drawn, so this checks the font's cmap and OpenType features directly.
 

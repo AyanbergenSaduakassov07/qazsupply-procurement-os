@@ -1,12 +1,12 @@
 # M2 gate: what the owner provides, and how it is run
 
-The M2 gate (`docs/prompts/PROGRESS.md`) is **matcher >= 90% top-1 at <= 15% abstain** on 300 owner-labelled lines, and **finding precision >= 80%** on two hand-audited datasets. Everything else in M2 is built. This page lists the inputs that only the owner can produce, in the exact format the runner expects, so the gate can be run the day they arrive.
+The M2 gate (see `docs/tech-debt.md`, D17 and D18) is **matcher >= 90% top-1 at <= 15% abstain** on 300 owner-labelled lines, and **finding precision >= 80%** on two hand-audited datasets. Everything else in M2 is built. This page lists the inputs that only the owner can produce, in the exact format the runner expects, so the gate can be run the day they arrive.
 
 Nothing here is real data. Real files never go into the repo: keep them outside it (for example `~/qazsupply-gate/`) and pass the path.
 
 ## 1. ЕНС ТРУ access (blocks 2 and the real classifier)
 
-Two routes, both owner actions (external messages; the agent drafts, the owner sends):
+Two routes, both owner actions (external messages; drafts are prepared, the owner sends):
 
 | Route | To | Ask for | Status |
 |---|---|---|---|
@@ -30,9 +30,9 @@ One UTF-8 CSV, header exactly `id,text,label,lang`:
 | `label` | The correct ЕНС ТРУ code; `NONE` if no code fits; `BUNDLED` if the line holds several items |
 | `lang` | `ru`, `kk`, `latin` or `mixed` (the tags the scorer reports top-1 by) |
 
-Composition: lines from at least 3 different real exports, with Kazakh and mixed lines included (the M2 prompt asks for ru, kk and mixed). Label without looking at the matcher's suggestions, so the set measures the matcher instead of agreeing with it.
+Composition: lines from at least 3 different real exports, with Kazakh and mixed lines included (ru, kk and mixed). Label without looking at the matcher's suggestions, so the set measures the matcher instead of agreeing with it.
 
-How it is run (agent): load the real classifier, hold out a test split, refit calibration on the rest (D18), then score with the existing definitions in `evals/matcher/score.py` (top-1, top-5, abstain, auto-precision, cost per 1k lines). A gate runner that reads an external path is a scorer change, so it lands as a separate `harness-change` PR before it is used, and is reviewed before it scores anything.
+How it is run: load the real classifier, hold out a test split, refit calibration on the rest (D18), then score with the existing definitions in `evals/matcher/score.py` (top-1, top-5, abstain, auto-precision, cost per 1k lines). A gate runner that reads an external path is a scorer change, so it lands as a separate `harness-change` PR before it is used, and is reviewed before it scores anything.
 
 ## 3. Two hand-audited spend datasets
 
@@ -41,10 +41,10 @@ For each dataset:
 2. Upload it on a local or staging stack and run the analysis as a reviewer.
 3. The owner (or an auditor they name) marks each finding `correct` or `wrong`, with a one-line reason for each `wrong`.
 
-Precision = correct findings / all findings, per dataset and overall; the gate needs >= 80%. The auditor's sheet is the evidence: record its location, the date and who scored it in `PROGRESS.md`. The agent never scores this itself (M2 prompt: "scored by me").
+Precision = correct findings / all findings, per dataset and overall; the gate needs >= 80%. The auditor's sheet is the evidence: record its location, the date and who scored it in this runbook's results table. The pipeline never scores this itself.
 
 ## 4. After the inputs arrive
 
 1. Agent switches `connectors/enstru` to the licensed source (contract tests, fixtures, register row), keeping the `SYN-*` sample for tests.
-2. Agent runs 2 and 3, pastes the real output into `PROGRESS.md` "Gate result / evidence", and closes D17 / D18 in `docs/tech-debt.md` if they pass.
+2. Maintainer runs 2 and 3, records the real output in `evals/REPORT-M2.md`, and closes D17 / D18 in `docs/tech-debt.md` if they pass.
 3. If a threshold fails, the status stays `blocked` with the numbers; thresholds are never lowered.

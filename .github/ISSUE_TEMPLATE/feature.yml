@@ -4,7 +4,7 @@ labels: [enhancement]
 body:
   - type: input
     id: spec
-    attributes: { label: Spec, description: "docs/specs/... or ticket id (docs/tickets)", placeholder: "docs/specs/C03-findings-engine.md" }
+    attributes: { label: Spec, description: "docs/specs/...", placeholder: "docs/specs/C03-findings-engine.md" }
     validations: { required: true }
   - type: textarea
     id: outcome

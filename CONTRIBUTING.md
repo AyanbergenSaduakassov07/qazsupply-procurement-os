@@ -1,6 +1,6 @@
 # Contributing
 
-Read `CLAUDE.md` (rules), `CONTEXT.md` (vocabulary) and the spec for your change first. Agents follow the same rules plus `docs/runbooks/agent-harness.md`.
+Read `docs/design/design-system.md` (design rules), `docs/glossary.md` (vocabulary) and the spec for your change first.
 
 ## Setup
 Node 24 (`.nvmrc`, corepack provides pnpm), uv, Docker, Supabase CLI.
@@ -14,9 +14,9 @@ make e2e        # Playwright on desktop / tablet / phone
 Local test users live in `infra/supabase/seed.sql` and `e2e/fixtures/users.json`. Never use real client data anywhere in the repo, tests, logs or evals.
 
 ## Workflow
-Trunk-based: `main` is the only long-lived branch and is always green. Work happens on short-lived branches (days, not weeks) that are squash-merged and deleted. Phase gates decide when the next phase *starts*; they do not hold finished, tested code out of `main` (a blocked gate stays recorded in `docs/prompts/PROGRESS.md`).
+Trunk-based: `main` is the only long-lived branch and is always green. Work happens on short-lived branches (days, not weeks) that are squash-merged and deleted. Phase gates decide when the next phase *starts*; they do not hold finished, tested code out of `main` (a blocked gate stays recorded in `docs/tech-debt.md`).
 
-1. Branch from `main`: `feat/<ticket>-<slug>`, `fix/...`, `chore/...`, `docs/...`.
+1. Branch from `main`: `feat/<slug>`, `fix/...`, `chore/...`, `docs/...`.
 2. Commits follow Conventional Commits (`feat(ingest): ...`); the `commit-msg` hook enforces it.
 3. Keep PRs small and vertical (DB -> service -> API -> UI -> e2e). One ticket per PR.
 4. Open the PR with the template. "What was NOT verified" and "UNVERIFIED assumptions" are mandatory.

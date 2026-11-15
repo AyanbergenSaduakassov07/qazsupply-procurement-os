@@ -1,6 +1,6 @@
 # Tech-debt register
 
-Budget: 20% of each phase (docs/product/prioritization.md). A phase gate cannot pass with an open item marked **blocker**. Close items by PR; keep closed rows for history.
+Budget: 20% of each phase. A phase gate cannot pass with an open item marked **blocker**. Close items by PR; keep closed rows for history.
 
 | # | Item | Why it exists | Fix when | Status |
 |---|---|---|---|---|
@@ -28,7 +28,7 @@ Budget: 20% of each phase (docs/product/prioritization.md). A phase gate cannot 
 | D22 | Text-only prompt-injection hijacks (no digits, no link) depend on the model refusing | No structural rule can tell a false sentence from a true one | Measured live by `evals/ask`; add an LLM-judge pass or a sentence allowlist if the live rate is above 0 | open |
 | D23 | Report PDF reads fonts from `node_modules` at runtime | Simplest path for `next start` | Before a standalone/serverless deploy | **closed** (2026-10-12: no change needed; `next build` already traces all Plex woff files + licence into the PDF route's `route.js.nft.json`, because the tracer follows `join(process.cwd(), ...)`) |
 | D24 | Agent-ready MCP API and `packages/agent-skills` packs (M3 tie-in) not built | M3 slices went to the review gate, report, PDF and Ask first | Before Gate A evidence collection ends, or when a client asks for agent access | **closed** (2026-10-13: read-only MCP server at `/mcp/` + three skill packs; ADR 0010; tests `test_mcp_integration.py`) |
-| D25 | EDS sign-off via NCALayer not built | Counsel must first confirm legal effect and whether server-side signature validation is required (M3 prompt) | After counsel's written answer; audit-log approval is the fallback in use | open, needs owner |
+| D25 | EDS sign-off via NCALayer not built | Counsel must first confirm legal effect and whether server-side signature validation is required | After counsel's written answer; audit-log approval is the fallback in use | open, needs owner |
 | D26 | Kazakh microcopy for the review console, report, PDF and Ask (~115 strings) not reviewed by a native speaker | Same as D12 | Before the first kk-speaking client (D12) | open, **blocker for kk launch** (with D12) |
 | D27 | Re-screening runs on request (`POST /screenings/rescreen-due`) or when a dossier is refreshed, not on a timer | The scheduler belongs to the deployment (no remote project yet, D8); pg_cron could only enqueue | With the first deployment: a daily job calling `rescreen_due` per org as a service principal | open |
 | D28 | Kazakh microcopy for Supplier 360 and onboarding (~195 strings) not reviewed by a native speaker | Same as D12 | Before the first kk-speaking client (D12) | open, **blocker for kk launch** (with D12) |

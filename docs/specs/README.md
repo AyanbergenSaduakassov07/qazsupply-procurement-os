@@ -2,7 +2,7 @@
 
 One spec per capability. Fields: user, job, flow, acceptance criteria, data needed, AI-vs-deterministic split, human gate, regulatory flag, phase, dependencies. Status: M0 drafts, owner review pending.
 
-The original QazSupply doc's 12-capability list is not in this repo. This list is derived from README, ROADMAP and M1-M9; confirm or correct it (question 1 in `docs/discovery/grill.md`).
+This list is derived from the README and the build plan; confirm or correct it.
 
 ## Core capabilities
 | # | Spec | Phase | RICE rank |
@@ -25,4 +25,3 @@ The original QazSupply doc's 12-capability list is not in this repo. This list i
 ## Future ideas
 F01 [Supplier portal](F01-supplier-portal-marketplace.md) · F02 [Group purchases](F02-group-purchases.md) · F03 [Negotiation assistant](F03-negotiation-assistant.md) · F04 [Honest rating](F04-honest-rating.md) · F05 [Financing and insurance](F05-financing-insurance.md) · F06 [Batch passport](F06-batch-passport.md) · F07 [Price index](F07-price-index-forecasting.md) · F08 [Inspector network](F08-inspector-network.md) · F09 [Country packs](F09-country-packs.md)
 
-RICE scoring: `docs/product/prioritization.md`. Tickets for phases 1-3: `docs/tickets/`.

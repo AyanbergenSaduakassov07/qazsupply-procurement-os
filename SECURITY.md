@@ -11,5 +11,5 @@ Report vulnerabilities privately through GitHub: **Security -> Report a vulnerab
 ## Rules for contributors
 - No secrets in the repo: `.env.example` holds names only; gitleaks runs in pre-commit and CI on full history.
 - No real client or personal data in code, fixtures, logs or evals.
-- Remote migrations, deploys and anything that sends messages or moves money are human-approved (`docs/runbooks/agent-harness.md`).
+- Remote migrations, deploys and anything that sends messages or moves money are human-approved.
 - Leaked secret: rotate first, then purge history, then record it in `docs/security/incidents/`.

@@ -4,7 +4,7 @@ Positives are spelling variants of a listed entity that a screener must not miss
 Kazakh letters, Kazakh Latin, patronymic forms, word order, legal form, one typo, missing
 middle name). Negatives share a surname, a first name or a business word with a listed entity
 but are different parties; any hit on them is review load (a false positive), not a miss.
-Built by the agent on 2026-10-12; locked after it lands (docs/runbooks/agent-harness.md).
+Built on 2026-10-12; locked after it lands.
 """
 
 from dataclasses import dataclass

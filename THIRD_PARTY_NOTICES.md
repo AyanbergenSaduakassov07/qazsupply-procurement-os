@@ -56,7 +56,7 @@ Vendored source (`vendor/`) keeps its own LICENSE file next to the code.
 | npm | @jridgewell/resolve-uri | 3.1.2 | MIT | https://github.com/jridgewell/resolve-uri#readme |
 | npm | @jridgewell/sourcemap-codec | 1.6.0 | MIT | https://github.com/jridgewell/sourcemaps/tree/main/packages/sourcemap-codec |
 | npm | @jridgewell/trace-mapping | 0.3.31 | MIT | https://github.com/jridgewell/sourcemaps/tree/main/packages/trace-mapping |
-| npm | @next/env | 16.4.0 | MIT | https://github.com/vercel/next.js#readme |
+| npm | @next/env | 16.4.6 | MIT | https://github.com/vercel/next.js#readme |
 | npm | @noble/ciphers | 1.3.0 | MIT | https://paulmillr.com/noble/ |
 | npm | @noble/hashes | 1.8.0 | MIT | https://paulmillr.com/noble/ |
 | npm | @radix-ui/primitive | 1.1.7 | MIT | https://radix-ui.com/primitives |
@@ -174,7 +174,7 @@ Vendored source (`vendor/`) keeps its own LICENSE file next to the code.
 | npm | magic-string | 0.30.21 | MIT | https://github.com/Rich-Harris/magic-string#readme |
 | npm | media-engine | 2.0.0 | MIT | https://github.com/diegomura/media-engine#readme |
 | npm | nanoid | 3.3.20 | MIT | https://github.com/ai/nanoid#readme |
-| npm | next | 16.4.0 | MIT | https://nextjs.org |
+| npm | next | 16.4.6 | MIT | https://nextjs.org |
 | npm | next-themes | 0.4.6 | MIT | https://github.com/pacocoursey/next-themes#readme |
 | npm | normalize-svg-path | 1.1.0 | MIT | https://github.com/jkroso/normalize-svg-path#readme |
 | npm | object-assign | 4.1.1 | MIT | https://github.com/sindresorhus/object-assign#readme |
@@ -191,8 +191,7 @@ Vendored source (`vendor/`) keeps its own LICENSE file next to the code.
 | npm | queue | 6.0.2 | MIT | https://github.com/jessetane/queue#readme |
 | npm | react | 19.3.0 | MIT | https://react.dev/ |
 | npm | react-dom | 19.3.0 | MIT | https://react.dev/ |
-| npm | react-is | 16.13.1 | MIT | https://react.dev/ |
-| npm | react-is | 19.3.0 | MIT | https://react.dev/ |
+| npm | react-is | 16.13.1 | MIT | https://reactjs.org/ |
 | npm | react-redux | 9.3.0 | MIT | https://github.com/reduxjs/react-redux |
 | npm | react-remove-scroll | 2.7.2 | MIT | https://github.com/theKashey/react-remove-scroll#readme |
 | npm | react-remove-scroll-bar | 2.3.8 | MIT | https://github.com/theKashey/react-remove-scroll-bar#readme |

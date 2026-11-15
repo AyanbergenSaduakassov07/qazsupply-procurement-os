@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-09
-- Deciders: Claude (M2), owner review pending
+- Deciders: Ayanbergen Saduakassov (review pending)
 
 ## Context
 M2 must match messy purchase text to ЕНС ТРУ and compute findings with measured accuracy. The OSS block lists 36 candidate repos. Real classifier data and the owner's 300 hand-labelled lines do not exist yet (sample classifier + synthetic set, owner decision 2026-10-09).

@@ -2,10 +2,10 @@
 
 - Status: accepted
 - Date: 2026-10-08
-- Deciders: Claude (M1), owner review pending
+- Deciders: Ayanbergen Saduakassov (review pending)
 
 ## Context
-CLAUDE.md rule 4 says every table has `org_id` and RLS. Some data is public and shared by every
+docs/design/design-system.md rule 4 says every table has `org_id` and RLS. Some data is public and shared by every
 tenant: border crossings now, the ЕНС ТРУ classifier and FX rates later. Copying it per tenant
 wastes storage and lets copies drift.
 

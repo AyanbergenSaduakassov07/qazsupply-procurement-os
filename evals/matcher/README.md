@@ -16,4 +16,4 @@ uv run python -m evals.matcher.score --gate   # score; CI runs this with --no-lo
 
 Definitions are in `score.py`. The CI gate holds: synthetic auto-precision >= 0.90 and abstain <= 0.15; holdout auto-precision >= 0.95 and no-match lines never auto-coded (>= 0.95). **The M2 gate itself (>= 90% top-1 at <= 15% abstain on the owner's set) is not evaluated by this harness until that set exists.**
 
-Locked surface (docs/runbooks/agent-harness.md): change golden sets or scorers only in a separate `harness-change` PR.
+Locked surface: change golden sets or scorers only in a separate `harness-change` PR.

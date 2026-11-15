@@ -14,4 +14,4 @@ Developer and CI tooling. Run from the repo root; most are wrapped by a `make` t
 
 Tests live next to the code (`test_*.py`).
 
-**Rules:** see root `CLAUDE.md`. Scripts touch the LOCAL stack only; nothing here deploys or writes to a remote project.
+**Rules:** see `docs/design/design-system.md`. Scripts touch the LOCAL stack only; nothing here deploys or writes to a remote project.

@@ -2,10 +2,10 @@
 
 - Status: accepted
 - Date: 2026-10-13
-- Deciders: Claude (M5, owner: "finish everything that must be built, do it yourself")
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
-M5 runs a purchase from specification to decision record. The prompt forbids auto-send and auto-award, requires supplier confirmation of extracted numbers, a weighted comparison with sensitivity, and a catalogue with forgiving search and private/shared boundaries. Free tools only.
+M5 runs a purchase from specification to decision record. The design forbids auto-send and auto-award, requires supplier confirmation of extracted numbers, a weighted comparison with sensitivity, and a catalogue with forgiving search and private/shared boundaries. Free tools only.
 
 ## Decision
 1. **Lifecycle in the database** (like the M3 review gate): approval per version, a human records "sent", offers append-only, confirmation by the supplier (portal) or a named buyer with a note, decision by approvers only after close, all audited.

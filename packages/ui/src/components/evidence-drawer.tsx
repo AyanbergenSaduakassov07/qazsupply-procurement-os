@@ -58,7 +58,7 @@ export interface EvidenceDrawerProps {
 /**
  * Side drawer: the figure stays visible behind a light scrim. Order is
  * title -> meta (method, confidence, version) -> how computed -> source rows.
- * No figure reaches a client without one (CONTEXT.md, Evidence).
+ * No figure reaches a client without one (docs/glossary.md, Evidence).
  */
 export function EvidenceDrawer({ open, onOpenChange, evidence, labels }: EvidenceDrawerProps) {
   return (

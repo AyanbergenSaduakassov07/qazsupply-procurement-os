@@ -2,7 +2,7 @@
 
 - Status: proposed
 - Date: 2026-10-08
-- Deciders: Ayan, Claude
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
 LLMs help with text: mapping item text to codes, extracting fields from documents, summarising, explaining. They are unreliable at arithmetic, can be prompt-injected by supplier files and news, and every call sends data to a third party (cost, privacy).

@@ -16,7 +16,7 @@ Three-layer design tokens (primitive -> semantic -> component), light + dark. Sh
 **Rules**
 - Components read **component-layer** tokens only; add a layer-3 token rather than reading
   a primitive.
-- Colours come from `CLAUDE.md`; contrast-safe derivations and their reasons live in
+- Colours come from `docs/design/design-system.md`; contrast-safe derivations and their reasons live in
   `docs/design/design-system.md`.
 - Liquid Glass is the navigation/control layer only. Reduce-transparency is a first-class
   fallback via `@media (prefers-reduced-transparency: reduce)` and

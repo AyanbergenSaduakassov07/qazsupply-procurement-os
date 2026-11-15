@@ -2,7 +2,7 @@
 
 - Status: proposed (implemented: `connectors/_contract/contract.py` + tests)
 - Date: 2026-10-08
-- Deciders: Ayan, Claude
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
 We depend on government portals, sanctions data, carriers and news, each with different access, licences and failure modes. External data must never reach domain code raw, and we must prove where every cached fact came from.

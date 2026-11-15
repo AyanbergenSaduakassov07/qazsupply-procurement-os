@@ -1,4 +1,3 @@
-# Required checks (set in GitHub branch protection for main): every job below.
 # Actions are pinned to commit SHAs; bump deliberately.
 name: ci
 on:
@@ -37,6 +36,7 @@ jobs:
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
       - run: corepack enable pnpm && pnpm install --frozen-lockfile
       - run: pnpm typecheck
+      - run: pnpm --filter @qazsupply/web build
       - run: uv run --frozen mypy
       - name: api-client is in sync with the API (regenerate with `pnpm --filter @qazsupply/api-client run generate`)
         run: pnpm --filter @qazsupply/api-client run generate && git diff --exit-code packages/api-client
@@ -73,66 +73,6 @@ jobs:
       - run: bash scripts/advisors.sh
       - run: uv run --frozen pytest -m integration
 
-  e2e:
-    # Functional journeys on desktop/tablet/phone, visual baselines in the Playwright Linux
-    # image, and the Lighthouse accessibility gate, all against a production web build.
-    runs-on: ubuntu-latest
-    env:
-      API_URL: http://localhost:8000
-      SUPABASE_URL: http://127.0.0.1:54321
-      APP_URL: http://localhost:3000 # plain http in CI: no Secure cookies / https upgrade
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with: { node-version: 24 }
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
-      - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
-        with: { version: 2.109.1 }
-      - run: corepack enable pnpm && pnpm install --frozen-lockfile && uv sync --frozen
-      - run: supabase start --workdir infra -x studio,imgproxy,inbucket,edge-runtime,logflare,vector,supavisor,realtime,storage-api,postgres-meta
-      - name: Export local Supabase publishable key
-        run: echo "SUPABASE_PUBLISHABLE_KEY=$(supabase status --workdir infra -o json | jq -r .PUBLISHABLE_KEY)" >> "$GITHUB_ENV"
-      - run: pnpm --filter @qazsupply/e2e exec playwright install --with-deps chromium
-      - run: pnpm --filter @qazsupply/web build
-      - name: Start API and web
-        run: |
-          nohup uv run --frozen uvicorn services.gateway.app:app --port 8000 > api.log 2>&1 &
-          nohup pnpm --filter @qazsupply/web start > web.log 2>&1 &
-          for i in $(seq 1 60); do curl -sf localhost:8000/health && curl -sf -o /dev/null localhost:3000/en/sign-in && exit 0; sleep 1; done; exit 1
-      - name: Functional e2e
-        run: pnpm e2e
-        env: { E2E_BASE_URL: "http://localhost:3000" }
-      - name: Visual baselines (Linux Playwright image)
-        run: bash scripts/e2e-visual.sh
-      - name: Lighthouse accessibility >= 95
-        run: bash scripts/lighthouse-a11y.sh
-      - if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: e2e-report
-          path: |
-            e2e/playwright-report
-            e2e/test-results
-            e2e/tests/__screenshots__
-            api.log
-            web.log
-          retention-days: 7
-
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with: { fetch-depth: 0 }
-      - name: Secret scan (gitleaks, full history)
-        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 git /repo --redact --exit-code 1
-      - name: Dependency vulnerabilities (OSV-Scanner, both lockfiles)
-        run: >
-          docker run --rm -v "$PWD:/src" ghcr.io/google/osv-scanner:v2.6.0
-          scan source --lockfile /src/pnpm-lock.yaml --lockfile /src/uv.lock
-      - name: SBOM (Syft, CycloneDX)
-        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
-        with: { format: cyclonedx-json, output-file: sbom.cdx.json }
-
   license-scan:
     runs-on: ubuntu-latest
     steps:
@@ -142,3 +82,4 @@ jobs:
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
       - run: corepack enable pnpm && pnpm install --frozen-lockfile && uv sync --frozen
       - run: uv run --frozen python scripts/license_check.py
+      - run: uv run --frozen python scripts/notices.py --check

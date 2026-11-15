@@ -1,6 +1,6 @@
 # M4 eval report: sanctions/PEP name screening (2026-10-12)
 
-**Set:** `evals/screening/cases.py`, built by the agent, INVENTED names only: 20 listed entities (15 persons, 5 companies), 54 positive queries in 29 variant kinds (script swap, Kazakh letters, Kazakh Latin, Uzbek Latin, patronymic forms, word order, legal forms with quotes, one typo, missing middle name, English names written in Cyrillic), 25 negatives (shared surname or root, shared first name, shared business words, unrelated).
+**Set:** `evals/screening/cases.py`, INVENTED names only: 20 listed entities (15 persons, 5 companies), 54 positive queries in 29 variant kinds (script swap, Kazakh letters, Kazakh Latin, Uzbek Latin, patronymic forms, word order, legal forms with quotes, one typo, missing middle name, English names written in Cyrillic), 25 negatives (shared surname or root, shared first name, shared business words, unrelated).
 
 **Matcher:** `services/supplier360/match.py` (Latin skeleton + one-to-one RapidFuzz token alignment). Gate: `evals/screening/test_gate.py` requires recall 1.0.
 

@@ -2,7 +2,7 @@
  * Motion presets and reduced-motion helpers. Pure and DOM-free so they can be
  * unit-tested and imported on the server.
  *
- * Rules (CLAUDE.md / docs/design/design-system.md): transform and opacity only;
+ * Rules (docs/design/design-system.md / docs/design/design-system.md): transform and opacity only;
  * 150-300 ms micro, <= 400 ms complex; interruptible; a full
  * prefers-reduced-motion behaviour where non-essential motion is disabled.
  */

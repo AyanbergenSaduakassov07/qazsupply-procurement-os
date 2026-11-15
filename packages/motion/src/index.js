@@ -3,7 +3,7 @@
  *
  * Uses subpath imports (animejs/scope, animejs/animation) and the
  * createScope + revert lifecycle so every animation is torn down on unmount
- * (CLAUDE.md). Import presets from the DOM-free `./presets` entry in tests.
+ * (docs/design/design-system.md). Import presets from the DOM-free `./presets` entry in tests.
  */
 
 import { animate } from "animejs/animation";

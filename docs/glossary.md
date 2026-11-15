@@ -1,6 +1,6 @@
 # CONTEXT: QazSupply domain language
 
-Use these terms exactly in code, docs, UI copy and prompts. Update via the `domain-modeling` skill. Status: **sharpened in M0 (2026-10-08), extended in M2/M3, pending owner review.** Bounded contexts: `docs/architecture/domain-model.md`.
+Use these terms exactly in code, docs, UI copy and LLM prompts. Status: **sharpened in M0 (2026-10-08), extended in M2/M3, pending owner review.** Bounded contexts: `docs/architecture/domain-model.md`.
 
 Conventions: every client-data entity carries `org_id` (its Organization). "Invariant" = must hold in every committed state; each one gets a test (DB constraint, RLS test, or property test).
 
@@ -63,5 +63,5 @@ Conventions: every client-data entity carries `org_id` (its Organization). "Inva
 - **LLM call:** a request through `services/llm` only; recorded with prompt version, model, tokens, cost, redaction flag.
 - **Audit log:** append-only, hash-chained record of every human and system action that changes client-visible state.
 
-## Open terms (owner to define; see `docs/discovery/grill.md`)
+## Open terms (not yet defined)
 Group purchase, batch passport, honest rating, inspector, price index, "verified savings" (needed for the % of savings revenue line).

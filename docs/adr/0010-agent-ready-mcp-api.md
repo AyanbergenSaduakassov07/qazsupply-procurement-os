@@ -2,10 +2,10 @@
 
 - Status: accepted
 - Date: 2026-10-13
-- Deciders: Claude (D24, owner: "finish everything, do it yourself")
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
-The M3 prompt asks for an agent-ready API: analyze/evidence as read-only, tenant-scoped MCP tools that return Evidence ids, plus our own skill packs. M4 added supplier dossiers worth exposing the same way.
+The M3 plan called for an agent-ready API: analyze/evidence as read-only, tenant-scoped MCP tools that return Evidence ids, plus our own skill packs. M4 added supplier dossiers worth exposing the same way.
 
 ## Decision
 1. Official MCP Python SDK `mcp==2.2.0` (MIT; v2.3.0 is inside the 14-day cooldown), mounted on the existing API at `/mcp/`, stateless JSON transport. FastMCP (third party) is not needed: the SDK's `MCPServer` covers it.

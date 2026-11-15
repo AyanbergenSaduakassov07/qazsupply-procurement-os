@@ -11,7 +11,7 @@ anime.js v4 presets, the `createScope` + `revert` React lifecycle, and
   `resolvePreset(name, { reducedMotion })`, `stagger(index, options)`,
   `countUp(from, to, progress)`, `prefersReducedMotion()`, `reduceMotionQuery`.
 
-**Rules (CLAUDE.md / docs/design/design-system.md)**
+**Rules (docs/design/design-system.md / docs/design/design-system.md)**
 - Subpath imports (`animejs/scope`, `animejs/animation`).
 - Transform and opacity only. 150-300 ms micro, <= 400 ms complex.
 - Interruptible; stagger clamped to `staggerLimit`.

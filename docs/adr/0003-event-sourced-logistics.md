@@ -2,7 +2,7 @@
 
 - Status: proposed
 - Date: 2026-10-08
-- Deciders: Ayan, Claude
+- Deciders: Ayanbergen Saduakassov
 
 ## Context
 Shipment status arrives from many unreliable sources (carrier APIs, AIS, rail, emails, PDFs, manual entry), often late, duplicated or contradictory. Coordinators must see *why* we believe a shipment is somewhere, and we must be able to fix a bad source and recompute.

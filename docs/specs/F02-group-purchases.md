@@ -11,4 +11,4 @@
 **Flow:** opt-in -> aggregate demand for the same Item (k-anonymous) -> joint RFQ run by QazSupply -> allocation.
 **Acceptance:** anonymity tests prove no tenant volume leakage; consent ledger; revocation works.
 **AI vs deterministic:** aggregation deterministic. **Human gate:** each tenant confirms participation and award.
-**Open term:** "group purchase" (CONTEXT.md).
+**Open term:** "group purchase" (docs/glossary.md).

@@ -3,7 +3,7 @@
 Append-only tables (`audit_log`, `reviews`, `shipment_events`, `match_feedback`) reject UPDATE always and DELETE by default. Deletion is allowed only:
 - for a privileged database role (`postgres`, `supabase_admin`, `service_role`),
 - inside a transaction that sets `qs.purge = 'on'`,
-- as part of an approved offboarding or retention job (owner approval per `docs/runbooks/agent-harness.md`).
+- as part of an approved offboarding or retention job.
 
 ```sql
 begin;

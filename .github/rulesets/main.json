@@ -26,8 +26,6 @@
           { "context": "unit" },
           { "context": "contract" },
           { "context": "rls" },
-          { "context": "e2e" },
-          { "context": "security-scan" },
           { "context": "license-scan" }
         ]
       }

@@ -1,4 +1,4 @@
-"""USD per million tokens. Source: Anthropic model table cached 2026-10-06 (claude-api skill).
+"""USD per million tokens. Source: Anthropic model table cached 2026-10-06.
 Re-verify against https://platform.claude.com/docs pricing before billing clients on it."""
 
 from decimal import Decimal
