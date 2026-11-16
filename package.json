@@ -17,7 +17,7 @@
     "demo": "bash scripts/demo.sh"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15",
-    "turbo": "2.11.7"
+    "@biomejs/biome": "2.6.4",
+    "turbo": "2.11.10"
   }
 }
