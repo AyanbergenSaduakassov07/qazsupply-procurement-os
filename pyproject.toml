@@ -4,29 +4,29 @@ version = "0.0.0"
 description = "QazSupply modular monolith: services/* and connectors/* are deep modules of one deployable."
 requires-python = ">=3.13"
 dependencies = [
-  "fastapi==0.142.4",
+  "fastapi==0.162.2",
   "openpyxl==3.1.5",
-  "psycopg[binary]==3.3.6",
+  "psycopg[binary]==3.3.8",
   "psycopg-pool==3.3.3",
-  "pyjwt[crypto]==2.15.0",
-  "python-multipart==0.0.32",
+  "pyjwt[crypto]==2.15.1",
+  "python-multipart==0.0.33",
   "rapidfuzz==3.14.6",
   "uvicorn==0.54.0",
-  "mcp==2.2.0",
+  "mcp==2.3.0",
 ]
 
 [dependency-groups]
 dev = [
-  "fonttools==4.66.0",
+  "fonttools==4.68.0",
   "httpx==0.28.1",
-  "httpx2==2.13.1",
-  "hypothesis==6.168.1",
-  "mypy==2.4.0",
+  "httpx2==2.16.0",
+  "hypothesis==6.170.15",
+  "mypy==2.4.1",
   "pip-audit==2.10.1",
   "pip-licenses==5.5.5",
-  "pre-commit==4.6.2",
-  "pytest==9.1.1",
-  "ruff==0.16.10",
+  "pre-commit==4.7.0",
+  "pytest==9.2.0",
+  "ruff==0.17.4",
 ]
 
 [tool.uv]
